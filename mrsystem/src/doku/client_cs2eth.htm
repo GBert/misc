@@ -1,0 +1,45 @@
+<HTML>
+<HEAD>
+<LINK HREF="../../mrsystem.css" REL="stylesheet">
+<TITLE>Client_CS2ETH</TITLE>
+</HEAD>
+<BODY>
+<DIV CLASS="odiv">
+<H1>Client_CS2ETH</H1>
+</DIV>
+<P>
+<H2>Daemon</H2>
+<P>
+<TABLE BORDER="1">
+<TR><TH>Daemon</TH><TD>mrcs2eth</TD></TR>
+<TR><TH>Projekt</TH><TD>client_cs2eth</TD></TR>
+</TABLE>
+<P>
+<H2>Parameter</H2>
+<P>
+Kommandozeilenparameter sind:
+<P>
+<TABLE BORDER="1">
+<TR><TH>Parameter</TH><TH>Beschreibung</TH></TR>
+<TR><TD>-a &lt;addr&gt;</TD><TD>Adresse der Servers, mit dem eine Verbindung aufgebaut werden soll.</TD></TR>
+<TR><TD>-h</TD><TD>Filtern von CAN nacrichten, damit die MS2 keinen Master
+sieht.</TD></TR>
+<TR><TD>-i &lt;iface&gt;</TD><TD>Interface, auf dem auf Verbindungen von
+anderen Clients zu drehscheibe gewartet wird.</TD></TR>
+<TR><TD>-b</TD><TD>UDP Nachrichen werden als Broadcast versendet.</TD></TR>
+<TR><TD>-p &lt;port&gt;</TD><TD>Port der Servers, mit dem eine Verbindung aufgebaut weden soll</TD></TR>
+<TR><TD>-f</TD><TD>optional, im Vordergrund starten (don't fork)</TD></TR>
+<TR><TD>-v</TD><TD>optional, mit zus&auml;tzluchen Ausgaben (verbose) starten</TD><TD>
+<TR><Td>-t</TD><TD>Zus&auml;tzliche Traceausgaben f&uuml;r die Can Nachrichen
+auf der UDP Seite. Nur verf&uuml;gbar, wenn bein compilieren TRACE definiert
+ist.</TD></TR>
+<TR><TD>-?</TD><TD>optional, gibt eine kurze Hilfe aus</TD></TR>
+</TABLE>
+<P>
+<H2>Beschreibung</H2>
+<P>
+Der Daemon <VAR>mrcs2eth2</VAR> wertet Nachrichten vom Ethernet Interface an
+den UDP Port der CS2 aus verschickt Nachrichten aus dem System als Broadcast
+im Format der CS2.
+</BODY>
+</HTML>

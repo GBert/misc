@@ -1,0 +1,12 @@
+#!/bin/sh
+
+GPIO_S88_KEY=gpio_s88
+GPIO_S88_START=startmrgpios88
+MRSYSTEM_CFG_FILE=/etc/mrsystem
+MRSTART_CFG_FILE=/etc/mrstart
+
+GPIO_S88_PARAM=`fgrep $GPIO_S88_KEY $MRSYSTEM_CFG_FILE | cut -f 2 -d "\""`
+GPIO_S88_START=`fgrep $GPIO_S88_START MRSTART_CFG_FILE | cut -f 2 -d "\""`
+if [ "x$GPIO_S88_START" = xstop" ] ; then
+	start-stop-daemon --start --background --exec /usr/local/bin/mrgpios88 -- $GPIO_S88_PARAM
+fi

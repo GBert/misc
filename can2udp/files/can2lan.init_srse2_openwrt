@@ -1,0 +1,30 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2015 OpenWrt.org
+
+START=99
+
+start() {
+	omega2-ctrl gpiomux set uart1 uart
+	slcand -S 500000 /dev/ttyS1 can0
+	sleep 1
+	ifconfig can0 up
+
+	[ -e /www/config/ ] && {
+		rm -f /var/run/can2lan.pid
+		can2lan -T30 -mc /www/config -b br-lan
+		# -g respond to CAN pings - WDP special
+		# can2lan -mg -c /www/config -b br-lan
+		# WiFi
+		# can2lan -m -c /www/config -b wlan0
+		# can2lan -m -c /www/config -b wlan0-1
+	}
+
+        # start MaeCAN can2udp if MaeCAN is installed
+	#[ -e /www/MaeCAN-Server/ ] && {
+	#		can2udp -l 15734 -d 15733
+	#}
+}
+
+stop() {
+	killall can2lan
+}

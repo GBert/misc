@@ -1,0 +1,179 @@
+<HTML>
+<HEAD>
+<LINK HREF="../../mrsystem.css" REL="stylesheet">
+<TITLE>Client_ZENTRALE</TITLE>
+</HEAD>
+<BODY>
+<DIV CLASS="odiv">
+<H1>Client_ZENTRALE</H1>
+</DIV>
+<P>
+<H2>Daemon</H2>
+<P>
+<TABLE BORDER="1">
+<TR><TH>Daemon</TH><TD>mrzentrale</TD></TR>
+<TR><TH>Projekt</TH><TD>client_zentrale</TD></TR>
+</TABLE>
+<P>
+<H2>Parameter</H2>
+<P>
+Kommandozeilenparameter sind:
+<P>
+<TABLE BORDER="1">
+<TR><TH>Parameter</TH><TH>Beschreibung</TH></TR>
+<TR><TD>-a &lt;addr&gt;</TD><TD>Adresse der Servers, mit dem eine Verbindung
+aufgebaut weden soll</TD></TR>
+<TR><TD>-i &lt;iface&gt;</TD><TD>Interface, auf dem auf Verbindungen von
+anderen Clients zu drehscheibe gewartet wird.</TD></TR>
+<TR><TD>-p &lt;port&gt;</TD><TD>Port der Servers, mit dem eine Verbindung
+aufgebaut weden soll</TD></TR>
+<TR><TD>-z &lt;zentrale&gt;</TD><TD>0=proxy mode, 1=ethernet addon f&uuml;r
+ms2</TD></TR>
+<TR><TD>-f</TD><TD>optional, im Vordergrund starten (don't fork)</TD></TR>
+<TR><TD>-k</TD><TD>optional, Anzahl Lokfunktionen, die in die *.cs2 bzw *.csr
+Datei geschrieben werden sollen.</TD></TR>
+<TR><TD>-v</TD><TD>optional, mit zus&auml;tzlichen Ausgaben (verbose)
+starten</TD><TD>
+<TR><TD>-l path</TD><TD>optional, Pfad unter dem lokomotive.cs2 gespeichert
+werden soll</TD><TD>
+<TR><TD>-s &lt;proto&gt;</TD><TD>Bitmaske f&uuml;r das Gleisrotokoll,
+1=motorola, 2=mfx, 4=dcc</TD><TD>
+<TR><TD>-g</TD><TD>System Start, Gleissignal einschalten</TD><TD>
+<TR><TD>-2 &lt;syncmask&gt;</TD><TD>Bitmaske, welche Daten periodisch von einer
+Master CS2 / MS2 abgefragt werden sollen, 1=periodisches Pollen, 2==keybd,
+2=layout 3=mem 4=contr</TD><TD>
+<TR><TD>-8 &lt;param&gt;</TD><TD>Start s88 Module, Der Parameter ist der
+gleiche wie f&uuml;r das wakeup-links-88 from G.B.</TD><TD>
+<TR><TD>-k &lt;num_lokfkt&gt;</TD><TD>Anzahl der Lokfunktionen, die in die
+lokomotive.cs2 geschrieben werden.</TD><TD>
+<TR><TD>-?</TD><TD>optional, gibt eine kurze Hilfe aus</TD></TR>
+</TABLE>
+<P>
+<H2>Beschreibung</H2>
+<P>
+Der Daemon <VAR>mrzentrale</VAR> dient dazu, die Lokliste zu verwalten.
+<P>
+<H2>Die Konfigdaten der MS2</H2>
+<P>
+Um eine Liste mit s&auml;mtlichen Loks von der MS2 zu erstellen, mu&szlig;
+zuerst die Liste der Loknamen angefordert werden. Anschlie&szlig;end kann
+f&uuml;r jeden Loknamen die Lokinfo angefordert werden. Die Texte werden
+dabei mit Nullbytes auf die 8 Bytes der CAN Nachricht aufgef&uml;llt.
+<P>
+<H3>Die Loknamen</H3>
+<P>
+Die Anforderung benutzt den Namen <VAR>loknamen</VAR>. Die Folgenachricht
+enth&auml;t den ersten und den letzten Index durch ein Leerzeichen getrennt.
+Die Antwort liefert 2 Loknamen und die Anzahl der Loks in der Lokliste. Der
+Lokname kann aus bis zu 16 Zeichen bestehen. Es scheint so, daﬂ von der
+ersten angeforderten Nachricht nur der erste Wert g&uuml;ltig ist. D.h es
+mu&szlig; 0-1 angefordert werden, der Wert f&uuml;r die Anzahl Loks ausgewertet
+werden und der erste Eintrag benutzt werden. Und dann paarweise die Loks Nr 1
+bis Anzahl Loks - 1.
+<PRE>[lok]
+  .name=111 043-6
+[lok]
+  .name=
+ [numloks]
+      .wert=16
+       </PRE>
+<P>
+<H3>Die Lokinfo</H3>
+<P>
+Die Anforderung benutzt den Namen <VAR>lokinfo</VAR>. Die 2 Folgenachrichten
+enthalten den Loknamen, wie er mit der Anforderung der Loknamen von der MS2
+geliefert wurde. Die Antwort liefert die Informationen einer Lok in einem
+der <VAR>lokomotive.cs2</VAR> &auml;hnlichen Format. Das Beispiel zeigt eine
+Datei mit einer Lokomotive.
+<PRE>[lokomotive]
+   lok
+    .uid=0xb
+       .name=111 043-6
+.adresse=0xb
+   .typ=mm2_prg
+   .mfxuid=0x0
+    .symbol=9
+      .symbol=9
+      .av=6
+  .bv=3
+  .volume=25
+     .velocity=0
+    .richtung=0
+    .vmax=60
+       .vmin=3
+.fkt
+   ..typ=1
+..dauer=0
+      ..wert=0
+       .fkt
+   ..typ=51
+       ..dauer=0
+      ..wert=0
+       .fkt
+   ..typ=52
+       ..dauer=0
+      ..wert=0
+       .fkt
+   ..typ=53
+       ..dauer=0
+      ..wert=0
+       .fkt
+   ..typ=8
+..dauer=0
+      ..wert=0
+       .fkt
+   ..typ=0
+..dauer=0
+      ..wert=0
+       .fkt
+   ..typ=0
+..dauer=0
+      ..wert=0
+       .fkt
+   ..typ=0
+..dauer=0
+      ..wert=0
+       .fkt
+   ..typ=0
+..dauer=0
+      ..wert=0
+       .fkt
+   ..typ=0
+..dauer=0
+      ..wert=0
+       .fkt
+   ..typ=0
+..dauer=0
+      ..wert=0
+       .fkt
+   ..typ=0
+..dauer=0
+      ..wert=0
+       .fkt
+   ..typ=0
+..dauer=0
+      ..wert=0
+       .fkt
+   ..typ=0
+..dauer=0
+      ..wert=0
+       .fkt
+   ..typ=0
+..dauer=0
+      ..wert=0
+       .fkt
+   ..typ=0
+..dauer=0
+      ..wert=0
+       </PRE>
+<P>
+<H3>lokomotive.cs2</H3>
+<P>
+Nach dem Anfordern der Lokanme und anschlie&szlig;end der Lokinfos schreibt
+die Zentrale die <A HREF="lokomotive_cs2.htm">lokomotive.cs2</A> f&uuml;r die
+M&auml;rklin App. <B>Achtung:</B> Die Einr&uuml;ckung ist auch wesentlich und
+Bestandteil der Syntax. Anderweitig kann die M&auml;rklin App die Datei nicht
+auswerten! Siehe dazu auch die Beschreibung der
+<A HREF="lokomotive_cs2.htm">lokomotive.cs2</A>.
+</BODY>
+</HTML>

@@ -1,0 +1,33 @@
+--- a/arch/arm/boot/dts/sun7i-a20.dtsi	2015-09-28 11:34:05.383525775 +0200
++++ b/arch/arm/boot/dts/sun7i-a20.dtsi	2015-09-28 11:58:11.720217304 +0200
+@@ -890,6 +890,13 @@
+ 				allwinner,pull = <SUN4I_PINCTRL_NO_PULL>;
+ 			};
+ 
++			can0_pins_a: can0@0 {
++				allwinner,pins = "PH20","PH21";
++				allwinner,function = "can";
++				allwinner,drive = <SUN4I_PINCTRL_10_MA>;
++				allwinner,pull = <SUN4I_PINCTRL_NO_PULL>;
++			};
++
+ 			i2c0_pins_a: i2c0@0 {
+ 				allwinner,pins = "PB0", "PB1";
+ 				allwinner,function = "i2c0";
+@@ -1334,6 +1341,16 @@
+ 			#size-cells = <0>;
+ 		};
+ 
++		can0: can@01c2bc00 {
++			compatible = "allwinner,sun4i-a10-can";
++			reg = <0x01c2bc00 0x400>;
++			interrupts = <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&apb1_gates 4>;
++			status = "disabled";
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++
+ 		i2c4: i2c@01c2c000 {
+ 			compatible = "allwinner,sun7i-a20-i2c", "allwinner,sun4i-a10-i2c";
+ 			reg = <0x01c2c000 0x400>;

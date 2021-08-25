@@ -1,0 +1,31 @@
+--- a/rocs/impl/unx/userial.c
++++ b/rocs/impl/unx/userial.c
+@@ -43,7 +43,7 @@ Copyright (c) 2002-2018 Robert Jan Versluis, Rocrail.net
+ #include <IOKit/serial/ioss.h>
+ #endif
+ #else
+-#include <termio.h>
++#include <sys/ioctl.h>
+ #include <termios.h>
+ #include "linux/serial.h"
+ #include <sys/io.h>
+--- a/rocs/impl/unx/usystem.c
++++ b/rocs/impl/unx/usystem.c
+@@ -106,7 +106,7 @@ Boolean rocs_system_accessPort( int from, int num ) {
+ #if defined __APPLE__ || defined __OpenBSD__ || defined __NO_DIRECT_IO__ || defined __aarch64__
+   return False;
+ #else
+-	return ioperm(from, num, 1) == 0 ? True:False;
++	return True;
+ #endif
+ }
+ 
+@@ -114,7 +114,7 @@ Boolean rocs_system_releasePort( int from, int num ) {
+ #if defined __APPLE__ || defined __OpenBSD__ || defined __NO_DIRECT_IO__ || defined __aarch64__
+   return False;
+ #else
+-  return ioperm(from, num, 0) == 0 ? True:False;
++  return True;
+ #endif
+ }
+ 

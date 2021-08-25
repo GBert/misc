@@ -1,0 +1,17 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2018 OpenWrt.org
+
+START=99
+
+start() {
+	# start MaeCAN if MaeCAN is installed
+	[ -e /www/MaeCAN-Server/ ] && {
+		can2udp -l 15734 -d 15733
+		cd /www/MaeCAN-Server/node && nohup node --use_strict maecanserver.js 2>&1 > /dev/null &
+        }
+}
+
+stop() {
+	killall can2udp
+	killall node
+}

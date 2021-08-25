@@ -1,0 +1,14 @@
+diff --git a/canservice/makefile b/canservice/makefile
+index f3d1b91..d49f895 100644
+--- a/canservice/makefile
++++ b/canservice/makefile
+@@ -109,7 +109,7 @@ clean:
+	-$(REMOVE) $(OUTDIR)$(FS)*.o
+	-$(REMOVE) $(GENDIR)$(FS)canservice$(FS)bin$(FS)*
+	-$(REMOVE) $(GENDIR)$(FS)canservice$(FS)public$(FS)*
+-	cd $(GENDIR)$(FS)canservice$(CS) ..$(FS)$(BINDIR)$(FS)ogen$(GENSUFFIX) ..$(FS)..$(FS)canservice$(FS)canservice.xml ..$(FS)
++	cd $(GENDIR)$(FS)canservice$(CS) ..$(FS)..$(FS)rocs$(FS)bin$(FS)ogen$(GENSUFFIX) ..$(FS)..$(FS)canservice$(FS)canservice.xml ..$(FS)
+
+
+ install:
+

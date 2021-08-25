@@ -1,0 +1,197 @@
+[gleisbildseite]
+version
+ .major=1
+element
+ .id=0x102
+ .typ=bogen
+ .artikel=-1
+element
+ .id=0x103
+ .typ=gerade
+ .artikel=-1
+element
+ .id=0x104
+ .typ=gerade
+ .artikel=-1
+element
+ .id=0x105
+ .typ=rechtsweiche
+ .drehung=3
+ .artikel=2
+ .text=23
+ .zustand=1
+element
+ .id=0x106
+ .typ=signal_p_hp012s
+ .drehung=2
+ .artikel=14
+ .text=D
+ .zustand=1
+element
+ .id=0x107
+ .typ=s88kontakt
+ .artikel=101
+ .text=603
+ .deviceId=0x100
+element
+ .id=0x108
+ .typ=gerade
+ .artikel=-1
+element
+ .id=0x109
+ .typ=linksweiche
+ .drehung=1
+ .artikel=2
+ .text=13
+element
+ .id=0x10a
+ .typ=gerade
+ .artikel=-1
+element
+ .id=0x10b
+ .typ=gerade
+ .artikel=-1
+element
+ .id=0x10c
+ .typ=bogen
+ .drehung=3
+ .artikel=-1
+element
+ .id=0x201
+ .typ=signal_p_hp012s
+ .drehung=2
+ .artikel=18
+ .text=FF
+ .zustand=1
+element
+ .id=0x202
+ .typ=bogen
+ .drehung=2
+ .artikel=-1
+element
+ .id=0x203
+ .typ=bogen
+ .artikel=-1
+element
+ .id=0x204
+ .typ=gerade
+ .artikel=-1
+element
+ .id=0x205
+ .typ=rechtsweiche
+ .drehung=1
+ .artikel=2
+ .text=22
+ .zustand=1
+element
+ .id=0x206
+ .typ=signal_p_hp012s
+ .artikel=34
+ .text=E
+ .zustand=1
+element
+ .id=0x207
+ .typ=s88kontakt
+ .artikel=102
+ .text=602
+ .deviceId=0x100
+element
+ .id=0x208
+ .typ=signal_p_hp012s
+ .drehung=2
+ .artikel=26
+ .text=C
+ .zustand=1
+element
+ .id=0x209
+ .typ=linksweiche
+ .drehung=3
+ .artikel=4
+ .text=12
+ .zustand=1
+element
+ .id=0x20a
+ .typ=gerade
+ .artikel=-1
+element
+ .id=0x20b
+ .typ=bogen
+ .drehung=3
+ .artikel=-1
+element
+ .id=0x20c
+ .typ=bogen
+ .drehung=1
+ .artikel=-1
+element
+ .id=0x20d
+ .typ=signal_p_hp012s
+ .artikel=14
+ .text=A
+ .zustand=1
+element
+ .id=0x301
+ .typ=signal_p_hp012s
+ .drehung=2
+ .artikel=14
+ .text=F
+ .zustand=1
+element
+ .id=0x302
+ .typ=gerade
+ .artikel=-1
+element
+ .id=0x303
+ .typ=linksweiche
+ .drehung=3
+ .artikel=4
+ .text=24
+ .zustand=1
+element
+ .id=0x304
+ .typ=gerade
+ .artikel=-1
+element
+ .id=0x305
+ .typ=gerade
+ .artikel=-1
+element
+ .id=0x306
+ .typ=gerade
+ .artikel=-1
+element
+ .id=0x307
+ .typ=s88kontakt
+ .artikel=103
+ .text=601
+ .deviceId=0x100
+element
+ .id=0x308
+ .typ=gerade
+ .artikel=-1
+element
+ .id=0x309
+ .typ=gerade
+ .artikel=-1
+element
+ .id=0x30a
+ .typ=signal_p_hp012s
+ .drehung=2
+ .artikel=18
+ .text=B
+ .zustand=1
+element
+ .id=0x30b
+ .typ=rechtsweiche
+ .drehung=1
+ .artikel=6
+ .text=11
+ .zustand=1
+element
+ .id=0x30c
+ .typ=gerade
+ .artikel=-1
+element
+ .id=0x30d
+ .typ=gerade
+ .artikel=-1

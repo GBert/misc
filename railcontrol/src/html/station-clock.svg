@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+     station-clock.svg
+
+     Copyright (c) 2012 Rüdiger Appel
+     Licensed under the creative common license.
+     
+     Date:    2012-03-23
+     Version: 1.0
+     Email:   ludi(at)me(dot)com
+     Home:    http://www.3Quarks.com/
+
+	 Modified by Dominik (Teddy) Mahrer for RailControl 2021-04-24
+-->
+
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     xmlns:ev="http://www.w3.org/2001/xml-events"
+     version="1.1"
+     baseProfile="full"
+     width="100%"
+     height="100%"
+     viewBox="0 0 200 200">
+
+  <defs>
+
+    <script type="text/javascript">
+    <![CDATA[
+
+      // the clock object
+      var clock  = new Object();
+      clock.init = window.setInterval(function() { clock.initialize() }, 50);
+
+      // initialize clock
+      clock.initialize = function() {
+        if (document.getElementById('background') && 
+            document.getElementById('dial') &&
+            document.getElementById('hourHand') &&
+            document.getElementById('minuteHand') &&
+            document.getElementById('secondHand') && 
+            document.getElementById('axisCover')) {
+
+          // get html parameter and set clock attributes
+          if (document.defaultView.frameElement) {
+            var params = document.defaultView.frameElement.getElementsByTagName('param');
+            for (var i = 0; i < params.length; i++) {
+              this[params[i].name] = params[i].value.toLowerCase();
+            }
+          }
+ 
+          // set clock colors
+          this.setColorForElement('background');
+          this.setColorForElement('dial');
+          this.setColorForElement('hourHand');
+          this.setColorForElement('minuteHand');
+          this.setColorForElement('secondHand');
+          this.setColorForElement('axisCover');
+
+          // set clock elements
+          this.setClockDial(this.dial);
+          this.setHourHand(this.hourHand);
+          this.setMinuteHand(this.minuteHand);
+          this.setSecondHand(this.secondHand);
+          this.setAxisCover(this.axisCoverRadius);
+
+          // draw clock
+          this.draw();
+
+          // show clock
+          this.showElement('clock', true);
+
+          // finish initialization and start animation loop
+          window.clearInterval(this.init);
+          var that = this;
+          window.setInterval(function() { that.draw() }, isNaN(this.updateInterval) ? 50 : this.updateInterval);
+        }
+      }
+
+      // draw the clock
+      clock.draw = function() {
+        var now     = new Date();
+        var hours   = now.getHours();
+        var minutes = now.getMinutes();
+        var seconds = now.getSeconds();
+        var millis  = now.getMilliseconds();
+
+        // rotate hour hands
+        this.rotateElement('hourHand', 30 * hours + 0.5 * minutes);
+
+        // rotate minute hand
+        this.rotateElement('minuteHand', 6 * minutes + (this.minuteHandBehavior === 'sweeping' ? 0.1 * seconds : 0));
+
+        // handle "stop to go" second hand
+        if (this.secondHandStopToGo === 'yes' || this.secondHandStopToGo === 'true') {
+          var wait = isNaN(this.secondHandStopTime) ? 1.5 : this.secondHandStopTime;
+          var fact = 60 / (60 - Math.min(30, Math.max(0, wait)));
+          var time = Math.min(60000, fact * (1000 * seconds + millis));
+          seconds  = Math.floor(time / 1000);
+          millis   = time % 1000;
+        }
+
+        // rotate second hand
+        var secondAngle = 6 * seconds;
+        if (this.secondHandBehavior === 'sweeping') {
+          secondAngle += 0.006 * millis;
+        } else if (this.secondHandBehavior === 'swinging') {
+          secondAngle += 3 * (1 + Math.cos(Math.PI + Math.PI * (0.001 * millis)));
+        }
+        this.rotateElement('secondHand', secondAngle);
+      }
+
+      // set element fill and stroke color
+      clock.setColorForElement = function(id) {
+        var element = document.getElementById(id);
+        var color   = this[id + 'Color'];
+        if (color && element) {
+          element.setAttribute('style', 'fill:' + color + '; stroke:' + color);
+        }
+      }
+
+      // set clock dial
+      clock.setClockDial = function(value) {
+        this.showElement('dialSwiss',      value === 'swiss' || value === undefined);
+      }
+
+      // set hour hand
+      clock.setHourHand = function(value) {
+        this.showElement('hourHandSwiss',      value === 'swiss' || value === undefined);
+      }
+
+      // set minute hand
+      clock.setMinuteHand = function(value) {
+        this.showElement('minuteHandSwiss',      value === 'swiss' || value === undefined);
+      }
+
+      // set second hand
+      clock.setSecondHand = function(value) {
+        this.showElement('secondHandDIN41071.1', value === 'din 41071.1');
+      }
+
+      // set axis cover
+      clock.setAxisCover = function(value) {
+        document.getElementById('axisCoverCircle').setAttribute('r', isNaN(value) ? 0 : value);
+      }
+
+      // show or hide clock element
+      clock.showElement = function(id, visible) {
+        document.getElementById(id).setAttribute('visibility', visible ? 'visible' : 'hidden');
+      }
+
+      // rotate clock element
+      clock.rotateElement = function(id, angle) {
+        document.getElementById(id).setAttribute('transform', 'rotate(' + angle + ', 100, 100)');
+      }
+
+    ]]>
+    </script>
+
+    <!-- hour stroke (swiss) -->
+    <symbol id="hourStrokeSwiss">
+      <rect x="96.25" y="0" width="7.5" height="25"/>
+    </symbol>
+
+    <!-- minute stroke (swiss) -->
+    <symbol id="minuteStrokeSwiss">
+      <rect x="98.5" y="0" width="3" height="7.5"/>
+    </symbol>
+
+    <!-- five minutes strokes (swiss) -->
+    <symbol id="fiveMinutesStrokesSwiss">
+      <use xlink:href="#hourStrokeSwiss"/>
+      <use xlink:href="#minuteStrokeSwiss" transform="rotate( 6, 100, 100)"/>
+      <use xlink:href="#minuteStrokeSwiss" transform="rotate(12, 100, 100)"/>
+      <use xlink:href="#minuteStrokeSwiss" transform="rotate(18, 100, 100)"/>
+      <use xlink:href="#minuteStrokeSwiss" transform="rotate(24, 100, 100)"/>
+    </symbol>
+
+    <!-- quarter strokes (swiss) -->
+    <symbol id="quarterStrokesSwiss">
+      <use xlink:href="#fiveMinutesStrokesSwiss"/>
+      <use xlink:href="#fiveMinutesStrokesSwiss" transform="rotate(30, 100, 100)"/>
+      <use xlink:href="#fiveMinutesStrokesSwiss" transform="rotate(60, 100, 100)"/>
+    </symbol>
+
+    <!-- visible dial circle -->
+    <clipPath id="dialCircle">
+      <circle cx="100" cy="100" r="100"/>
+    </clipPath>
+
+  </defs>
+
+  <!-- clock -->
+  <g id="clock" clip-path="url(#dialCircle)" visibility="hidden">
+
+    <!-- background -->
+    <g id="background" style="fill:none">
+      <circle cx="100" cy="100" r="100" style="stroke:none"/>
+    </g>
+
+    <!-- dial -->
+    <g id="dial" style="fill:#ccc">
+      <g id="dialSwiss">
+        <use xlink:href="#quarterStrokesSwiss" style="stroke:none"/>
+        <use xlink:href="#quarterStrokesSwiss" style="stroke:none" transform="rotate( 90, 100, 100)"/>
+        <use xlink:href="#quarterStrokesSwiss" style="stroke:none" transform="rotate(180, 100, 100)"/>
+        <use xlink:href="#quarterStrokesSwiss" style="stroke:none" transform="rotate(270, 100, 100)"/>
+      </g>
+    </g>
+
+    <!-- hour hand -->
+    <g id="hourHand" style="fill:#eee">
+      <g id="hourHandSwiss">
+        <polygon points="95,33 105,33 106,125 94,125" style="stroke:none"/>
+      </g>
+    </g>
+
+    <!-- minute hand -->
+    <g id="minuteHand" style="fill:#eee">
+      <g id="minuteHandSwiss">
+        <polygon points="96,5 104,5 105,125 95,125" style="stroke:none"/>
+      </g>
+    </g>
+
+    <!-- second hand -->
+    <g id="secondHand" style="fill:#ad1a14; stroke:#ad1a14">
+      <g id="secondHandDIN41071.1">
+        <polygon points="99.4,8 100.6,8 102.8,123 97.2,123" style="stroke:none"/>
+      </g>
+    </g>
+
+    <!-- axis cover -->
+    <g id="axisCover" style="fill:none">
+      <circle id="axisCoverCircle" cx="100" cy="100" r="10" style="stroke:none"/>
+    </g>
+
+  </g>
+
+</svg>
+ 

@@ -1,0 +1,389 @@
+<HTML>
+<HEAD>
+<LINK HREF="../../mrsystem.css" REL="stylesheet">
+<TITLE>lokomotive.cs2</TITLE>
+</HEAD>
+<BODY>
+<DIV CLASS="odiv">
+<H1>lokomotive.cs2</H1>
+</DIV>
+<P>
+<H2>Allgemeines</H2>
+<P>
+Das Dateiformat ist am ini-File Format angelehnt. Durch Voranstellen von
+Punkten wird aber eine Art Baumstruktur definiert. Die Einr&uuml;ckung ist auch
+wesentlich und Bestandteil der Syntax. Anderweitig kann die M&auml;rklin App
+die Datei nicht auswerten! Jede Zeile ohne Punkte ist nicht einger&uuml;ckt,
+eine Zeile mit Punkten ist genau ein Leerzeichen eingerückt.
+<P>
+<H2>Paragraph [lokomotive]</H2>
+<P>
+Die Datei wird durch den Paragraph <VAR>lokomotive</VAR> eingeleitet.
+<P>
+<H3>version</H3>
+<P>
+Der Konfigwert <VAR>version</VAR> unterst&uuml;tzt die folgenen Werte:
+<P>
+<TABLE BORDER="1">
+<TR><TH>Name</TH><TH>Bedeutung</TH></TR>
+<TR><TD>.major</TD><TD>Major Versionsnummer</TD></TR>
+<TR><TD>.minor</TD><TD>Minor Versionsnummer</TD></TR>
+</TABLE>
+<P>
+<H4>.major</H4>
+<P>
+Majornummer der Version der Datei.
+<P>
+<PRE>.major=0</PRE>
+<P>
+<H4>.minor</H4>
+<P>
+Minornummer der Version der Datei.
+<P>
+<PRE>.minor=1</PRE>
+<P>
+<H3>session</H3>
+<P>
+Der Konfigwert <VAR>version</VAR> unterst&uuml;tzt die folgenen Werte:
+<P>
+<TABLE BORDER="1">
+<TR><TH>Name</TH><TH>Bedeutung</TH></TR>
+<TR><TD>.id</TD><TD></TD></TR>
+</TABLE>
+<P>
+<H4>.id</H4>
+<P>
+<PRE>.id=1</PRE>
+<P>
+<H3>lokomotive</H3>
+<P>
+Der Konfigwert <VAR>lokomotive</VAR> unterst&uuml;tzt die folgenen Werte:
+<P>
+<TABLE BORDER="1">
+<TR><TH>Name</TH><TH>Bedeutung</TH></TR>
+<TR><TD>.uid</TD><TD></TD></TR>
+<TR><TD>.name</TD><TD>anzuzeigender Name</TD></TR>
+<TR><TD>.adresse</TD><TD>Digitaladresse</TD></TR>
+<TR><TD>.typ</TD><TD>Protokolltyp</TD></TR>
+<TR><TD>.sid</TD><TD></TD></TR>
+<TR><TD>.mfxuid</TD><TD></TD></TR>
+<TR><TD>.icon</TD><TD>anzuzeigendes Icon</TD></TR>
+<TR><TD>.symbol</TD><TD></TD></TR>
+<TR><TD>.av</TD><TD></TD></TR>
+<TR><TD>.bv</TD><TD></TD></TR>
+<TR><TD>.volume</TD><TD></TD></TR>
+<TR><TD>.velocity</TD><TD>Geschwindigkeit</TD></TR>
+<TR><TD>.richtung</TD><TD>Richtung</TD></TR>
+<TR><TD>.tachomax</TD><TD>maximale Geschwindigkeit auf Tacho</TD></TR>
+<TR><TD>.vmax</TD><TD></TD></TR>
+<TR><TD>.vmin</TD><TD></TD></TR>
+<TR><TD>.xprotokoll</TD><TD></TD></TR>
+<TR><TD>.mfxtyp</TD><TD></TD></TR>
+<TR><TD>.stand</TD><TD></TD></TR>
+<TR><TD>.fahrt</TD><TD></TD></TR>
+<TR><TD>.funktionen</TD><TD></TD></TR>
+</TABLE>
+<P>
+<H4>.uid</H4>
+<P>
+<PRE>.uid=0xb</PRE>
+<P>
+<H4>.name</H4>
+<P>
+Der Konfigwert <VAR>.name</VAR> ist der angezeigte Name der Lok.
+<P>
+<PRE>.name=111 043-6</PRE>
+<P>
+<H4>.adresse</H4>
+<P>
+Der Konfigwert <VAR>.adresse</VAR> ist die Digitaladresse der Lok.
+<P>
+<PRE>.adresse=0xb</PRE>
+<P>
+<H4>.typ</H4>
+<P>
+Der Konfigwert <VAR>.typ</VAR> gibt das Digitalformat des Decoders an.
+M&ouml;liche Werte sind:
+<P>
+<TABLE BORDER="1">
+<TR><TH>Wert</TH><TH>Bedeutung</TH></TR>
+<TR><TD>mm2_dil8</TD><TD>Motorola 2 mit Dipswitches f&uuml;r Digitaladresse</TD></TR>
+<TR><TD>mm2_prg</TD><TD>Motorola 2, Digitaladresse programmierbar</TD></TR>
+<TR><TD>mmm2_lok</TD><TD></TD></TR>
+<TR><TD>mfx</TD><TD>MFX Format</TD></TR>
+<TR><TD>dcc</TD><TD>DCC Format</TD></TR>
+</TABLE>
+<P>
+<PRE>.typ=mm2_prg</PRE>
+<P>
+<H4>.sid</H4>
+<P>
+<PRE>.sid=0x1</PRE>
+<P>
+<H4>.mfxuid</H4>
+<P>
+<PRE>.mfxuid=0x0</PRE>
+<P>
+<H4>.icon</H4>
+<P>
+Der Konfigwert <VAR>.icon</VAR> ist der Name einer PNG Grafikdatei ohne
+Extension, die als Icon angezeigt wird.
+<P>
+<PRE>.icon=111 043-6</PRE>
+<P>
+<H4>.symbol</H4>
+<P>
+<PRE>.symbol=9</PRE>
+<P>
+<H4>.av</H4>
+<P>
+<PRE>.av=6</PRE>
+<P>
+<H4>.bv</H4>
+<P>
+<PRE>.bv=3</PRE>
+<P>
+<H4>.volume</H4>
+<P>
+<PRE>.volume=25</PRE>
+<P>
+<H4>.velocity</H4>
+<P>
+Der Konfigwert <VAR>.velocity</VAR> ist der aktuelle Geschwindigkeitswert der
+Lok.
+<P>
+<PRE>.velocity=0</PRE>
+<P>
+<H4>.richtung</H4>
+<P>
+Der Konfigwert <VAR>.richtung</VAR> ist die aktuelle Richtung der Lok.
+M&ouml;liche Werte sind:
+<P>
+<TABLE BORDER="1">
+<TR><TH>Wert</TH><TH>Bedeutung</TH></TR>
+<TR><TD>0</TD><TD>vorw&auml;rts</TD></TR>
+<TR><TD>1</TD><TD>rueckw&auml;rts</TD></TR>
+</TABLE>
+<P>
+<PRE>.richtung=0</PRE>
+<P>
+<H4>.tachomax</H4>
+<P>
+Der Konfigwert <VAR>.tachomax</VAR> ist maximale Geschwindigkeit, die auf dem
+Tacho angezeigt wird.
+<P>
+<PRE>.tachomax=320</PRE>
+<P>
+<H4>.vmax</H4>
+<P>
+<PRE>.vmax=60</PRE>
+<P>
+<H4>.vmin</H4>
+<P>
+<PRE>.vmin=3</PRE>
+<P>
+<H4>.xprotokoll</H4>
+<P>
+<PRE>.xprotokoll=0</PRE>
+<P>
+<H4>.mfxtyp</H4>
+<P>
+<PRE>.mfxtyp=0</PRE>
+<P>
+<H4>.stand</H4>
+<P>
+<PRE>.stand=0x0</PRE>
+<P>
+<H4>.fahrt</H4>
+<P>
+<PRE>.fahrt=0x0</PRE>
+<P>
+<H4>.funktionen</H4>
+<P>
+Der Konfigwert <VAR>.funktionen</VAR> ist genau 16 mal mit fortlaufender ..nr
+von 0 bis 15 vorhanden und unterst&uuml;tzt die folgenen Werte:
+<P>
+<TABLE BORDER="1">
+<TR><TH>Name</TH><TH>Bedeutung</TH></TR>
+<TR><TD>..nr</TD><TD>Fortlaufende Nummer</TD></TR>
+<TR><TD>..typ</TD><TD>Typ der Funktion</TD></TR>
+<TR><TD>..dauer</TD><TD></TD></TR>
+<TR><TD>..wert</TD><TD></TD></TR>
+<TR><TD>..vorwaerts</TD><TD></TD></TR>
+<TR><TD>..rueckwaerts</TD><TD></TD></TR>
+</TABLE>
+<P>
+<H5>..nr</H5>
+<P>
+Der Konfigwert <VAR>..nr</VAR> ist eine fortlaufende Nummer von 0 bis 15
+<P>
+<PRE>..nr=1</PRE>
+<P>
+<H5>..typ</H5>
+<P>
+Der Konfigwert <VAR>..typ</VAR> ist der Typ der Funktion und bestimmt damit
+das abzuzeigende Icon. Eine Auflistung befindet sich in der Include Datei
+<VAR>cs2_types.h</VAR>.
+<P>
+<PRE>..typ=51</PRE>
+<P>
+<H5>..dauer</H5>
+<P>
+<PRE>..dauer=0</PRE>
+<P>
+<H5>..wert</H5>
+<P>
+<PRE>..wert=0</PRE>
+<P>
+<H5>..vorwaerts</H5>
+<P>
+<PRE>..vorwaerts=0x0</PRE>
+<P>
+<H5>..rueckwaerts</H5>
+<P>
+<PRE>..rueckwaerts=0x0</PRE>
+<P>
+<H2>Beispiel</H2>
+<P>
+<PRE>[lokomotive]
+version
+ .major=0
+ .minor=1
+session
+ .id=1
+lokomotive
+ .uid=0xb
+ .name=111 043-6
+ .adresse=0xb
+ .typ=mm2_prg
+ .sid=0x1
+ .mfxuid=0x0
+ .icon=111 043-6
+ .symbol=9
+ .av=6
+ .bv=3
+ .volume=25
+ .velocity=0
+ .richtung=0
+ .tachomax=320
+ .vmax=60
+ .vmin=3
+ .xprotokoll=0
+ .mfxtyp=0
+ .stand=0x0
+ .fahrt=0x0
+ .funktionen
+ ..nr=0
+ ..typ=1
+ ..dauer=0
+ ..wert=0
+ ..vorwaerts=0x0
+ ..rueckwaerts=0x0
+ .funktionen
+ ..nr=1
+ ..typ=51
+ ..dauer=0
+ ..wert=0
+ ..vorwaerts=0x0
+ ..rueckwaerts=0x0
+ .funktionen
+ ..nr=2
+ ..typ=52
+ ..dauer=0
+ ..wert=0
+ ..vorwaerts=0x0
+ ..rueckwaerts=0x0
+ .funktionen
+ ..nr=3
+ ..typ=53
+ ..dauer=0
+ ..wert=0
+ ..vorwaerts=0x0
+ ..rueckwaerts=0x0
+ .funktionen
+ ..nr=4
+ ..typ=8
+ ..dauer=0
+ ..wert=0
+ ..vorwaerts=0x0
+ ..rueckwaerts=0x0
+ .funktionen
+ ..nr=5
+ ..typ=0
+ ..dauer=0
+ ..wert=0
+ ..vorwaerts=0x0
+ ..rueckwaerts=0x0
+ .funktionen
+ ..nr=6
+ ..typ=0
+ ..dauer=0
+ ..wert=0
+ ..vorwaerts=0x0
+ ..rueckwaerts=0x0
+ .funktionen
+ ..nr=7
+ ..typ=0
+ ..dauer=0
+ ..wert=0
+ ..vorwaerts=0x0
+ ..rueckwaerts=0x0
+ .funktionen
+ ..nr=8
+ ..typ=0
+ ..dauer=0
+ ..wert=0
+ ..vorwaerts=0x0
+ ..rueckwaerts=0x0
+ .funktionen
+ ..nr=9
+ ..typ=0
+ ..dauer=0
+ ..wert=0
+ ..vorwaerts=0x0
+ ..rueckwaerts=0x0
+ .funktionen
+ ..nr=10
+ ..typ=0
+ ..dauer=0
+ ..wert=0
+ ..vorwaerts=0x0
+ ..rueckwaerts=0x0
+ .funktionen
+ ..nr=11
+ ..typ=0
+ ..dauer=0
+ ..wert=0
+ ..vorwaerts=0x0
+ ..rueckwaerts=0x0
+ .funktionen
+ ..nr=12
+ ..typ=0
+ ..dauer=0
+ ..wert=0
+ ..vorwaerts=0x0
+ ..rueckwaerts=0x0
+ .funktionen
+ ..nr=13
+ ..typ=0
+ ..dauer=0
+ ..wert=0
+ ..vorwaerts=0x0
+ ..rueckwaerts=0x0
+ .funktionen
+ ..nr=14
+ ..typ=0
+ ..dauer=0
+ ..wert=0
+ ..vorwaerts=0x0
+ ..rueckwaerts=0x0
+ .funktionen
+ ..nr=15
+ ..typ=0
+ ..dauer=0
+ ..wert=0
+ ..vorwaerts=0x0
+ ..rueckwaerts=0x0
+ .inTraktion=0xffffffff</PRE>
+</BODY>
+</HTML>

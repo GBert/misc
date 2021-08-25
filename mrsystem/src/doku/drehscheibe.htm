@@ -1,0 +1,42 @@
+<HTML>
+<HEAD>
+<LINK HREF="../../mrsystem.css" REL="stylesheet">
+<TITLE>Drehscheibe</TITLE>
+</HEAD>
+<BODY>
+<DIV CLASS="odiv">
+<H1>Drehscheibe</H1>
+</DIV>
+<P>
+<H2>Daemon</H2>
+<P>
+<TABLE BORDER="1">
+<TR><TH>Daemon</TH><TD>drehscheibe</TD></TR>
+<TR><TH>Projekt</TH><TD>drehscheibe</TD></TR>
+</TABLE>
+<P>
+<H2>Parameter</H2>
+<P>
+Kommandozeilenparameter sind:
+<P>
+<TABLE BORDER="1">
+<TR><TH>Parameter</TH><TH>Beschreibung</TH></TR>
+<TR><TD>-a &lt;addr&gt;</TD><TD>Adresse, auf der auf Verbindungen von clients gewaret wird</TD></TR>
+<TR><TD>-i &lt;iface&gt;</TD><TD>Interface, auf dem auf Verbindungen von anderen
+Clients zu drehscheibe gewartet wird.</TD></TR>
+<TR><TD>-p &lt;port&gt;</TD><TD>Port, auf der auf Verbindungen von clients gewaret wird</TD></TR>
+<TR><TD>-f</TD><TD>optional, im Vordergrund starten (don't fork)</TD></TR>
+<TR><TD>-v</TD><TD>optional, mit zus&auml;tzluchen Ausgaben (verbose) starten</TD><TD>
+<TR><TD>-?</TD><TD>optional, gibt eine kurze Hilfe aus</TD></TR>
+</TABLE>
+<P>
+<H2>Beschreibung</H2>
+<P>
+Der Daemon <VAR>drehscheibe</VAR> h&ouml;rt auf der Adresse, die mit
+<VAR>-a</VAR>, und dem Port, der mit <VAR>-p</VAR> in der Kommandozeile
+&uuml;bergeben wird, auf eingehende Verbindungen der Clients.
+<P>
+Ist eine Verbindung mit einem Client etabliert, werden s&auml;mtliche
+Messages dieses Clients an s&auml;tliche anderen Clients weiter geleitet.
+</BODY>
+</HTML>

@@ -1,0 +1,507 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<meta content="text/html;charset=ISO-8859-1" http-equiv="Content-Type"><!--NewPage--><!-- Extract of javadoc -->
+
+
+<title>Verwaltung Read Config</title><meta content="2009-09-23" name="date">
+<link title="Style" href="../../stylesheet.css" type="text/css" rel="stylesheet">
+<script type="text/javascript">
+function windowTitle()
+{
+if (location.href.indexOf('is-external=true') == -1) {
+parent.document.title="Read Config";
+}
+}
+</script></head>
+<body onload="windowTitle();" style="background-color: white;">
+<hr>
+&nbsp;
+<table style="width: 100%;" summary="" border="0" cellpadding="1" cellspacing="0">
+<tbody>
+<tr>
+<td colspan="2" class="NavBarCell1" bgcolor="#eeeeff">
+<table summary="" border="0" cellpadding="0" cellspacing="3">
+<tbody>
+<tr align="center" valign="top">
+<td class="NavBarCell1" bgcolor="#eeeeff">
+<a href="../../overview-summary.html"><font class="NavBarFont1"><b>Überblick</b></font></a>&nbsp;</td>
+<td class="NavBarCell1" bgcolor="#eeeeff">
+<a href="kapitel-summary.html"><font class="NavBarFont1"><b>Kapitel</b></font></a>&nbsp;</td>
+<td class="NavBarCell1" bgcolor="#eeeeff">
+<a href="../../help-doc.html"><font class="NavBarFont1"><b>Help</b></font></a>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr>
+<td style="background-color: white; text-align: right; vertical-align: middle;" class="NavBarCell2"><font size="-2"> <a href="../../index.html" target="_top"><b>FRAMES</b></a>
+&nbsp;
+&nbsp;<a href="7_ReadCV.html" target="_top"><b>NO
+FRAMES</b></a> &nbsp;
+&nbsp;
+<script type="text/javascript">
+<!--
+if(window==top) {
+document.writeln('<A HREF="../../allclasses-noframe.html"><B>All Classes</B></A>');
+}
+//-->
+</script>
+<noscript> <A
+HREF="../../allclasses-noframe.html"><B>All
+Classes</B></A>
+</noscript>
+</font></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>Read Config</h2>
+<hr>
+<table summary="" border="1" cellpadding="3" cellspacing="0" width="100%">
+<tbody>
+<tr class="TableHeadingColor" bgcolor="#ccccff">
+<th colspan="2" align="left"><font size="+2">
+<b>Kennung</b></font></th>
+</tr>
+<tr class="TableRowColor" bgcolor="white">
+<td>
+Read Config(<i><font color="#0000ff" face="Arial" size="2">0x07</font></i>,
+in CAN-ID:<i><font color="#0000ff" face="Arial" size="2"> </font><font color="#ff0000" face="Arial" size="2">0x0E</font></i>)&nbsp;
+</td>
+</tr>
+</tbody>
+</table>
+<br>
+<table summary="" border="1" cellpadding="3" cellspacing="0" width="100%">
+<tbody>
+<tr class="TableHeadingColor" bgcolor="#ccccff">
+<th colspan="1" align="left"><font size="+2">
+<b>Format</b></font></th>
+</tr>
+</tbody>
+</table>
+<br>
+<table style="text-align: center; width: 653px;" class="CanTable" border="1" bordercolor="#000000" cellspacing="1">
+<tbody>
+<tr>
+<td style="width: 7%;">
+Prio
+</td>
+<td style="width: 9%;">
+Command
+</td>
+<td style="width: 5%;">
+Resp.
+</td>
+<td style="width: 6%;">
+Hash
+</td>
+<td style="width: 6%;">
+DLC
+</td>
+<td style="width: 8%;">
+D-Byte 0
+</td>
+<td style="width: 8%;">
+D-Byte 1
+</td>
+<td style="width: 8%;">
+D-Byte 2
+</td>
+<td style="width: 8%;">
+D-Byte 3
+</td>
+<td style="width: 8%;">
+D-Byte 4
+</td>
+<td style="width: 8%;">
+D-Byte 5
+</td>
+<td style="width: 8%;">
+D-Byte 6
+</td>
+<td style="width: 8%;">
+D-Byte 7
+</td>
+</tr>
+<tr>
+<td>2+2 Bit
+</td>
+<td>
+8 Bit
+</td>
+<td>
+1 Bit
+</td>
+<td>
+16 Bit
+</td>
+<td>
+4 Bit
+</td>
+<td>
+8 Bit
+</td>
+<td>
+8 Bit
+</td>
+<td>
+8 Bit
+</td>
+<td>
+8 Bit
+</td>
+<td>
+8 Bit
+</td>
+<td>
+8 Bit
+</td>
+<td>
+8 Bit
+</td>
+<td>
+8 Bit
+</td>
+</tr>
+<tr>
+<td rowspan="2">
+Message
+Prio
+</td>
+<td rowspan="2">
+<font color="#0000ff">Read-Config</font>
+</td>
+<td rowspan="2">
+0
+</td>
+<td rowspan="2">
+-</td>
+<td rowspan="2">
+7
+</td>
+<td colspan="4">
+Loc - ID
+</td>
+<td colspan="2" rowspan="2">
+CV-Index
+(6 Bit) <br>
+CV-Nummer (10 Bit)<br>
+</td>
+<td rowspan="2">
+Anzahl</td>
+<td rowspan="2" style="background-color: silver;">
+&nbsp;</td>
+</tr>
+<tr>
+<td>
+High
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+Low
+</td>
+</tr>
+<tr>
+<td rowspan="2">
+Message
+Prio
+</td>
+<td rowspan="2">
+<font color="#0000ff">Read-Config</font>
+</td>
+<td rowspan="2">
+1
+</td>
+<td rowspan="2">
+-</td>
+<td rowspan="2">
+7
+</td>
+<td colspan="4">
+Loc - ID
+</td>
+<td colspan="2" rowspan="2">
+CV-Index
+(6 Bit) <br>
+CV-Nummer (10 Bit)<br>
+</td>
+<td rowspan="2">
+Wert</td>
+<td rowspan="2" style="background-color: silver;">
+&nbsp;</td>
+</tr>
+<tr>
+<td>
+High
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+Low
+</td>
+</tr>
+<tr>
+<td rowspan="2">
+Message
+Prio
+</td>
+<td rowspan="2">
+<font color="#0000ff">Read-Config</font>
+</td>
+<td rowspan="2">
+1
+</td>
+<td rowspan="2">
+-</td>
+<td rowspan="2">
+6
+</td>
+<td colspan="4">
+Loc - ID
+</td>
+<td colspan="2" rowspan="2">
+CV-Index
+(6 Bit) <br>
+CV-Nummer (10 Bit)<br>
+</td>
+<td rowspan="2" style="background-color: silver;">
+&nbsp;</td>
+<td rowspan="2" style="background-color: silver;">
+&nbsp;</td>
+</tr>
+<tr>
+<td>
+High
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+Low
+</td>
+</tr>
+</tbody>
+</table>
+<br>
+<table summary="" border="1" cellpadding="3" cellspacing="0" width="100%">
+<tbody>
+<tr class="TableHeadingColor" bgcolor="#ccccff">
+<th colspan="1" align="left"><font size="+2">
+<b>Beschreibung</b></font></th>
+</tr>
+</tbody>
+</table>
+<p>Lesen von
+Werten aus rückmeldefähigen Decodern.</p>
+<p>Bei einer Anfrage wird die CV-Nummer und der Startindex
+angegeben.
+Durch die Anzahl der zu lesenden Bytes wird bestimmt, wie viele gelesen
+werden sollen. Eine Anfrage kann, bedingt durch die Anzahl der zu
+lesenden Bytes, mehrere Antworten auslösen.</p>
+<p>Durch Loc-ID werden Protokoll und Adresse des Decoders
+bestimmt.&nbsp;</p>
+<p>CV-Nummer bestimmt, welche Konfigurationsvariable gelesen
+werden soll.
+Möglich sind insgesamt 1024 Adressen. CV-Nummer steht in D-Byte 5 und
+den 2 niedrigstwertigen Bits von D-Byte 4.</p>
+<p>CV-Index bestimmt den Index der zu lesenden CV-Nummer.
+CV-Index ist nur
+für Mfx zulässig. CV-Index steht in den 6 höchstwertigen Bits von
+D-Byte 4.</p>
+<p style="text-decoration: underline;">Protokolltypische
+Wertebereiche und Verhalten:</p>
+<p>DCC: <br>
+</p>
+<dl>
+<dd>CV-Index wird nicht behandelt. CV-Nummer liegt im Bereich 1
+- 1024.</dd>
+<dd>Parameter "Anzahl" bestimmt die Anzahl der zu lesenden
+Bytes ab der
+angegebenen Start - CV-Nummer. Wert "00" für "Anzahl" liest 256 Bytes
+aus dem Decoder.</dd>
+<dd>Als Antwort wird das gelesene Byte angehängt. CV-Nummer
+wird in der
+Antwort aktualisiert. Konnte kein Wert ausgelesen werden, so wird ein
+Frame mit DLC=6 und fehlendem D-Byte 6 ausgegeben.</dd>
+<dd>Decoder kann nur auf dem Programmiergleis gelesen werden. <br>
+</dd>
+</dl>
+<p>MFX:<br>
+</p>
+<dl>
+<dd>CV-Nummer liegt im Bereich zwischen 1 und 1024. </dd>
+<dd>CV-Index wird beachtet und liegt im Bereich zwischen 0 und
+63.</dd>
+<dd>Parameter "Anzahl" bestimmt die Anzahl der zu lesenden
+Bytes ab dem
+angegebenen Start - CV-Index. Parameter CV-Nummer bleibt konstant. Es
+können maximal 63 Byte pro Befehl ausgelesen werden. Der Gleis Format
+Prozessor zerlegt die Leseanfrage in Mehrbytelesebefehle und liest
+maximal 4 Byte gleichzeitig aus dem Decoder aus.</dd>
+<dd>Als Antwort wird das gelesene Byte angehängt. CV-Index wird
+in der
+Antwort aktualisiert. Konnte kein Wert ausgelesen werden, so wird ein
+Frame mit DLC=6 und fehlendem D-Byte 6 ausgegeben.</dd>
+<dd>Decoder kann auf Hauptgleis und Programmiergleis gelesen
+werden. Eine
+Unterscheidung findet nicht statt. </dd>
+</dl>
+<p>SX1: <br>
+</p>
+<dl>
+<dd>CV-Index wird nicht behandelt. CV-Nummer liegt im Bereich 1
+- 5.</dd>
+<dd>Parameter "Anzahl" bestimmt die Anzahl der zu lesenden
+Bytes ab der
+angegebenen Start - CV-Nummer "CV-Nummer". Es können maximal 5 Bytes
+gelesen werden. </dd>
+<dd>Als Antwort wird das gelesene Byte angehängt. CV-Nummer
+wird in der
+Antwort aktualisiert. Konnte kein Wert ausgelesen werden, so wird ein
+Frame mit DLC=6 und fehlendem D-Byte 6 ausgegeben.</dd>
+<dd>Da SX1 keine Nummerierung der Konfigurationswerte kennt,
+wird folgende
+Umsetzung vorgenommen:</dd>
+</dl>
+<dl>
+<dd></dd>
+<dd>
+<table style="text-align: left; width: 437px; height: 172px;" border="1" cellpadding="2" cellspacing="2">
+<tbody>
+<tr>
+<td>CV-Nummer&nbsp;</td>
+<td>Bedeutung</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Adresse</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Höchstgeschwindigkeit</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Beschleunigung</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Impulsbreite des Motorimpulses</td>
+</tr>
+<tr>
+<td>5</td>
+<td>1 / 2 &#8211; Halteabschnitte</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+<dl>
+<dd>Ein Decoder kann nur auf dem Programmiergleis gelesen
+werden.</dd>
+</dl>
+<p>MM2:<br>
+</p>
+<dl>
+<dd>MM2 Loks können nicht ausgelesen werden.</dd>
+</dl>
+<table summary="" border="1" cellpadding="3" cellspacing="0" width="100%">
+<tbody>
+<tr class="TableHeadingColor" bgcolor="#ccccff">
+<th colspan="1" align="left"><font size="+2">
+Beispiel</font></th>
+</tr>
+</tbody>
+</table>
+<p>000E4711 7 00 00 c0 05 00 01 01&nbsp;&nbsp;&nbsp;
+CV Lesen
+DCC</p>
+<table summary="" border="1" cellpadding="3" cellspacing="0" width="100%">
+<tbody>
+<tr class="TableHeadingColor" bgcolor="#ccccff">
+<th colspan="1" align="left"><font size="+2">
+Antwort</font></th>
+</tr>
+</tbody>
+</table>
+<p>Bei der Antwort wird Byteweise ein Wert gesendet.&nbsp;</p>
+<p>CV-Nummer
+und
+CV-Index bestimmen dabei, um welches Bytes es sich handelt. Platzhalter
+Anzahl beinhaltet nun den gelesenen Wert.</p>
+<p>Konnte kein Wert ausgelesen werden, so wird dies mit der
+negativen
+Quittung mit DLC = 6, also fehlendem Wert mitgeteilt.&nbsp;</p>
+<table summary="" border="1" cellpadding="3" cellspacing="0" width="100%">
+<tbody>
+<tr class="TableHeadingColor" bgcolor="#ccccff">
+<th colspan="1" align="left"><font size="+2">
+Besonderheiten</font></th>
+</tr>
+</tbody>
+</table>
+<p>Wird immer von
+Graphical User Interface Prozessor ausgelöst.</p>
+<p>Der Befehl nimmt Lok/Funktionsdecoder nicht in Zyklus auf.<br>
+</p>
+<p>Je nach Protokoll nur auf dem Programmiergleis möglich.<br>
+</p>
+<p>Bei diesem Kommando handelt es sich um ein sequenziell in der
+Abarbeitung befindlichen Programmierbefehl. Diese werden nicht in einer
+Befehlqueue zwischengespeichert. Erst nach einer Antwort durch den
+Gleis Format Prozessor darf der nächste Programmierbefehl angefordert
+werden. Genau ein&nbsp;Programmierbefehl wird durch den Gleis
+Format
+Prozessor zeitgleich abgearbeitet.<br>
+</p>
+<hr><br>
+<table style="width: 100%;" summary="" border="0" cellpadding="1" cellspacing="0">
+<tbody>
+<tr>
+<td colspan="2" class="NavBarCell1" bgcolor="#eeeeff">
+<table summary="" border="0" cellpadding="0" cellspacing="3">
+<tbody>
+<tr align="center" valign="top">
+<td class="NavBarCell1" bgcolor="#eeeeff">
+<a href="../../overview-summary.html"><font class="NavBarFont1"><b>Überblick</b></font></a>&nbsp;</td>
+<td class="NavBarCell1" bgcolor="#eeeeff">
+<a href="kapitel-summary.html"><font class="NavBarFont1"><b>Kapitel</b></font></a>&nbsp;</td>
+<td class="NavBarCell1" bgcolor="#eeeeff">
+<a href="../../help-doc.html"><font class="NavBarFont1"><b>Help</b></font></a>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr>
+<td style="background-color: white; text-align: right;" class="NavBarCell2"><font size="-2"> <a href="../../index.html" target="_top"><b>FRAMES</b></a>
+&nbsp;
+&nbsp;<a href="7_ReadCV.html" target="_top"><b>NO
+FRAMES</b></a> &nbsp;
+&nbsp;
+<script type="text/javascript">
+<!--
+if(window==top) {
+document.writeln('<A HREF="../../allclasses-noframe.html"><B>All Classes</B></A>');
+}
+//-->
+</script>
+<noscript> <A
+HREF="../../allclasses-noframe.html"><B>All
+Classes</B></A>
+</noscript>
+</font></td>
+</tr>
+</tbody>
+</table>
+&nbsp;<br>
+<hr>
+</body></html>

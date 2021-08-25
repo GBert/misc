@@ -1,0 +1,11 @@
+--- a/rocs/public/rocs.h
++++ b/rocs/public/rocs.h
+@@ -55,7 +55,7 @@ typedef enum {True=1,False=0,Yes=1,No=0,
+ #define __ROCS_EVENT__
+ #define __ROCS_LIB__
+ #define __ROCS_MUTEX__
+-#define __ROCS_SERIAL__
++/* #define __ROCS_SERIAL__ */
+ #define __ROCS_SOCKET__
+ #define __ROCS_SYSTEM__
+ #define __ROCS_THREAD__

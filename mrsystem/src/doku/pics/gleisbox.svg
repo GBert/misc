@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91pre2 r13516"
+   sodipodi:docname="gleisbox.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.979899"
+     inkscape:cx="174.54907"
+     inkscape:cy="891.42857"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1173"
+     inkscape:window-height="776"
+     inkscape:window-x="-2"
+     inkscape:window-y="40"
+     inkscape:window-maximized="0"
+     showguides="false" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g3533"
+       transform="translate(-302.03561,-13.131983)">
+      <rect
+         ry="0"
+         rx="0"
+         y="48.270554"
+         x="347.49249"
+         height="123.23861"
+         width="206.57619"
+         id="rect3486"
+         style="fill:#999999" />
+      <ellipse
+         ry="25.001276"
+         rx="25.506351"
+         cy="109.63731"
+         cx="392.19171"
+         id="path3490"
+         style="fill:#000000"
+         d="m 417.69806,109.63731 a 25.506351,25.001276 0 0 1 -25.50635,25.00127 25.506351,25.001276 0 0 1 -25.50635,-25.00127 25.506351,25.001276 0 0 1 25.50635,-25.00128 25.506351,25.001276 0 0 1 25.50635,25.00128 z" />
+      <ellipse
+         ry="25.001276"
+         rx="25.506351"
+         cy="108.37462"
+         cx="514.1676"
+         id="path3490-1"
+         style="fill:#000000"
+         d="M 539.67395,108.37462 A 25.506351,25.001276 0 0 1 514.1676,133.37589 25.506351,25.001276 0 0 1 488.66125,108.37462 25.506351,25.001276 0 0 1 514.1676,83.373343 25.506351,25.001276 0 0 1 539.67395,108.37462 Z" />
+      <ellipse
+         ry="29.294424"
+         rx="31.062191"
+         cy="107.36448"
+         cx="454.82117"
+         id="path3531"
+         style="fill:#000000"
+         d="m 485.88336,107.36448 a 31.062191,29.294424 0 0 1 -31.06219,29.29442 31.062191,29.294424 0 0 1 -31.06219,-29.29442 31.062191,29.294424 0 0 1 31.06219,-29.294425 31.062191,29.294424 0 0 1 31.06219,29.294425 z" />
+    </g>
+  </g>
+</svg>

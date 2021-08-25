@@ -1,0 +1,14 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2019 OpenWrt.org
+
+START=99
+
+start() {
+	z21emu
+	# with turnout switching
+	# z21emu -x
+}
+
+stop() {
+	killall z21emu
+}

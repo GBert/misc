@@ -1,0 +1,33 @@
+--- a/arch/arm/boot/dts/sun7i-a20-bananapi.dts	2016-02-03 20:07:27.074726689 +0100
++++ b/arch/arm/boot/dts/sun7i-a20-bananapi.dts	2016-02-03 20:17:37.264522980 +0100
+@@ -56,8 +56,8 @@
+ 
+ 	aliases {
+ 		serial0 = &uart0;
+-		serial1 = &uart3;
+-		serial2 = &uart7;
++		serial1 = &uart2;
++		serial2 = &uart3;
+ 	};
+ 
+ 	chosen {
+@@ -262,15 +262,15 @@
+ 	status = "okay";
+ };
+ 
+-&uart3 {
++&uart2 {
+ 	pinctrl-names = "default";
+-	pinctrl-0 = <&uart3_pins_b>;
++	pinctrl-0 = <&uart2_pins_a>;
+ 	status = "okay";
+ };
+ 
+-&uart7 {
++&uart3 {
+ 	pinctrl-names = "default";
+-	pinctrl-0 = <&uart7_pins_a>;
++	pinctrl-0 = <&uart3_pins_a>;
+ 	status = "okay";
+ };
+ 

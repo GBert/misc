@@ -1,0 +1,322 @@
+[Preferences]
+version
+ .major=0
+ .minor=1
+page
+ .entry
+ ..key=Vergabe
+ ..value=automatisch
+ .entry
+ ..key=Mac-Adresse
+ ..value=C8:A0:30:AA:E4:24
+ .entry
+ ..key=IpAdresse
+ ..value=192.168.0.19
+ .entry
+ ..key=NetzMaske
+ ..value=255.255.255.0
+ .entry
+ ..key=Gateway
+ ..value=
+ .entry
+ ..key=GwZielAddr
+ ..value=192.168.0.255
+page
+ .entry
+ ..key=Version
+ ..value=
+page
+ .entry
+ ..key=DrehgeberDyn
+ ..value=
+ .entry
+ ..key=StatusAkt
+ ..value=5
+ .entry
+ ..key=AutoAnfahren
+ ..value=
+ .entry
+ ..key=CursorAnsicht
+ ..value=1
+ .entry
+ ..key=FunktionsBildFarbe
+ ..value=weiß-grau
+ .entry
+ ..key=Sprache
+ ..value=de
+page
+ .entry
+ ..key=Zweitgeraet
+ ..value=
+ .entry
+ ..key=StartDlgAnzeigen
+ ..value=1
+ .entry
+ ..key=DrehgeberRicht
+ ..value=1
+ .entry
+ ..key=MfxTotal
+ ..value=
+ .entry
+ ..key=CanView
+ ..value=
+ .entry
+ ..key=LastCs1Name
+ ..value=
+ .entry
+ ..key=LastCs1Ip
+ ..value=
+page
+ .entry
+ ..key=LokLinks
+ ..value=101 047-9
+ .entry
+ ..key=LokRechts
+ ..value=BR 85 006
+page
+ .entry
+ ..key=LLru0
+ ..value=1
+ .entry
+ ..key=LLru1
+ ..value=3
+ .entry
+ ..key=LLru2
+ ..value=33
+ .entry
+ ..key=LLru3
+ ..value=a
+ .entry
+ ..key=LLru4
+ ..value=4006
+page
+ .entry
+ ..key=RLru0
+ ..value=28
+ .entry
+ ..key=RLru1
+ ..value=4005
+ .entry
+ ..key=RLru2
+ ..value=14
+ .entry
+ ..key=RLru3
+ ..value=3c
+ .entry
+ ..key=RLru4
+ ..value=33
+page
+ .entry
+ ..key=FontFamily
+ ..value=BitStream Vera Sans
+ .entry
+ ..key=FontSize
+ ..value=14
+page
+ .entry
+ ..key=SerNum
+ ..value=84
+ .entry
+ ..key=GfpUid
+ ..value=1129525928
+ .entry
+ ..key=GuiUid
+ ..value=1129525929
+ .entry
+ ..key=HardVers
+ ..value=3.1
+lruLoksLinks
+ .entry
+ ..name=101 047-9
+ .entry
+ ..name=BR 85 006
+ .entry
+ ..name=ICE 402
+ .entry
+ ..name=212 276-0
+ .entry
+ ..name=1
+ .entry
+ ..name=3
+ .entry
+ ..name=33
+ .entry
+ ..name=a
+ .entry
+ ..name=4006
+lruLoksRechts
+ .entry
+ ..name=BR 85 006
+ .entry
+ ..name=Ae 6/6 11404
+ .entry
+ ..name=ICE 402
+ .entry
+ ..name=212 276-0
+ .entry
+ ..name=101 047-9
+ .entry
+ ..name=28
+ .entry
+ ..name=4005
+ .entry
+ ..name=14
+ .entry
+ ..name=3c
+ .entry
+ ..name=33
+usedLoks
+ .entry
+ ..name=BR 85 006
+ .entry
+ ..name=Ae 6/6 11404
+ .entry
+ ..name=Ae 6/6 11404
+ .entry
+ ..name=101 047-9
+ .entry
+ ..name=BR 85 006
+ .entry
+ ..name=ICE 402
+ .entry
+ ..name=BR 85 006
+ .entry
+ ..name=BR 85 006
+ .entry
+ ..name=BR 85 006
+ .entry
+ ..name=ICE 402
+ .entry
+ ..name=BR 85 006
+ .entry
+ ..name=BR 85 006
+ .entry
+ ..name=212 276-0
+ .entry
+ ..name=101 047-9
+ .entry
+ ..name=BR 85 006
+ .entry
+ ..name=BR 85 006
+ .entry
+ ..name=ICE 402
+ .entry
+ ..name=BR 85 006
+ .entry
+ ..name=212 276-0
+ .entry
+ ..name=101 047-9
+ .entry
+ ..name=28
+ .entry
+ ..name=28
+ .entry
+ ..name=4005
+ .entry
+ ..name=28
+ .entry
+ ..name=14
+ .entry
+ ..name=3c
+ .entry
+ ..name=1
+ .entry
+ ..name=33
+ .entry
+ ..name=14
+ .entry
+ ..name=3
+ .entry
+ ..name=3
+ .entry
+ ..name=3
+ .entry
+ ..name=33
+ .entry
+ ..name=3
+ .entry
+ ..name=3
+ .entry
+ ..name=33
+ .entry
+ ..name=3
+ .entry
+ ..name=33
+ .entry
+ ..name=3
+ .entry
+ ..name=14
+ .entry
+ ..name=33
+ .entry
+ ..name=3
+ .entry
+ ..name=3
+ .entry
+ ..name=14
+ .entry
+ ..name=18
+ .entry
+ ..name=3
+ .entry
+ ..name=a
+ .entry
+ ..name=4006
+ .entry
+ ..name=4005
+ .entry
+ ..name=4007
+ .entry
+ ..name=402
+ .entry
+ ..name=1
+ .entry
+ ..name=4006
+ .entry
+ ..name=401
+ .entry
+ ..name=c003
+ .entry
+ ..name=4005
+ .entry
+ ..name=847
+ .entry
+ ..name=a
+ .entry
+ ..name=a
+ .entry
+ ..name=a
+ .entry
+ ..name=a
+ .entry
+ ..name=a
+ .entry
+ ..name=c003
+ .entry
+ ..name=a
+ .entry
+ ..name=5
+ .entry
+ ..name=3
+ .entry
+ ..name=3
+ .entry
+ ..name=3
+ .entry
+ ..name=401
+ .entry
+ ..name=1
+ .entry
+ ..name=847
+ .entry
+ ..name=401
+ .entry
+ ..name=847
+ .entry
+ ..name=401
+ .entry
+ ..name=847
+ .entry
+ ..name=401
+ .entry
+ ..name=847

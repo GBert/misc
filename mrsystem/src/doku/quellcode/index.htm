@@ -1,0 +1,57 @@
+<HTML>
+<HEAD>
+<TITLE>Beschreibung des Quellcodes</TITLE>
+</HEAD>
+<BODY>
+<H1>Beschreibung des Quellcodes</H1>
+<P>
+Die Daemons lassen sich in Gruppen einteilen, wobei innerhalb der einzelnen
+Gruppen der Ablauf immer sehr &auml;hnlich ist. Als "Funktionsgruppe" gibt
+es:
+<P>
+<UL>
+<LI>Clients nach <A HREF="aussen.htm">"au&szlig;en"</A> (Ethernet, TTY, ...)
+<LI>Clients nach <A HREF="innen.htm">"innen"</A> (MS2/Gleisbox &uuml;ber
+socketCAN, CC-Schnitte oder can4linux)
+<LI>Trace (intern, CAN, nach au&szlig;en)
+<LI>Ablauflogik (<A HREF="mr_zentrale.htm">zentrale</A>)
+<LI>Verteilen der Nachrichten (drehscheibe)
+</UL>
+<P>
+Da der Umgang mit Nachrichten von der <VAR>drehscheibe</VAR> und Nachrichten
+vom CAN Bus bzw. von "au&szlig;erhalb" immer sehr &auml;hnlich ist, wurde
+dieser Teil des Codes in das Verzeichnis <VAR>common</VAR> geschoben. Die
+Verzeichnisse f&uuml;r die Clients enthalten nur die clientspezifischen Code.
+<P>
+Das Lesen der Konfiguration, Parsen der CS2 Dateien, Kommunikation von und zur
+drehscheibe und Encoder/Decoder f&uuml;r Protokolle wurde in einige
+<A HREF="libs.htm">Bibliotheken</A> im Verzeichnis <VAR>libs</VAR> ausgelagert.
+<P>
+Die meisten Module der Software haben den gleichen Aufbau mit einer Struktur
+f&uuml;r die Daten, Makros um die Felder der Struktur zu setzen und f&uuml;r
+das Erzeugen, Initialisieren, Beenden und Freigeben einen definierten Satz an
+Funktionen.
+<TABLE BORDER="1">
+<TR><TH>Name</TH><TH>Bedeutung</TH></TR>
+<TR>
+<TD NOWRAP>XXXstruct *XXXCreate(void)</TD>
+<TD>Die Createfunktion legt den Speicher an und liefert einen Zeiger auf die
+Struktur oder im Fehlerfall NULL zu&uuml;ck.</TD>
+</TR>
+<TR>
+<TD NOWRAP>BOOL XXXInit(XXXStruct, ...)</TD>
+<TD>Die Initfunktion initialisiert die Struktur. Dazu kann es spezifische
+Parameter geben.</TD>
+</TR>
+<TR>
+<TD NOWRAP>XXXExit(XXXStruct)</TD>
+<TD>Die Exitfunktion beendet die Arbeit mit dem Modul. Dazu geh&ouml;rt z.B.
+das Schlie&szlig;en von Sockets oder Filedeskriptoren.</TD>
+</TR>
+<TR>
+<TD NOWRAP>XXXDestroy(XXXStruct)</TD>
+<TD>Die Destroyfunktion gibt allozierten Speicher wieder frei.</TD>
+</TR>
+</TABLE>
+</BODY>
+</HTML>

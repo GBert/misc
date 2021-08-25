@@ -1,0 +1,23 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2016 OpenWrt.org
+
+START=99
+
+start() {
+	/usr/sbin/ip link set can0 up type can bitrate 250000
+
+	sleep 10
+	nohup drehscheibe &
+	sleep 3
+	nohup mrcs2eth &
+	nohup mrms2 &
+	nohup mrzentrale &
+}
+
+stop() {
+	killall drehscheibe
+	sleep 1
+	killall mrcs2eth
+	killall mrms2
+	killall mrzentrale
+}

@@ -1,0 +1,410 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<meta content="text/html;charset=ISO-8859-1" http-equiv="Content-Type"><!--NewPage--><!-- Extract of javadoc -->
+
+
+<title>Rückmelde Basisadresse</title><meta content="2009-09-23" name="date">
+<link title="Style" href="../../stylesheet.css" type="text/css" rel="stylesheet">
+<script type="text/javascript">
+function windowTitle()
+{
+if (location.href.indexOf('is-external=true') == -1) {
+parent.document.title="System Cmd Seek";
+}
+}
+</script></head>
+<body onload="windowTitle();" style="background-color: white;">
+<hr>
+&nbsp;
+<table style="width: 100%;" summary="" border="0" cellpadding="1" cellspacing="0">
+<tbody>
+<tr>
+<td colspan="2" class="NavBarCell1" bgcolor="#eeeeff">
+<table summary="" border="0" cellpadding="0" cellspacing="3">
+<tbody>
+<tr align="center" valign="top">
+<td class="NavBarCell1" bgcolor="#eeeeff">
+<a href="../../overview-summary.html"><font class="NavBarFont1"><b>Überblick</b></font></a>&nbsp;</td>
+<td class="NavBarCell1" bgcolor="#eeeeff">
+<a href="kapitel-summary.html"><font class="NavBarFont1"><b>Kapitel</b></font></a>&nbsp;</td>
+<td class="NavBarCell1" bgcolor="#eeeeff">
+<a href="../../help-doc.html"><font class="NavBarFont1"><b>Help</b></font></a>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr>
+<td style="background-color: white; text-align: right; vertical-align: middle;" class="NavBarCell2"><font size="-2"> <a href="../../index.html.html" target="_top"><b>FRAMES</b></a>
+&nbsp;
+&nbsp;<a href="30_MFX_Seek.html" target="_top"><b>NO
+FRAMES</b></a> &nbsp;
+&nbsp;
+<script type="text/javascript">
+<!--
+if(window==top) {
+document.writeln('<A HREF="../../allclasses-noframe.html"><B>All Classes</B></A>');
+}
+//-->
+</script>
+<noscript> <A
+HREF="../../allclasses-noframe.html"><B>All
+Classes</B></A>
+</noscript>
+</font></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>System Geräte Kennung</h2>
+<hr>
+<table summary="" border="1" cellpadding="3" cellspacing="0" width="100%">
+<tbody>
+<tr class="TableHeadingColor" bgcolor="#ccccff">
+<th colspan="2" align="left"><font size="+2">
+<b>Kennung</b></font></th>
+</tr>
+<tr class="TableRowColor" bgcolor="white">
+<td>
+Systembefehl
+(<i><font color="#0000ff">0x00</font></i>,
+in CAN-ID: <i><font color="#ff0000">0x00</font></i>)&nbsp;
+</td>
+</tr>
+</tbody>
+</table>
+<br>
+<table style="width: 100%;" summary="" border="1" cellpadding="3" cellspacing="0">
+<tbody>
+<tr class="TableHeadingColor" bgcolor="#ccccff">
+<th colspan="2" align="left"><font size="+2">
+<b>Sub-CMD</b></font></th>
+</tr>
+<tr class="TableRowColor" bgcolor="white">
+<td style="width: 1%; text-align: right; vertical-align: middle;">
+(<i><font color="#008080">0x0C</font></i>)</td>
+<td>
+System Basisadresse eines rückmeldefähiges Gerätes
+</td>
+</tr>
+</tbody>
+</table>
+<br>
+<table summary="" border="1" cellpadding="3" cellspacing="0" width="100%">
+<tbody>
+<tr class="TableHeadingColor" bgcolor="#ccccff">
+<th colspan="1" align="left"><font size="+2">
+<b>Format</b></font></th>
+</tr>
+</tbody>
+</table>
+<br>
+<table style="text-align: center; width: 653px;" class="CanTable" border="1" bordercolor="#000000" cellspacing="1">
+<tbody>
+<tr>
+<td style="width: 7%;">
+Prio
+</td>
+<td style="width: 9%;">
+Command
+</td>
+<td style="width: 5%;">
+Resp.
+</td>
+<td style="width: 6%;">
+Hash
+</td>
+<td style="width: 6%;">
+DLC
+</td>
+<td style="width: 8%;">
+D-Byte 0
+</td>
+<td style="width: 8%;">
+D-Byte 1
+</td>
+<td style="width: 8%;">
+D-Byte 2
+</td>
+<td style="width: 8%;">
+D-Byte 3
+</td>
+<td style="width: 8%;">
+D-Byte 4
+</td>
+<td style="width: 8%;">
+D-Byte 5
+</td>
+<td style="width: 8%;">
+D-Byte 6
+</td>
+<td style="width: 8%;">
+D-Byte 7
+</td>
+</tr>
+<tr>
+<td>
+2+2 Bit
+</td>
+<td>
+8 Bit
+</td>
+<td>
+1 Bit
+</td>
+<td>
+16 Bit
+</td>
+<td>
+4 Bit
+</td>
+<td>
+8 Bit
+</td>
+<td>
+8 Bit
+</td>
+<td>
+8 Bit
+</td>
+<td>
+8 Bit
+</td>
+<td>
+8 Bit
+</td>
+<td>
+8 Bit
+</td>
+<td>
+8 Bit
+</td>
+<td>
+8 Bit
+</td>
+</tr>
+<tr>
+<td rowspan="2">
+Message
+Prio
+</td>
+<td rowspan="2">
+<font color="#0000ff">System-befehl</font>
+</td>
+<td rowspan="2">
+0
+</td>
+<td rowspan="2">
+-</td>
+<td rowspan="2">
+5 </td>
+<td colspan="4">
+Ziel
+Geräte-UID
+</td>
+<td rowspan="2">
+<font color="#008080">Sub-CMD<br>
+Kennung</font></td>
+<td colspan="1" rowspan="2" style="background-color: silver;">
+&nbsp;</td>
+<td colspan="1" rowspan="2" style="background-color: silver;">&nbsp;</td>
+<td rowspan="2" style="background-color: silver;">
+&nbsp;</td>
+</tr>
+<tr>
+<td>
+High
+</td>
+<td>
+-</td>
+<td>
+-</td>
+<td>
+Low
+</td>
+</tr>
+<tr>
+<td rowspan="2">
+Message
+Prio
+</td>
+<td rowspan="2">
+<font color="#0000ff">System-befehl</font>
+</td>
+<td rowspan="2">
+0
+</td>
+<td rowspan="2">
+-</td>
+<td rowspan="2">
+7
+</td>
+<td colspan="4">
+Ziel
+Geräte-UID
+</td>
+<td rowspan="2">
+<font color="#008080">Sub-CMD<br>
+</font><font color="#008080">Kennung</font></td>
+<td colspan="2" rowspan="1">
+System - Kenner</td>
+<td rowspan="2" style="background-color: silver;">
+&nbsp;</td>
+</tr>
+<tr>
+<td>
+High
+</td>
+<td>
+-</td>
+<td>
+-</td>
+<td>
+Low
+</td>
+<td colspan="1">High</td>
+<td>Low</td>
+</tr>
+<tr>
+<td rowspan="2">
+Message
+Prio
+</td>
+<td rowspan="2">
+<font color="#0000ff">System-befehl</font>
+</td>
+<td rowspan="2">
+1
+</td>
+<td rowspan="2">
+-</td>
+<td rowspan="2">
+7
+</td>
+<td colspan="4">
+Ziel
+Geräte-UID
+</td>
+<td rowspan="2">
+<font color="#008080">Sub-CMD<br>
+</font><font color="#008080">Kennung</font></td>
+<td colspan="2" rowspan="1">
+System - Kenner</td>
+<td rowspan="2" style="background-color: silver;">
+&nbsp;</td>
+</tr>
+<tr>
+<td>
+High
+</td>
+<td>
+-</td>
+<td>
+-</td>
+<td>
+Low
+</td>
+<td colspan="1">High</td>
+<td>Low</td>
+</tr>
+</tbody>
+</table>
+<br>
+<table summary="" border="1" cellpadding="3" cellspacing="0" width="100%">
+<tbody>
+<tr class="TableHeadingColor" bgcolor="#ccccff">
+<th colspan="1" align="left"><font size="+2">
+<b>Beschreibung</b></font></th>
+</tr>
+</tbody>
+</table>
+<p>Für Geräte S88 Bus / Rückmeldebus&nbsp; und
+Automatisierungsmodule:<br>
+Setzen oder Mitteilen einer 16 Bit Kennung zur Bildung eindeutiger
+Kontaktkennungen.<br>
+Wird der Befehl mit fehlendem Geräte - Kenner gesendet, so wird der
+aktuelle Kennung gesendet.<br>
+Wird der Befehl mit Geräte - Kenner gesendet. so setzt dieser Befehl
+die Kennung.<br>
+Die
+Master - Zentrale weist den Endgeräten die Geräte - Kennung beim
+Systemstart jeweis zu. Eine Resetfeste Speicherung findet in den
+Geräten nicht statt.<br>
+Der Master -Zentrale speichert sich eine Liste
+mit allen bekannten Geräten im System, sowie deren NickNames als .cs2
+Konfigurationsdatei.</p>
+<br>
+<table summary="" border="1" cellpadding="3" cellspacing="0" width="100%">
+<tbody>
+<tr class="TableHeadingColor" bgcolor="#ccccff">
+<th colspan="1" align="left"><font size="+2">
+Beispiel</font></th>
+</tr>
+</tbody>
+</table>
+&nbsp;- - <br>
+<br>
+<table summary="" border="1" cellpadding="3" cellspacing="0" width="100%">
+<tbody>
+<tr class="TableHeadingColor" bgcolor="#ccccff">
+<th colspan="1" align="left"><font size="+2">
+Antwort</font></th>
+</tr>
+</tbody>
+</table>
+&nbsp;- - <br>
+<br>
+<table summary="" border="1" cellpadding="3" cellspacing="0" width="100%">
+<tbody>
+<tr class="TableHeadingColor" bgcolor="#ccccff">
+<th colspan="1" align="left"><font size="+2">
+Besonderheiten</font></th>
+</tr>
+</tbody>
+</table>
+&nbsp;<br>
+Systemkenner mit dem Wert "0" oder 0xFFFF" sind ungültig und sollten in
+dem Graphical User Interface Prozessor zu einer Meldung zur Eingabe
+einer gültigen Kennung führen. <br>
+<hr><br>
+<table style="width: 100%;" summary="" border="0" cellpadding="1" cellspacing="0">
+<tbody>
+<tr>
+<td colspan="2" class="NavBarCell1" bgcolor="#eeeeff">
+<table summary="" border="0" cellpadding="0" cellspacing="3">
+<tbody>
+<tr align="center" valign="top">
+<td class="NavBarCell1" bgcolor="#eeeeff">
+<a href="../../overview-summary.html"><font class="NavBarFont1"><b>Überblick</b></font></a>&nbsp;</td>
+<td class="NavBarCell1" bgcolor="#eeeeff">
+<a href="kapitel-summary.html"><font class="NavBarFont1"><b>Kapitel</b></font></a>&nbsp;</td>
+<td class="NavBarCell1" bgcolor="#eeeeff">
+<a href="../../help-doc.html"><font class="NavBarFont1"><b>Help</b></font></a>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr>
+<td style="background-color: white; text-align: right;" class="NavBarCell2"><font size="-2"> <a href="../../index.html?de/CMD_0System/20_MFX_Seek.html" target="_top"><b>FRAMES</b></a> &nbsp;
+&nbsp;<a href="30_MFX_Seek.html" target="_top"><b>NO
+FRAMES</b></a> &nbsp;
+&nbsp;
+<script type="text/javascript">
+<!--
+if(window==top) {
+document.writeln('<A HREF="../../allclasses-noframe.html"><B>All Classes</B></A>');
+}
+//-->
+</script>
+<noscript> <A
+HREF="../../allclasses-noframe.html"><B>All
+Classes</B></A>
+</noscript>
+</font></td>
+</tr>
+</tbody>
+</table>
+&nbsp;<br>
+<hr>
+</body></html>

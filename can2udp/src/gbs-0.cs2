@@ -1,0 +1,723 @@
+[gleisbildseite]
+version
+ .major=1
+element
+ .id=0x101
+ .typ=s88kontakt
+ .artikel=101
+ .deviceId=0x100
+element
+ .id=0x102
+ .typ=s88kontakt
+ .artikel=102
+ .deviceId=0x100
+element
+ .id=0x103
+ .typ=s88kontakt
+ .artikel=103
+ .deviceId=0x100
+element
+ .id=0x104
+ .typ=s88kontakt
+ .artikel=104
+ .deviceId=0x100
+element
+ .id=0x105
+ .typ=s88kontakt
+ .artikel=105
+ .deviceId=0x100
+element
+ .id=0x106
+ .typ=s88kontakt
+ .artikel=106
+ .deviceId=0x100
+element
+ .id=0x107
+ .typ=s88kontakt
+ .artikel=107
+ .deviceId=0x100
+element
+ .id=0x108
+ .typ=s88kontakt
+ .artikel=108
+ .deviceId=0x100
+element
+ .id=0x201
+ .typ=s88kontakt
+ .artikel=109
+ .deviceId=0x100
+element
+ .id=0x202
+ .typ=s88kontakt
+ .artikel=110
+ .deviceId=0x100
+element
+ .id=0x203
+ .typ=s88kontakt
+ .artikel=111
+ .deviceId=0x100
+element
+ .id=0x204
+ .typ=s88kontakt
+ .artikel=112
+ .deviceId=0x100
+element
+ .id=0x205
+ .typ=s88kontakt
+ .artikel=113
+ .deviceId=0x100
+element
+ .id=0x206
+ .typ=s88kontakt
+ .artikel=114
+ .deviceId=0x100
+element
+ .id=0x207
+ .typ=s88kontakt
+ .artikel=115
+ .deviceId=0x100
+element
+ .id=0x208
+ .typ=s88kontakt
+ .artikel=116
+ .deviceId=0x100
+element
+ .id=0x301
+ .typ=s88kontakt
+ .artikel=117
+ .deviceId=0x100
+element
+ .id=0x302
+ .typ=s88kontakt
+ .artikel=118
+ .deviceId=0x100
+element
+ .id=0x303
+ .typ=s88kontakt
+ .artikel=119
+ .deviceId=0x100
+element
+ .id=0x304
+ .typ=s88kontakt
+ .artikel=120
+ .deviceId=0x100
+element
+ .id=0x305
+ .typ=s88kontakt
+ .artikel=121
+ .deviceId=0x100
+element
+ .id=0x306
+ .typ=s88kontakt
+ .artikel=122
+ .deviceId=0x100
+element
+ .id=0x307
+ .typ=s88kontakt
+ .artikel=123
+ .deviceId=0x100
+element
+ .id=0x308
+ .typ=s88kontakt
+ .artikel=124
+ .deviceId=0x100
+element
+ .id=0x401
+ .typ=s88kontakt
+ .artikel=125
+ .deviceId=0x100
+element
+ .id=0x402
+ .typ=s88kontakt
+ .artikel=126
+ .deviceId=0x100
+element
+ .id=0x403
+ .typ=s88kontakt
+ .artikel=127
+ .deviceId=0x100
+element
+ .id=0x404
+ .typ=s88kontakt
+ .artikel=128
+ .deviceId=0x100
+element
+ .id=0x405
+ .typ=s88kontakt
+ .artikel=129
+ .deviceId=0x100
+element
+ .id=0x406
+ .typ=s88kontakt
+ .artikel=130
+ .deviceId=0x100
+element
+ .id=0x407
+ .typ=s88kontakt
+ .artikel=131
+ .deviceId=0x100
+element
+ .id=0x408
+ .typ=s88kontakt
+ .artikel=132
+ .deviceId=0x100
+element
+ .id=0x501
+ .typ=s88kontakt
+ .artikel=133
+ .deviceId=0x100
+element
+ .id=0x502
+ .typ=s88kontakt
+ .artikel=134
+ .deviceId=0x100
+element
+ .id=0x503
+ .typ=s88kontakt
+ .artikel=135
+ .deviceId=0x100
+element
+ .id=0x504
+ .typ=s88kontakt
+ .artikel=136
+ .deviceId=0x100
+element
+ .id=0x505
+ .typ=s88kontakt
+ .artikel=137
+ .deviceId=0x100
+element
+ .id=0x506
+ .typ=s88kontakt
+ .artikel=138
+ .deviceId=0x100
+element
+ .id=0x507
+ .typ=s88kontakt
+ .artikel=139
+ .deviceId=0x100
+element
+ .id=0x508
+ .typ=s88kontakt
+ .artikel=140
+ .deviceId=0x100
+element
+ .id=0x601
+ .typ=s88kontakt
+ .artikel=141
+ .deviceId=0x100
+element
+ .id=0x602
+ .typ=s88kontakt
+ .artikel=142
+ .deviceId=0x100
+element
+ .id=0x603
+ .typ=s88kontakt
+ .artikel=143
+ .deviceId=0x100
+element
+ .id=0x604
+ .typ=s88kontakt
+ .artikel=144
+ .deviceId=0x100
+element
+ .id=0x605
+ .typ=s88kontakt
+ .artikel=145
+ .deviceId=0x100
+element
+ .id=0x606
+ .typ=s88kontakt
+ .artikel=146
+ .deviceId=0x100
+element
+ .id=0x607
+ .typ=s88kontakt
+ .artikel=147
+ .deviceId=0x100
+element
+ .id=0x608
+ .typ=s88kontakt
+ .artikel=148
+ .deviceId=0x100
+element
+ .id=0x701
+ .typ=s88kontakt
+ .artikel=149
+ .deviceId=0x100
+element
+ .id=0x702
+ .typ=s88kontakt
+ .artikel=150
+ .deviceId=0x100
+element
+ .id=0x703
+ .typ=s88kontakt
+ .artikel=151
+ .deviceId=0x100
+element
+ .id=0x704
+ .typ=s88kontakt
+ .artikel=152
+ .deviceId=0x100
+element
+ .id=0x705
+ .typ=s88kontakt
+ .artikel=153
+ .deviceId=0x100
+element
+ .id=0x706
+ .typ=s88kontakt
+ .artikel=154
+ .deviceId=0x100
+element
+ .id=0x707
+ .typ=s88kontakt
+ .artikel=155
+ .deviceId=0x100
+element
+ .id=0x708
+ .typ=s88kontakt
+ .artikel=156
+ .deviceId=0x100
+element
+ .id=0x801
+ .typ=s88kontakt
+ .artikel=157
+ .deviceId=0x100
+element
+ .id=0x802
+ .typ=s88kontakt
+ .artikel=158
+ .deviceId=0x100
+element
+ .id=0x803
+ .typ=s88kontakt
+ .artikel=159
+ .deviceId=0x100
+element
+ .id=0x804
+ .typ=s88kontakt
+ .artikel=160
+ .deviceId=0x100
+element
+ .id=0x805
+ .typ=s88kontakt
+ .artikel=161
+ .deviceId=0x100
+element
+ .id=0x806
+ .typ=s88kontakt
+ .artikel=162
+ .deviceId=0x100
+element
+ .id=0x807
+ .typ=s88kontakt
+ .artikel=163
+ .deviceId=0x100
+element
+ .id=0x808
+ .typ=s88kontakt
+ .artikel=164
+ .deviceId=0x100
+element
+ .id=0xa01
+ .typ=s88kontakt
+ .artikel=1001
+ .deviceId=0x6
+element
+ .id=0xa02
+ .typ=s88kontakt
+ .artikel=1002
+ .deviceId=0x100
+element
+ .id=0xa03
+ .typ=s88kontakt
+ .artikel=1003
+ .deviceId=0x100
+element
+ .id=0xa04
+ .typ=s88kontakt
+ .artikel=1004
+ .deviceId=0x100
+element
+ .id=0xa05
+ .typ=s88kontakt
+ .artikel=1005
+ .deviceId=0x100
+element
+ .id=0xa06
+ .typ=s88kontakt
+ .artikel=1006
+ .deviceId=0x100
+element
+ .id=0xa07
+ .typ=s88kontakt
+ .artikel=1007
+ .deviceId=0x100
+element
+ .id=0xa08
+ .typ=s88kontakt
+ .artikel=1008
+ .deviceId=0x100
+element
+ .id=0xa09
+ .typ=s88kontakt
+ .artikel=1009
+ .deviceId=0x100
+element
+ .id=0xa0a
+ .typ=s88kontakt
+ .artikel=1010
+ .deviceId=0x100
+element
+ .id=0xa0b
+ .typ=s88kontakt
+ .artikel=1011
+ .deviceId=0x100
+element
+ .id=0xa0c
+ .typ=s88kontakt
+ .artikel=1012
+ .deviceId=0x100
+element
+ .id=0xa0d
+ .typ=s88kontakt
+ .artikel=1013
+ .deviceId=0x100
+element
+ .id=0xa0e
+ .typ=s88kontakt
+ .artikel=1014
+ .deviceId=0x100
+element
+ .id=0xa0f
+ .typ=s88kontakt
+ .artikel=1015
+ .deviceId=0x100
+element
+ .id=0xa10
+ .typ=s88kontakt
+ .artikel=1016
+ .deviceId=0x100
+element
+ .id=0xb01
+ .typ=s88kontakt
+ .artikel=1017
+ .deviceId=0x100
+element
+ .id=0xb02
+ .typ=s88kontakt
+ .artikel=1018
+ .deviceId=0x100
+element
+ .id=0xb03
+ .typ=s88kontakt
+ .artikel=1019
+ .deviceId=0x100
+element
+ .id=0xb04
+ .typ=s88kontakt
+ .artikel=1020
+ .deviceId=0x100
+element
+ .id=0xb05
+ .typ=s88kontakt
+ .artikel=1021
+ .deviceId=0x100
+element
+ .id=0xb06
+ .typ=s88kontakt
+ .artikel=1022
+ .deviceId=0x100
+element
+ .id=0xb07
+ .typ=s88kontakt
+ .artikel=1023
+ .deviceId=0x100
+element
+ .id=0xb08
+ .typ=s88kontakt
+ .artikel=1024
+ .deviceId=0x100
+element
+ .id=0xb09
+ .typ=s88kontakt
+ .artikel=1025
+ .deviceId=0x100
+element
+ .id=0xb0a
+ .typ=s88kontakt
+ .artikel=1026
+ .deviceId=0x100
+element
+ .id=0xb0b
+ .typ=s88kontakt
+ .artikel=1027
+ .deviceId=0x100
+element
+ .id=0xb0c
+ .typ=s88kontakt
+ .artikel=1028
+ .deviceId=0x100
+element
+ .id=0xb0d
+ .typ=s88kontakt
+ .artikel=1029
+ .deviceId=0x100
+element
+ .id=0xb0e
+ .typ=s88kontakt
+ .artikel=1030
+ .deviceId=0x100
+element
+ .id=0xb0f
+ .typ=s88kontakt
+ .artikel=1031
+ .deviceId=0x100
+element
+ .id=0xb10
+ .typ=s88kontakt
+ .artikel=1032
+ .deviceId=0x100
+element
+ .id=0xc01
+ .typ=s88kontakt
+ .artikel=1033
+ .deviceId=0x100
+element
+ .id=0xc02
+ .typ=s88kontakt
+ .artikel=1034
+ .deviceId=0x100
+element
+ .id=0xc03
+ .typ=s88kontakt
+ .artikel=1035
+ .deviceId=0x100
+element
+ .id=0xc04
+ .typ=s88kontakt
+ .artikel=1036
+ .deviceId=0x100
+element
+ .id=0xc05
+ .typ=s88kontakt
+ .artikel=1037
+ .deviceId=0x100
+element
+ .id=0xc06
+ .typ=s88kontakt
+ .artikel=1038
+ .deviceId=0x100
+element
+ .id=0xc07
+ .typ=s88kontakt
+ .artikel=1039
+ .deviceId=0x100
+element
+ .id=0xc08
+ .typ=s88kontakt
+ .artikel=1040
+ .deviceId=0x100
+element
+ .id=0xc09
+ .typ=s88kontakt
+ .artikel=1041
+ .deviceId=0x100
+element
+ .id=0xc0a
+ .typ=s88kontakt
+ .artikel=1042
+ .deviceId=0x100
+element
+ .id=0xc0b
+ .typ=s88kontakt
+ .artikel=1043
+ .deviceId=0x100
+element
+ .id=0xc0c
+ .typ=s88kontakt
+ .artikel=1044
+ .deviceId=0x100
+element
+ .id=0xc0d
+ .typ=s88kontakt
+ .artikel=1045
+ .deviceId=0x100
+element
+ .id=0xc0e
+ .typ=s88kontakt
+ .artikel=1046
+ .deviceId=0x100
+element
+ .id=0xc0f
+ .typ=s88kontakt
+ .artikel=1047
+ .deviceId=0x100
+element
+ .id=0xc10
+ .typ=s88kontakt
+ .artikel=1048
+ .deviceId=0x100
+element
+ .id=0xd01
+ .typ=s88kontakt
+ .artikel=1049
+ .deviceId=0x100
+element
+ .id=0xd02
+ .typ=s88kontakt
+ .artikel=1050
+ .deviceId=0x100
+element
+ .id=0xd03
+ .typ=s88kontakt
+ .artikel=1051
+ .deviceId=0x100
+element
+ .id=0xd04
+ .typ=s88kontakt
+ .artikel=1052
+ .deviceId=0x100
+element
+ .id=0xd05
+ .typ=s88kontakt
+ .artikel=1053
+ .deviceId=0x100
+element
+ .id=0xd06
+ .typ=s88kontakt
+ .artikel=1054
+ .deviceId=0x100
+element
+ .id=0xd07
+ .typ=s88kontakt
+ .artikel=1055
+ .deviceId=0x100
+element
+ .id=0xd08
+ .typ=s88kontakt
+ .artikel=1056
+ .deviceId=0x100
+element
+ .id=0xd09
+ .typ=s88kontakt
+ .artikel=1057
+ .deviceId=0x100
+element
+ .id=0xd0a
+ .typ=s88kontakt
+ .artikel=1058
+ .deviceId=0x100
+element
+ .id=0xd0b
+ .typ=s88kontakt
+ .artikel=1059
+ .deviceId=0x100
+element
+ .id=0xd0c
+ .typ=s88kontakt
+ .artikel=1060
+ .deviceId=0x100
+element
+ .id=0xd0d
+ .typ=s88kontakt
+ .artikel=1061
+ .deviceId=0x100
+element
+ .id=0xd0e
+ .typ=s88kontakt
+ .artikel=1062
+ .deviceId=0x100
+element
+ .id=0xd0f
+ .typ=s88kontakt
+ .artikel=1063
+ .deviceId=0x100
+element
+ .id=0xd10
+ .typ=s88kontakt
+ .artikel=1064
+ .deviceId=0x100
+element
+ .id=0xe01
+ .typ=s88kontakt
+ .artikel=1065
+ .deviceId=0x100
+element
+ .id=0xe02
+ .typ=s88kontakt
+ .artikel=1066
+ .deviceId=0x100
+element
+ .id=0xe03
+ .typ=s88kontakt
+ .artikel=1067
+ .deviceId=0x100
+element
+ .id=0xe04
+ .typ=s88kontakt
+ .artikel=1068
+ .deviceId=0x100
+element
+ .id=0xe05
+ .typ=s88kontakt
+ .artikel=1069
+ .deviceId=0x100
+element
+ .id=0xe06
+ .typ=s88kontakt
+ .artikel=1070
+ .deviceId=0x100
+element
+ .id=0xe07
+ .typ=s88kontakt
+ .artikel=1071
+ .deviceId=0x100
+element
+ .id=0xe08
+ .typ=s88kontakt
+ .artikel=1072
+ .deviceId=0x100
+element
+ .id=0xe09
+ .typ=s88kontakt
+ .artikel=1073
+ .deviceId=0x100
+element
+ .id=0xe0a
+ .typ=s88kontakt
+ .artikel=1074
+ .deviceId=0x100
+element
+ .id=0xe0b
+ .typ=s88kontakt
+ .artikel=1075
+ .deviceId=0x100
+element
+ .id=0xe0c
+ .typ=s88kontakt
+ .artikel=1076
+ .deviceId=0x100
+element
+ .id=0xe0d
+ .typ=s88kontakt
+ .artikel=1077
+ .deviceId=0x100
+element
+ .id=0xe0e
+ .typ=s88kontakt
+ .artikel=1078
+ .deviceId=0x100
+element
+ .id=0xe0f
+ .typ=s88kontakt
+ .artikel=1079
+ .deviceId=0x100
+element
+ .id=0xe10
+ .typ=s88kontakt
+ .artikel=1080
+ .deviceId=0x100

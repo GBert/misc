@@ -1,0 +1,33 @@
+Index: rocrail/rocnetnode/makefile
+===================================================================
+--- rocrail/rocnetnode/makefile	2018-01-08 10:49:48.921731052 +0100
++++ rocrail/rocnetnode/makefile	2018-01-08 11:01:27.575718120 +0100
+@@ -142,16 +142,16 @@
+ #	-cp -p package$(FS)rocnetnode.ini $(DESTDIR)
+ 
+ version:
+-	echo $(QUOT)const int revisionnr = $(QUOT) > ..$(FS)common$(FS)version.h
+-	git rev-list --count HEAD >> ..$(FS)common$(FS)version.h
+-	echo $(QUOT);$(QUOT) >> ..$(FS)common$(FS)version.h
+-	echo $(QUOT)const char* commithash = $(QUOT) >> ..$(FS)common$(FS)version.h
+-	git log -n 1 --pretty=format:\"%H\" >> ..$(FS)common$(FS)version.h
+-	echo $(QUOT);$(QUOT) >> ..$(FS)common$(FS)version.h
+-	@echo $(QUOT)const char* origin = \"$(ORIGIN)\"$(QUOT) >> common$(FS)version.h
+-	@echo $(QUOT);$(QUOT) >> common$(FS)version.h
+-	@echo $(QUOT)const char* revlog = $(QUOT) >> ..$(FS)common$(FS)version.h
+-	git log --pretty=format:"%ci %s" -n 50 | awk -v REV=`git rev-list --count HEAD` '{printf"\"%d %s\\n\" \\\n",REV,$$0;REV=REV-1;}' >> ..$(FS)common$(FS)version.h
+-	@echo $(QUOT)$(QUOT) >> ..$(FS)common$(FS)version.h
+-	@echo $(QUOT)\"log end\";$(QUOT) >> ..$(FS)common$(FS)version.h
++#	echo $(QUOT)const int revisionnr = $(QUOT) > ..$(FS)common$(FS)version.h
++#	git rev-list --count HEAD >> ..$(FS)common$(FS)version.h
++#	echo $(QUOT);$(QUOT) >> ..$(FS)common$(FS)version.h
++#	echo $(QUOT)const char* commithash = $(QUOT) >> ..$(FS)common$(FS)version.h
++#	git log -n 1 --pretty=format:\"%H\" >> ..$(FS)common$(FS)version.h
++#	echo $(QUOT);$(QUOT) >> ..$(FS)common$(FS)version.h
++#	@echo $(QUOT)const char* origin = \"$(ORIGIN)\"$(QUOT) >> common$(FS)version.h
++#	@echo $(QUOT);$(QUOT) >> common$(FS)version.h
++#	@echo $(QUOT)const char* revlog = $(QUOT) >> ..$(FS)common$(FS)version.h
++#	git log --pretty=format:"%ci %s" -n 50 | awk -v REV=`git rev-list --count HEAD` '{printf"\"%d %s\\n\" \\\n",REV,$$0;REV=REV-1;}' >> ..$(FS)common$(FS)version.h
++#	@echo $(QUOT)$(QUOT) >> ..$(FS)common$(FS)version.h
++#	@echo $(QUOT)\"log end\";$(QUOT) >> ..$(FS)common$(FS)version.h
+ 

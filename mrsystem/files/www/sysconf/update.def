@@ -1,0 +1,6 @@
+//update.def
+//Update-Parameter fuer Maerklin-Zentrale: definitions
+//last change: 20.03.2016
+//put type in quotes here if value has to quoted in config file
+//name type range description
+update_file str "1 255" "name of update file"

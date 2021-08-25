@@ -1,0 +1,6 @@
+config XPNDEV
+    tristate ""
+    depends on GENERIC_GPIO
+    select XPNDEV
+    help
+      XpressNet Device Driver

@@ -1,0 +1,19 @@
+//daemons.def
+//Start-Parameter fuer Maerklin-Zentrale: definitions
+//last change: 06.02.2016
+//put type in quotes here if value has to quoted in config file
+//name type range description
+client_cc rb "enable disable" "Client fuer CC-Schnitte"
+client_cs2eth rb "enable disable" "Client fuer CS2 Ethernet Server"
+client_cs2sl rb "enable disable" "Client fuer Client zu CS2 Ethernet"
+client_ms1 rb "enable disable" "Client fuer MS1 SocketCAN"
+client_ms2 rb "enable disable" "Client fuer MS2 SocketCAN"
+client_ms24l rb "enable disable" "Client fuer MS2 CAN4Linux"
+client_slcan rb "enable disable" "Client fuer serial line CAN"
+client_zentrale rb "enable disable" "Client fuer Zenttrale (Verwaltung)"
+drehscheibe rb "enable disable" "Drehscheibe"
+client_gpios88 rb "enable disable" "Client fuer S88 Bus per GPIO"
+client_cceth rb "enable disable" "Client fuer virtuellen COM Port Server"
+client_srcp rb "enable disable" "SRCP Server"
+client_tty rb "enable disable" "Client f&uuml;r serielle Schnittstelle"
+client_lok rb "enable disable" "Client zum Ausl&ouml;sen von Aktionen"

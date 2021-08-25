@@ -1,0 +1,675 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><title>Verwaltung Discovery</title>
+
+<meta content="2009-09-23" name="date">
+<link title="Style" href="../../stylesheet.css" type="text/css" rel="stylesheet">
+<script type="text/javascript">
+function windowTitle()
+{
+if (location.href.indexOf('is-external=true') == -1) {
+parent.document.title="Verwaltung Discovery";
+}
+}
+</script></head>
+<body onload="windowTitle();" style="background-color: white;">
+<hr>
+&nbsp;<br>
+<table style="width: 100%;" summary="" border="0" cellpadding="1" cellspacing="0">
+<tbody>
+<tr>
+<td colspan="2" class="NavBarCell1" bgcolor="#eeeeff">
+<table summary="" border="0" cellpadding="0" cellspacing="3">
+<tbody>
+<tr align="center" valign="top">
+<td class="NavBarCell1" bgcolor="#eeeeff">
+<a style="font-weight: bold;" href="../../overview-summary.html"><font class="NavBarFont1">Überblick</font></a>&nbsp;</td>
+<td class="NavBarCell1" bgcolor="#eeeeff">
+<a href="kapitel-summary.html"><font class="NavBarFont1"><b>Kapitel</b></font></a>&nbsp;</td>
+<td class="NavBarCell1" bgcolor="#eeeeff">
+<a href="../../help-doc.html"><font class="NavBarFont1"><b>Help</b></font></a>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr>
+<td style="background-color: white; text-align: right; vertical-align: middle;" class="NavBarCell2"><font size="-2"> <a href="../../index.html" target="_top"><b>FRAMES</b></a>
+&nbsp;
+&nbsp;<a href="1_Discovery.html" target="_top"><b>NO
+FRAMES</b></a> &nbsp;
+&nbsp;
+<script type="text/javascript">
+<!--
+if(window==top) {
+document.writeln('<A HREF="../../allclasses-noframe.html"><B>All Classes</B></A>');
+}
+//-->
+</script>
+<noscript> <A
+HREF="../../allclasses-noframe.html"><B>All
+Classes</B></A>
+</noscript>
+</font></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>Verwaltung Discovery</h2>
+<hr>
+<table summary="" border="1" cellpadding="3" cellspacing="0" width="100%">
+<tbody>
+<tr class="TableHeadingColor" bgcolor="#ccccff">
+<th colspan="2" align="left"><font size="+2">
+<b>Kennung</b></font></th>
+</tr>
+<tr class="TableRowColor" bgcolor="white">
+<td>
+&nbsp;Discovery&nbsp;(<i><font color="#0000ff">0x01</font></i>,
+in
+CAN-ID:<i><font color="#0000ff"> </font><font color="#ff0000">0x02</font></i>)&nbsp;
+</td>
+</tr>
+</tbody>
+</table>
+<br>
+<table summary="" border="1" cellpadding="3" cellspacing="0" width="100%">
+<tbody>
+<tr class="TableHeadingColor" bgcolor="#ccccff">
+<th colspan="1" align="left"><font size="+2">
+<b>Format</b></font></th>
+</tr>
+</tbody>
+</table>
+<br>
+<table style="text-align: center; width: 653px;" class="CanTable" border="1" bordercolor="#000000" cellspacing="1">
+<tbody>
+<tr>
+<td style="width: 7%;">
+Prio
+</td>
+<td style="width: 9%;">
+Command
+</td>
+<td style="width: 5%;">
+Resp.
+</td>
+<td style="width: 6%;">
+Hash
+</td>
+<td style="width: 6%;">
+DLC
+</td>
+<td style="width: 8%;">
+D-Byte 0
+</td>
+<td style="width: 8%;">
+D-Byte 1
+</td>
+<td style="width: 8%;">
+D-Byte 2
+</td>
+<td style="width: 8%;">
+D-Byte 3
+</td>
+<td style="width: 8%;">
+D-Byte 4
+</td>
+<td style="width: 8%;">
+D-Byte 5
+</td>
+<td style="width: 8%;">
+D-Byte 6
+</td>
+<td style="width: 8%;">
+D-Byte 7
+</td>
+</tr>
+<tr>
+<td>
+2+2 Bit
+</td>
+<td>
+8 Bit
+</td>
+<td>
+1 Bit
+</td>
+<td>
+16 Bit
+</td>
+<td>
+4 Bit
+</td>
+<td>
+8 Bit
+</td>
+<td>
+8 Bit
+</td>
+<td>
+8 Bit
+</td>
+<td>
+8 Bit
+</td>
+<td>
+8 Bit
+</td>
+<td>
+8 Bit
+</td>
+<td>
+8 Bit
+</td>
+<td>
+8 Bit
+</td>
+</tr>
+<tr>
+<td>Message
+Prio</td>
+<td>Discovery</td>
+<td>0|1</td>
+<td>-</td>
+<td>
+0
+</td>
+<td style="background-color: silver;">&nbsp;</td>
+<td style="background-color: silver;">&nbsp;</td>
+<td style="background-color: silver;">&nbsp;</td>
+<td style="background-color: silver;">&nbsp;</td>
+<td style="background-color: silver;">&nbsp;</td>
+<td style="background-color: silver;">&nbsp;</td>
+<td style="background-color: silver;">&nbsp;</td>
+<td style="background-color: silver;">&nbsp;</td>
+</tr>
+<tr>
+<td>Message
+Prio</td>
+<td>Discovery</td>
+<td>0</td>
+<td>-</td>
+<td>
+1
+</td>
+<td>Protokoll-<br>
+Kennung</td>
+<td style="background-color: silver;">&nbsp;</td>
+<td style="background-color: silver;">&nbsp;</td>
+<td style="background-color: silver;">&nbsp;</td>
+<td style="background-color: silver;">&nbsp;</td>
+<td style="background-color: silver;">&nbsp;</td>
+<td style="background-color: silver;">&nbsp;</td>
+<td style="background-color: silver;">&nbsp;</td>
+</tr>
+<tr>
+<td rowspan="2">
+Message
+Prio
+</td>
+<td rowspan="2">
+Discovery
+</td>
+<td rowspan="2">
+0|1
+</td>
+<td rowspan="2">
+-</td>
+<td rowspan="2">
+5
+</td>
+<td colspan="4">
+MFX-UID
+/ Loc-ID
+</td>
+<td rowspan="2">
+Range/
+Protokoll-<br>
+Kennung
+</td>
+<td rowspan="2" style="background-color: silver;">
+&nbsp;</td>
+<td rowspan="2" style="background-color: silver;">
+&nbsp;</td>
+<td rowspan="2" style="background-color: silver;">
+&nbsp;</td>
+</tr>
+<tr>
+<td>
+High
+</td>
+<td>
+-</td>
+<td>
+-</td>
+<td>
+Low
+</td>
+</tr>
+<tr>
+<td rowspan="2">
+Message
+Prio
+</td>
+<td rowspan="2">
+Discovery
+</td>
+<td rowspan="2">
+1
+</td>
+<td rowspan="2">
+-</td>
+<td rowspan="2">
+6
+</td>
+<td colspan="4">
+MFX-UID
+/ Loc-ID
+</td>
+<td rowspan="2">
+Range
+</td>
+<td rowspan="2">
+ASK-<br>
+Verhältnis</td>
+<td rowspan="2" style="background-color: silver;">
+&nbsp;</td>
+<td rowspan="2" style="background-color: silver;">
+&nbsp;</td>
+</tr>
+<tr>
+<td>
+High
+</td>
+<td>
+-</td>
+<td>
+-</td>
+<td>
+Low
+</td>
+</tr>
+</tbody>
+</table>
+<br>
+<table summary="" border="1" cellpadding="3" cellspacing="0" width="100%">
+<tbody>
+<tr class="TableHeadingColor" bgcolor="#ccccff">
+<th colspan="1" align="left"><font size="+2">
+<b>Beschreibung</b></font></th>
+</tr>
+</tbody>
+</table>
+<p>Suchen von
+Loks auf dem Gleis. Gleis wird durch Protokoll-Kennung bestimmt.<br>
+</p>
+<p>Form 1: DLC =
+0:</p>
+<dl>
+<dd>Starten
+"Erkennen alle Protokolle". (später &gt;= V2.0)</dd>
+</dl>
+<p>Form 2: DLC =
+1:<br>
+</p>
+<dl>
+<dd>Erkennen nach Datenprotokoll, Protokoll - Kennung bestimmt
+Datenprotokoll, Gleis
+Format Prozessor macht MFX&nbsp;Discovery / Lok&nbsp;Erkennen
+eigenständig. </dd>
+</dl>
+<p>Form 3: DLC = 5:<br>
+</p>
+<dl>
+<dd>1.) Einzel
+- MFX - Discovery: Senden der Anforderung mit Range (=Info Länge der
+Bits) (Realisiert in V1.0)</dd>
+<dd>2.)
+Sonstiges Erkennen: Aus Loc-ID werden Adresse und Protokoll
+extrahiert. Mit diesen Daten wird versucht, diese Adresse auf dem Gleis
+zu erkennen.</dd>
+</dl>
+<p>Die
+Discovery-Zwischenschritte werden in Form 3 kommuniziert. <br>
+Pro Erkennungsvorgang wird nur ein Decoder erkannt.</p>
+<br>
+<center>
+<table border="1" bordercolor="#000000" cellspacing="1" width="620">
+<tbody>
+<tr>
+<td colspan="3" valign="top">
+Anfrage
+Programmiergleis:
+</td>
+</tr>
+<tr>
+<td width="10%">
+Protokoll
+</td>
+<td width="20%">
+Range/
+Protokoll-Kennung
+</td>
+<td>
+Bemerkung
+</td>
+</tr>
+<tr>
+<td>
+MFX:
+</td>
+<td>
+0-32 </td>
+<td>
+=Range.
+Anfrage zur Erkennung der Lok auf dem Programmiergleis.<br>
+Wenn die Lok antwortet, wird das Antwortbit gesetzt
+</td>
+</tr>
+<tr>
+<td valign="top" width="10%">
+MM2:
+</td>
+<td>
+33
+</td>
+<td>
+Erkennung
+der MM2-Lok auf dem Programmiergleis.<br>
+In der Antwort wird die MM2-Adresse gemeldet. (20 kHz)
+</td>
+</tr>
+<tr>
+<td>
+MM2:
+</td>
+<td>
+34
+</td>
+<td>
+Erkennung
+der MM2-Lok auf dem Programmiergleis.<br>
+In der Antwort wird die MM2-Adresse gemeldet. (40 kHz) <font color="#0000ff">(&gt;V3.0)</font>
+</td>
+</tr>
+<tr>
+<td>
+DCC:
+</td>
+<td>
+35
+</td>
+<td>
+Auslesen
+der DDC-Adresse auf dem Programmiergleis. <br>
+Bewirkt denselben Vorgang wie 36, Antwort entweder 35 oder 36.<br>
+In der Antwort wird die kurze DCC-Adresse gemeldet.
+</td>
+</tr>
+<tr>
+<td>
+DCC
+</td>
+<td>
+36
+</td>
+<td>
+Auslesen
+der DDC-Adresse auf dem Programmiergleis.<br>
+Bewirkt denselben Vorgang wie 35, Antwort entweder 35 oder 36.<br>
+In der Antwort wird die lange DCC-Adresse gemeldet.
+</td>
+</tr>
+<tr>
+<td>
+DCC:
+</td>
+<td>
+37
+</td>
+<td>
+DCC-Erkennen
+(Intervall-Schachtelungs-Algorithmus mit DCC-K=127 Adr). In der Antwort
+wird die DCC-Adresse gemeldet. <font color="#0000ff">(&gt;V3.0)</font>
+</td>
+</tr>
+<tr>
+<td>
+SX1:
+</td>
+<td>
+38
+</td>
+<td>
+Auslesen
+der SX1-Adresse auf dem Programmiergleis.<br>
+In der Antwort wird die SX1-Adresse gemeldet. <font color="#0000ff">(&gt;V3.0)</font>
+</td>
+</tr>
+<tr>
+<td>
+SX1:
+</td>
+<td>
+39
+</td>
+<td>
+Erkennen
+(Intervall-Schachtelungs-Algorithmus mit Adr 0-99)<br>
+In der Antwort wird die SX1-Adresse gemeldet. <font color="#0000ff">(&gt;V3.0)</font>
+</td>
+</tr>
+</tbody>
+</table>
+<br>
+<table border="1" bordercolor="#000000" cellspacing="1" width="620">
+<tbody>
+<tr>
+<td colspan="2" width="26%">
+Anfrage
+Hauptgleis:
+</td>
+<td>
+Range =
+Wert mod 64.
+</td>
+</tr>
+<tr>
+<td width="10%">
+MFX:
+</td>
+<td width="20%">
+64-96 </td>
+<td>
+Anfrage
+zur Erkennung der Lok auf dem Hauptgleis.<br>
+Wenn die Lok antwortet, wird das Antwortbit gesetzt
+</td>
+</tr>
+<tr>
+<td>
+MM2:
+</td>
+<td>
+98
+</td>
+<td>
+Erkennung der MM2-Lok auf dem Hauptgleis.<br>
+In der Antwort wird die MM2-Adresse gemeldet.<br>
+<font color="#ff0000">Ungültig,
+da Hardwaretechnisch nicht möglich</font>
+</td>
+</tr>
+<tr>
+<td>
+DCC:
+</td>
+<td>
+99
+</td>
+<td>
+Auslesen der DDC-Adresse auf dem Hauptgleis.<br>
+In der Antwort wird die DCC-Adresse gemeldet.<br>
+<font color="#ff0000">Ungültig,
+da Hardwaretechnisch nicht möglich</font>
+</td>
+</tr>
+<tr>
+<td>
+DCC:
+</td>
+<td>
+100
+</td>
+<td>
+DCC-Erkennen (Intervall-Schachtelungs-Algorithmus mit
+DCC-K=127 Adr). In der Antwort wird die gefundene DCC-Adresse gemeldet.<br>
+<font color="#ff0000">Ungültig,
+da Hardwaretechnisch nicht möglich</font>
+</td>
+</tr>
+<tr>
+<td>
+SX1:
+</td>
+<td>
+101
+</td>
+<td>
+Auslesen der SX1-Adresse auf dem Hauptgleis.<br>
+In der Antwort wird die SX1-Adresse gemeldet.<br>
+<font color="#ff0000">Ungültig,
+da Hardwaretechnisch nicht möglich</font>
+</td>
+</tr>
+<tr>
+<td>
+SX1:
+</td>
+<td>
+102
+</td>
+<td>
+Erkennen (Intervall-Schachtelungs-Algorithmus mit Adr
+0-99).<br>
+In der Antwort wird die gefundene SX1-Adresse gemeldet.<br>
+<font color="#ff0000">Ungültig,
+da Hardwaretechnisch nicht möglich</font>
+</td>
+</tr>
+</tbody>
+</table>
+</center>
+<p></p>
+&nbsp;<br>
+<table summary="" border="1" cellpadding="3" cellspacing="0" width="100%">
+<tbody>
+<tr class="TableHeadingColor" bgcolor="#ccccff">
+<th colspan="1" align="left"><font size="+2">
+Beispiel</font></th>
+</tr>
+</tbody>
+</table>
+<br>
+<p>00024711 1
+20 Voller
+mfx Discoveryzyklus <br>
+00024711 5 FF FF FF FF 00 Range 0 MFX
+Discovery<br>
+00024711 1 21
+MM2 Discovery</p>
+<br>
+<table summary="" border="1" cellpadding="3" cellspacing="0" width="100%">
+<tbody>
+<tr class="TableHeadingColor" bgcolor="#ccccff">
+<th colspan="1" align="left"><font size="+2">
+Antwort</font></th>
+</tr>
+</tbody>
+</table>
+<br>
+<p>Positiv mit
+DLC=5 und (bisher) gefundener Adresse<br>
+Negativ:
+DLC=0
+</p>
+<br>
+<table summary="" border="1" cellpadding="3" cellspacing="0" width="100%">
+<tbody>
+<tr class="TableHeadingColor" bgcolor="#ccccff">
+<th colspan="1" align="left"><font size="+2">
+Besonderheiten</font></th>
+</tr>
+</tbody>
+</table>
+<br>
+<p>Wird immer von
+Graphical User Interface Prozessor ausgelöst. Das Auslösen eines
+Discoverys sollte nur vom Master - Bediengerät gemacht werden.
+Ansonsten sind Vorkehrungen für das gleichzeitige Auslösen von
+Dicoverys zu treffen.</p>
+<p>Antworten auf
+ein Discovery sollen und dürfen von allen Teilnehmern empfangen und
+auch entsprechend ausgewertet werden.</p>
+<p>Mfx Discovery
+unterscheidet nicht nach Hauptgleis oder Programmiergleis.</p>
+<p>Wird eine MFX
+Lok nach Form 1 gesucht, so wird bei einer Antwort der komplette Zyklus
+mit 32 Stufen durchgeführt.</p>
+<p>ASK Verhältnis
+ist eine Kenngröße für die Qualität der MFX Rückmeldesignale.</p>
+<p>Bei einem
+kompletten Zyklus wird die letzte Meldung mit und ohne ASK Verhältnis
+gesendet.</p>
+<p>Bei diesem
+Kommando handelt es sich um ein sequenziell in der Abarbeitung
+befindlichen Programmierbefehl. Diese werden nicht in einer Befehlqueue
+zwischengespeichert. Erst nach einer Antwort durch den Gleis Format
+Prozessor darf der nächste Programmierbefehl angefordert werden. Genau
+ein Programmierbefehl wird durch den Gleis Format Prozessor zeitgleich
+abgearbeitet.</p>
+<br>
+<hr><br>
+<table style="width: 100%;" summary="" border="0" cellpadding="1" cellspacing="0">
+<tbody>
+<tr>
+<td colspan="2" class="NavBarCell1" bgcolor="#eeeeff">
+<table summary="" border="0" cellpadding="0" cellspacing="3">
+<tbody>
+<tr align="center" valign="top">
+<td class="NavBarCell1" bgcolor="#eeeeff">
+<a href="../../overview-summary.html"><font class="NavBarFont1"><b>Überblick</b></font></a>&nbsp;</td>
+<td class="NavBarCell1" bgcolor="#eeeeff">
+<a href="package-summary.html"><font class="NavBarFont1"><b>Kapitel</b></font></a>&nbsp;</td>
+<td class="NavBarCell1" bgcolor="#eeeeff">
+<a href="../../help-doc.html"><font class="NavBarFont1"><b>Help</b></font></a>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr>
+<td style="background-color: white; text-align: right;" class="NavBarCell2"><font size="-2"> <a href="../../index.html" target="_top"><b>FRAMES</b></a>
+&nbsp;
+&nbsp;<a href="1_Discovery.html" target="_top"><b>NO
+FRAMES</b></a> &nbsp;
+&nbsp;
+<script type="text/javascript">
+<!--
+if(window==top) {
+document.writeln('<A HREF="../../allclasses-noframe.html"><B>All Classes</B></A>');
+}
+//-->
+</script>
+<noscript> <A
+HREF="../../allclasses-noframe.html"><B>All
+Classes</B></A>
+</noscript>
+</font></td>
+</tr>
+</tbody>
+</table>
+<br>
+&nbsp;
+<hr>
+</body></html>

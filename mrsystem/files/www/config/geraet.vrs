@@ -1,0 +1,9 @@
+[geraet]
+version
+ .major=2
+ .minor=6
+geraet
+ .sernum=9999
+ .gfpuid=0x4353fff2
+ .guiuid=0x4353fff3
+ .hardvers=0.99

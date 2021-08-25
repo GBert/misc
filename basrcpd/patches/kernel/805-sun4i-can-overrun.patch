@@ -1,0 +1,37 @@
+--- a/drivers/net/can/sun4i_can.c	2016-09-30 10:20:43.000000000 +0200
++++ b/drivers/net/can/sun4i_can.c	2016-10-02 16:57:54.707545905 +0200
+@@ -531,6 +531,7 @@
+ 	}
+ 
+ 	if (isrc & SUN4I_INT_DATA_OR) {
++		int err;
+ 		/* data overrun interrupt */
+ 		netdev_dbg(dev, "data overrun interrupt\n");
+ 		if (likely(skb)) {
+@@ -539,6 +540,15 @@
+ 		}
+ 		stats->rx_over_errors++;
+ 		stats->rx_errors++;
++
++		/* reset the CAN IP by entering reset mode */
++		err = set_reset_mode(dev);
++		if (err)
++			netdev_err(dev, "could not enter reset mode\n");
++		err = set_normal_mode(dev);
++		if (err)
++			netdev_err(dev, "could not enter normal mode\n");
++
+ 		/* clear bit */
+ 		sun4i_can_write_cmdreg(priv, SUN4I_CMD_CLEAR_OR_FLAG);
+ 	}
+@@ -653,8 +663,8 @@
+ 			netif_wake_queue(dev);
+ 			can_led_event(dev, CAN_LED_EVENT_TX);
+ 		}
+-		if (isrc & SUN4I_INT_RBUF_VLD) {
+-			/* receive interrupt */
++		if ((isrc & SUN4I_INT_RBUF_VLD) && !(isrc & SUN4I_INT_DATA_OR)) {
++			/* receive interrupt - don't read data if overrun occured */
+ 			while (status & SUN4I_STA_RBUF_RDY) {
+ 				/* RX buffer is not empty */
+ 				sun4i_can_rx(dev);

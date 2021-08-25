@@ -1,0 +1,10 @@
+//CV_maerklin.def
+//CV-Parameter fuer Loks: definitions
+//last change: 06.02.2016
+//put type in quotes here if value has to quoted in config file
+//name type range description
+CV1 int "0 127" "Basis-Adresse: Die Basisadresse enth&auml;lt die Lokadresse."
+CV2 int "0 255" "Start-Spannung: Definiert die Fahrspannung, die bei niedrigster Fahrstufe am Motor anliegt."
+CV3 int "0 255" "Beschleunigungsrate: Definiert die L&auml;nge der Wartezeit, die beim Beschleunigen jeweils vor dem Hochschalten zur n&auml;chst h&ouml;heren Fahrstufe vergeht."
+CV4 int "0 255" "Bremsrate: Definiert die L&auml;nge der Wartezeit, die beim Bremsen jeweils vor dem Herunterschalten zur n&auml;chst niedrigen Fahrstufe vergeht."
+CV5 int "0 255" "Maximale Spannung: Definiert die Fahrspannung, die bei h&ouml;chster Fahrstufe am Motor anliegt."

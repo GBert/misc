@@ -1,0 +1,17 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2016 OpenWrt.org
+
+START=99
+
+start() {
+	[ -e /opt/rocrail/ ] && {
+		cd /opt/rocrail/
+		sleep 15
+		nohup ./rocrail -nodevcheck -l /opt/rocrail 2>&1 > /dev/null &
+		echo "$!" > /tmp/rocraild.pid
+	}
+}
+
+stop() {
+	killall rocrail
+}

@@ -1,0 +1,24 @@
+//mrsystem.def
+//System-Parameter fuer Maerklin-Zentrale: definitions
+//last change: 06.02.2016
+//put type in quotes here if value has to quoted in config file
+//name type range description
+zentrale int "0 1" "Betriebsmodus"
+broadcast rb "on off" "UDP als broadcast senden"
+udpbc ip "UDP Broadcast Adresse"
+address ip "IP-Adresse f&uuml;r Interprozesskommunikation"
+port int "1000 65535" "Portnummer f&uuml;r Interprozesskommunikation"
+interface str "1 10" "Interface f&uuml;r Interprozesskommunikation"
+can_interface str "1 10" "Name des CAN-Interface"
+cs2_path str "1 255" "Pfad zu den *.cs2 Konfigurationsdateien"
+protokoll bits "motorola mfx dcc" "Gleisprotokolle"
+gleissignal rb "start stop" "Gleissignal einschalten"
+sync bits "periodisch keybd layout mem contr" "Sync mit Master MS2"
+conn_tcp int "0 1" "Als CS2 Slave TCP benutzen"
+wakeup_s88 str "1 255" "S88 Module aufwwecken"
+gpio_s88 "str" "0 255" "Kommandozeile S88"
+hide_ms2 rb "unhide hide" "MS2 auf Ethernet Seite verstecken"
+emu_host_com int "1000 65535" "Portnummer f&uuml;r virtuellen COM Port Server"
+serial_line str "1 20" "Name des seriellen Interface"
+num_lokfkt int "16 32" "Anzahl Lokfunktionen"
+write_web rb "on off" "write CAN member and config to web page"

@@ -1,0 +1,22 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2019 OpenWrt.org
+
+START=99
+
+start() {
+	# clone every 5 minutes
+	# clone-ms2-loco -t 300
+
+	# clone on FO loco Lokliste / F4 deletes exising list except Lokliste entry
+	# clone-ms2-loco -k
+
+	# using new Switch for MS2 V3.x + F0 & F4 action
+	clone-ms2-loco -nk
+
+	# using LED on BPi PI14 and push button on BPi PI10
+	# clone-ms2-loco -l 270 -p 266
+}
+
+stop() {
+	killall clone-ms2-loco
+}

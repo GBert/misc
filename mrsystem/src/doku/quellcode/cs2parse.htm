@@ -1,0 +1,579 @@
+<HTML>
+<HEAD>
+<TITLE>Funktionen f&uuml;r das Parsen und Schreiben von CS2 Dateien</TITLE>
+</HEAD>
+<BODY>
+<H1>Funktionen f&uuml;r das Parsen und Schreiben von CS2 Dateien</H1>
+<P>
+<P>
+<H2>Bibliothek</H2>
+<P>
+<TABLE BORDER="1">
+<TR><TH>Projekt</TH><TD>libs/cs2_parse</TD></TR>
+<TR><TH>Library</TH><TD>libcs2_parse.a</TD></TR>
+<TR><TH>Includedatei</TH><TD>cs2parse.h<BR>write_cs2.h</TD></TR>
+</TABLE>
+<P>
+<H2>Lesen (cs2parse.h)</H2>
+<P>
+<H3>Definitionen</H3>
+<P>
+<H4>Konstanten</H4>
+<P>
+<H5>Konstanten f&uuml;r den Returnwert der Parse-Funktion</H5>
+<P>
+<PRE>#define PARSER_ERROR     0x00
+#define PARSER_EOF       0x01
+#define PARSER_PARAGRAPH 0x02
+#define PARSER_VALUE     0x03</PRE>
+<P>
+<H5>Konstanten f&uuml;r den erkannten Paragraphen</H5>
+<P>
+<PRE>#define PARSER_PARAGRAPH_UNDEFINED      0x00
+#define PARSER_PARAGRAPH_LOK            0x01
+#define PARSER_PARAGRAPH_NUMLOKS        0x02
+#define PARSER_PARAGRAPH_LOKOMOTIVE     0x03
+#define PARSER_PARAGRAPH_GERAET         0x04
+#define PARSER_PARAGRAPH_GLEISBILD      0x05
+#define PARSER_PARAGRAPH_MAGNETARTIKEL  0x06
+#define PARSER_PARAGRAPH_FAHRSTRASSEN   0x07
+#define PARSER_PARAGRAPH_GLEISBILDSEITE 0x08
+#define PARSER_PARAGRAPH_LOKSTATUS      0x09</PRE>
+<P>
+<H5>Konstanten f&uuml;r den erkannten Wert</H5>
+<P>
+<PRE>#define PARSER_VALUE_LOK             0x01
+#define PARSER_VALUE_NAME            0x02
+#define PARSER_VALUE_WERT            0x03
+#define PARSER_VALUE_UID             0x04
+#define PARSER_VALUE_ADRESSE         0x05
+#define PARSER_VALUE_TYP             0x06
+#define PARSER_VALUE_MFXUID          0x07
+#define PARSER_VALUE_SYMBOL          0x08
+#define PARSER_VALUE_AV              0x09
+#define PARSER_VALUE_BV              0x0a
+#define PARSER_VALUE_VOLUME          0x0b
+#define PARSER_VALUE_VELOCITY        0x0c
+#define PARSER_VALUE_RICHTUNG        0x0d
+#define PARSER_VALUE_VMAX            0x0e
+#define PARSER_VALUE_VMIN            0x0f
+#define PARSER_VALUE_FKT             0x10
+#define PARSER_VALUE_DAUER           0x11
+#define PARSER_VALUE_GERAET          0x12
+#define PARSER_VALUE_VERSION         0x13
+#define PARSER_VALUE_MINOR           0x14
+#define PARSER_VALUE_SERNUM          0x15
+#define PARSER_VALUE_GFPUID          0x16
+#define PARSER_VALUE_GUIUID          0x17
+#define PARSER_VALUE_HARDVERS        0x18
+#define PARSER_VALUE_MAJOR           0x19
+#define PARSER_VALUE_SESSION         0x20
+#define PARSER_VALUE_ID              0x21
+#define PARSER_VALUE_LOKOMOTIVE      0x22
+#define PARSER_VALUE_SID             0x24
+#define PARSER_VALUE_ICON            0x25
+#define PARSER_VALUE_TACHOMAX        0x26
+#define PARSER_VALUE_XPROTOKOLL      0x27
+#define PARSER_VALUE_MFXTYP          0x28
+#define PARSER_VALUE_STAND           0x29
+#define PARSER_VALUE_FAHRT           0x2a
+#define PARSER_VALUE_FUNKTIONEN      0x2b
+#define PARSER_VALUE_NR              0x2c
+#define PARSER_VALUE_VORWAERTS       0x2d
+#define PARSER_VALUE_RUECKWAERTS     0x2e
+#define PARSER_VALUE_INTRAKTION      0x2f
+#define PARSER_VALUE_SEITE           0x30
+#define PARSER_VALUE_GROESSE         0x31
+#define PARSER_VALUE_ZULETZT_BENUTZT 0x32
+#define PARSER_VALUE_ARTIKEL         0x33
+#define PARSER_VALUE_STELLUNG        0x34
+#define PARSER_VALUE_SCHALTZEIT      0x35
+#define PARSER_VALUE_UNGERADE        0x36
+#define PARSER_VALUE_DECODER         0x37
+#define PARSER_VALUE_DECTYP          0x38
+#define PARSER_VALUE_FAHRSTRASSE     0x39
+#define PARSER_VALUE_S88             0x3a
+#define PARSER_VALUE_S88EIN          0x3b
+#define PARSER_VALUE_EXTERN          0x3c
+#define PARSER_VALUE_ITEM            0x3d
+#define PARSER_VALUE_FSVERWEIS       0x3e
+#define PARSER_VALUE_MAGNETARTIKEL   0x3f
+#define PARSER_VALUE_ELEMENT         0x40
+#define PARSER_VALUE_DREHUNG         0x41
+#define PARSER_VALUE_TEXT            0x48
+#define PARSER_VALUE_ZUSTAND         0x49
+#define PARSER_VALUE_DEVICE_ID       0x50
+#define PARSER_VALUE_PAGE            0x51
+#define PARSER_VALUE_SEKUNDE         0x52
+#define PARSER_VALUE_IDX             0x53
+#define PARSER_VALUE_ON              0x54</PRE>
+<P>
+<H5>Konstanten f&uuml;r den Typ der Konfigurationsdatei</H5>
+<P>
+<PRE>#define PARSER_TYPE_LOKNAMEN          0x01
+#define PARSER_TYPE_LOKINFO           0x02
+#define PARSER_TYPE_GERAET_VRS        0x03
+#define PARSER_TYPE_LOK_CS2           0x04
+#define PARSER_TYPE_GLEISBILD_CS2     0x05
+#define PARSER_TYPE_GLEISBILD_SEITE   0x06
+#define PARSER_TYPE_MAGNETARTIKEL_CS2 0x07
+#define PARSER_TYPE_FAHRSTRASSEN_CS2  0x08
+#define PARSER_TYPE_HEADER_CS2        0x09</PRE>
+<P>
+<H4>Datentypen</H4>
+<P>
+<H5>Datentypen f&uuml;r Funktionen der Konfigurationslib</H5>
+<P>
+<PRE>typedef struct {
+   BOOL Verbose;
+   Scanner *Scanner;
+   int Type;
+   int SubType;
+   int Level;
+   char Name[20];
+   char Value[80];
+} Cs2parser;</PRE>
+<P>
+<H4>Makros</H4>
+<P>
+<H5>Makros, um Felder im Kommando zu setzen</H5>
+<P>
+<PRE>#define Cs2pSetVerbose(Data, Val) (Data)->Verbose=Val
+#define Cs2pSetScanner(Data, Scn) (Data)->Scanner=Scn
+#define Cs2pSetType(Data, Val)    (Data)->Type=Val
+#define Cs2pSetSubType(Data, Val) (Data)->SubType=Val
+#define Cs2pSetLevel(Data, Val)   (Data)->Level=Val
+#define Cs2pSetName(Data, Str)    strcpy((Data)->Name, Str)
+#define Cs2pSetValue(Data, Str)   strcpy((Data)->Value, Str)</PRE>
+<P>
+<H5>Makros, um Felder im Kommando zu lesen</H5>
+<P>
+<PRE>#define Cs2pGetVerbose(Data) (Data)->Verbose
+#define Cs2pGetScanner(Data) (Data)->Scanner
+#define Cs2pGetType(Data)    (Data)->Type
+#define Cs2pGetSubType(Data) (Data)->SubType
+#define Cs2pGetLevel(Data)   (Data)->Level
+#define Cs2pGetName(Data)    (Data)->Name
+#define Cs2pGetValue(Data)   (Data)->Value</PRE>
+<P>
+<H5>Sonstige Makros</H5>
+<P>
+<PRE>#define Cs2pExit(Cs2parser *Data)</PRE>
+<P>
+<H4>Funktionen</H4>
+<P>
+<PRE>Cs2parser *Cs2pCreate(void);
+void Cs2pDestroy(Cs2parser *Data);
+void Cs2pInit(Cs2parser *Data, int Type, char *InputLine, int Len);
+int Cs2pParse(Cs2parser *Data);</PRE>
+<P>
+<H2>Schreiben (write_cs2.h)</H2>
+<P>
+<P>
+<H3>Definitionen</H3>
+<P>
+<H4>Konstanten</H4>
+<P>
+<H5>Konstanten f&uuml;r Dateityp</H5>
+<P>
+<PRE>#define CS2_FILE_TYPE_LOKOMOTIVE 1</PRE>
+<P>
+<H5>Konstanten f&uuml;r Dateinamen</H5>
+<P>
+<PRE>#define CS2_FILE_STRING_LOKOMOTIVE           "lokomotive.cs2"
+#define CS2_FILE_STRING_MAGNETARTIKEL        "magnetartikel.cs2"
+#define CS2_FILE_STRING_GLEISBILD            "gleisbild.cs2"
+#define CS2_FILE_STRING_FAHRSTRASSE          "fahrstrassen.cs2"
+#define CS2_FILE_STRING_STATUS_LOKOMOTIVE    "lokstatus.sr2"
+#define CS2_FILE_STRING_STATUS_MAGNETARTIKEL "magnetartikel.sr2"
+#define CS2_FILE_STRING_STATUS_GLEISBILD     "gleisbild.sr2"
+#define CS2_FILE_STRING_STATUS_FAHRSTRASSE   "fahrstrassen.sr2"</PRE>
+<P>
+<H5>Konstanten f&uuml;r Paragraphen/Abs&auml;tze (Token und Text)</H5>
+<P>
+<PRE>#define CS2_PARAGRAPH_TYPE_LOK            1
+#define CS2_PARAGRAPH_TYPE_NUMLOKS        2
+#define CS2_PARAGRAPH_TYPE_LOKOMOTIVE     3
+#define CS2_PARAGRAPH_TYPE_GLEISBILD      4
+#define CS2_PARAGRAPH_TYPE_GLEISBILDSEITE 5
+#define CS2_PARAGRAPH_TYPE_MAGNETARTIKEL  6
+#define CS2_PARAGRAPH_TYPE_FAHRSTRASSEN   7
+
+#define CS2_PARAGRAPH_STRING_LOK            "lok"
+#define CS2_PARAGRAPH_STRING_NUMLOKS        "numloks"
+#define CS2_PARAGRAPH_STRING_LOKOMOTIVE     "lokomotive"
+#define CS2_PARAGRAPH_STRING_GLEISBILD      "gleisbild"
+#define CS2_PARAGRAPH_STRING_GLEISBILDSEITE "gleisbildseite"
+#define CS2_PARAGRAPH_STRING_MAGNETARTIKEL  "magnetartikel"
+#define CS2_PARAGRAPH_STRING_FAHRSTRASSEN   "fahrstrassen"</PRE>
+<P>
+<H5>Konstanten f&uuml;r Konfigurationswert</H5>
+<P>
+<PRE>#define CS_MAGNETARTIKEL_TYP_STRING_STD_ROT_GRUEN              "std_rot_gruen"
+#define CS_MAGNETARTIKEL_TYP_STRING_STD_ROT                    "std_rot"
+#define CS_MAGNETARTIKEL_TYP_STRING_STD_GRUEN                  "std_gruen"
+#define CS_MAGNETARTIKEL_TYP_STRING_ENTKUPPLUNGSGLEIS          "entkupplungsgleis"
+#define CS_MAGNETARTIKEL_TYP_STRING_ENTKUPPLUNGSGLEIS_1        "entkupplungsgleis_1"
+#define CS_MAGNETARTIKEL_TYP_STRING_RECHTSWEICHE               "rechtsweiche"
+#define CS_MAGNETARTIKEL_TYP_STRING_LINKSWEICHE                "linksweiche"
+#define CS_MAGNETARTIKEL_TYP_STRING_Y_WEICHE                   "y_weiche"
+#define CS_MAGNETARTIKEL_TYP_STRING_K84_AUSGANG                "k84_ausgang"
+#define CS_MAGNETARTIKEL_TYP_STRING_K84_DOPPELAUSGANG          "k84_doppelausgang"
+#define CS_MAGNETARTIKEL_TYP_STRING_DREIWEGWEICHE              "dreiwegweiche"
+#define CS_MAGNETARTIKEL_TYP_STRING_DKW_2_ANTRIEBE             "DKW 2 Antriebe"
+#define CS_MAGNETARTIKEL_TYP_STRING_DKW_1_ANTRIEB              "DKW 1 Antrieb"
+#define CS_MAGNETARTIKEL_TYP_STRING_LICHTSIGNAL_HP01           "lichtsignal_HP01"
+#define CS_MAGNETARTIKEL_TYP_STRING_LICHTSIGNAL_HP02           "lichtsignal_HP02"
+#define CS_MAGNETARTIKEL_TYP_STRING_LICHTSIGNAL_HP012          "lichtsignal_HP012"
+#define CS_MAGNETARTIKEL_TYP_STRING_LICHTSIGNAL_HP012_SH01     "lichtsignal_HP012_SH01"
+#define CS_MAGNETARTIKEL_TYP_STRING_LICHTSIGNAL_SH01           "lichtsignal_SH01"
+#define CS_MAGNETARTIKEL_TYP_STRING_FORMSIGNAL_HP01            "formsignal_HP01"
+#define CS_MAGNETARTIKEL_TYP_STRING_FORMSIGNAL_HP02            "formsignal_HP02"
+#define CS_MAGNETARTIKEL_TYP_STRING_FORMSIGNAL_HP012           "formsignal_HP012"
+#define CS_MAGNETARTIKEL_TYP_STRING_FORMSIGNAL_HP012_SH01      "formsignal_HP012_SH01"
+#define CS_MAGNETARTIKEL_TYP_STRING_FORMSIGNAL_SH01            "formsignal_SH01"
+#define CS_MAGNETARTIKEL_TYP_STRING_URC_LICHTSIGNAL_HP01       "urc_lichtsignal_HP01"
+#define CS_MAGNETARTIKEL_TYP_STRING_URC_LICHTSIGNAL_HP012      "urc_lichtsignal_HP012"
+#define CS_MAGNETARTIKEL_TYP_STRING_URC_LICHTSIGNAL_HP012_SH01 "urc_lichtsignal_HP012_SH01"
+#define CS_MAGNETARTIKEL_TYP_STRING_URC_LICHTSIGNAL_SH01       "urc_lichtsignal_SH01"
+#define CS_MAGNETARTIKEL_TYP_STRING_SCHIEBEBUEHNE              "schiebebuehne"
+#define CS_MAGNETARTIKEL_TYP_STRING_DREHSCHEIBE_ALT            "drehscheibe_alt"
+#define CS_MAGNETARTIKEL_TYP_STRING_DIGITALDREHSCHEIBE         "digitaldrehscheibe"
+
+#define CS2_GLEISBILD_TYP_STRING_LEER               "leer"
+#define CS2_GLEISBILD_TYP_STRING_GERADE             "gerade"
+#define CS2_GLEISBILD_TYP_STRING_KREUZUNG           "kreuzung"
+#define CS2_GLEISBILD_TYP_STRING_UNTERFUEHRUNG      "unterfuehrung"
+#define CS2_GLEISBILD_TYP_STRING_PRELLBOCK          "prellbock"
+#define CS2_GLEISBILD_TYP_STRING_BOGEN              "bogen"
+#define CS2_GLEISBILD_TYP_STRING_DOPPELBOGEN        "doppelbogen"
+#define CS2_GLEISBILD_TYP_STRING_TUNNEL             "tunnel"
+#define CS2_GLEISBILD_TYP_STRING_LINKSWEICHE        "linksweiche"
+#define CS2_GLEISBILD_TYP_STRING_RECHTSWEICHE       "rechtsweiche"
+#define CS2_GLEISBILD_TYP_STRING_DREIWEGWEICHE      "dreiwegweiche"
+#define CS2_GLEISBILD_TYP_STRING_YWEICHE            "yweiche"
+#define CS2_GLEISBILD_TYP_STRING_DKWEICHE           "dkweiche"
+#define CS2_GLEISBILD_TYP_STRING_DKWEICHE_2         "dkweiche_2"
+#define CS2_GLEISBILD_TYP_STRING_SIGNAL             "signal"
+#define CS2_GLEISBILD_TYP_STRING_S88KONTAKT         "s88kontakt"
+#define CS2_GLEISBILD_TYP_STRING_S88BOGEN           "s88bogen"
+#define CS2_GLEISBILD_TYP_STRING_PFEIL              "pfeil"
+#define CS2_GLEISBILD_TYP_STRING_FAHRSTRASSE        "fahrstrasse"
+#define CS2_GLEISBILD_TYP_STRING_TEXT               "text"
+#define CS2_GLEISBILD_TYP_STRING_SIGNAL_HP02        "signal_hp02"
+#define CS2_GLEISBILD_TYP_STRING_SIGNAL_HP012       "signal_hp012"
+#define CS2_GLEISBILD_TYP_STRING_SIGNAL_HP01S       "signal_hp01s"
+#define CS2_GLEISBILD_TYP_STRING_SIGNAL_P_HP012S    "signal_p_hp012s"
+#define CS2_GLEISBILD_TYP_STRING_SIGNAL_F_HP012S    "signal_f_hp012s"
+#define CS2_GLEISBILD_TYP_STRING_SIGNAL_P_HP012     "signal_p_hp012"
+#define CS2_GLEISBILD_TYP_STRING_SIGNAL_F_HP01      "signal_f_hp01"
+#define CS2_GLEISBILD_TYP_STRING_SIGNAL_F_HP02      "signal_f_hp02"
+#define CS2_GLEISBILD_TYP_STRING_SIGNAL_F_HP012     "signal_f_hp012"
+#define CS2_GLEISBILD_TYP_STRING_SIGNAL_SH01        "signal_sh01"
+#define CS2_GLEISBILD_TYP_STRING_K84_EINFACH        "k84_einfach"
+#define CS2_GLEISBILD_TYP_STRING_K84_DOPPELT        "k84_doppelt"
+#define CS2_GLEISBILD_TYP_STRING_ENTKUPPLER         "entkuppler"
+#define CS2_GLEISBILD_TYP_STRING_ENTKUPPLER_1       "entkuppler_1"
+#define CS2_GLEISBILD_TYP_STRING_STD_ROT            "std_rot"
+#define CS2_GLEISBILD_TYP_STRING_STD_GRUEN          "std_gruen"
+#define CS2_GLEISBILD_TYP_STRING_STD_ROT_GRUEN_0    "std_rot_gruen_0"
+#define CS2_GLEISBILD_TYP_STRING_STD_ROT_GRUEN_1    "std_rot_gruen_1"
+#define CS2_GLEISBILD_TYP_STRING_SCHIEBEBUEHNE_0    "schiebebuehne_0"
+#define CS2_GLEISBILD_TYP_STRING_SCHIEBEBUEHNE_1    "schiebebuehne_1"
+#define CS2_GLEISBILD_TYP_STRING_SCHIEBEBUEHNE_2    "schiebebuehne_2"
+#define CS2_GLEISBILD_TYP_STRING_SCHIEBEBUEHNE_3    "schiebebuehne_3"
+#define CS2_GLEISBILD_TYP_STRING_DREHSCHEIBE_ALT_0  "drehscheibe_alt_0"
+#define CS2_GLEISBILD_TYP_STRING_DREHSCHEIBE_ALT_1  "drehscheibe_alt_1 "
+#define CS2_GLEISBILD_TYP_STRING_DREHSCHEIBE_ALT_2  "drehscheibe_alt_2"
+#define CS2_GLEISBILD_TYP_STRING_DREHSCHEIBE_ALT_3  "drehscheibe_alt_3"
+#define CS2_GLEISBILD_TYP_STRING_DREHSCHEIBE_DIG_0  "drehscheibe_dig_0"
+#define CS2_GLEISBILD_TYP_STRING_DREHSCHEIBE_DIG_1  "drehscheibe_dig_1"
+#define CS2_GLEISBILD_TYP_STRING_DREHSCHEIBE_DIG_2  "drehscheibe_dig_2"
+#define CS2_GLEISBILD_TYP_STRING_DREHSCHEIBE_DIG_3  "drehscheibe_dig_3"
+#define CS2_GLEISBILD_TYP_STRING_DREHSCHEIBE_DIG_4  "drehscheibe_dig_4"
+#define CS2_GLEISBILD_TYP_STRING_DREHSCHEIBE_DIG_5  "drehscheibe_dig_5"
+#define CS2_GLEISBILD_TYP_STRING_DREHSCHEIBE_DIG_6  "drehscheibe_dig_6"
+#define CS2_GLEISBILD_TYP_STRING_DREHSCHEIBE_DIG_7  "drehscheibe_dig_7"
+#define CS2_GLEISBILD_TYP_STRING_DREHSCHEIBE_DIG_8  "drehscheibe_dig_8"
+#define CS2_GLEISBILD_TYP_STRING_DREHSCHEIBE_DIG_9  "drehscheibe_dig_9"
+#define CS2_GLEISBILD_TYP_STRING_DREHSCHEIBE_DIG_10 "drehscheibe_dig_10"
+#define CS2_GLEISBILD_TYP_STRING_DREHSCHEIBE_DIG_11 "drehscheibe_dig_11"
+#define CS2_GLEISBILD_TYP_STRING_DREHSCHEIBE_DIG_12 "drehscheibe_dig_12"
+#define CS2_GLEISBILD_TYP_STRING_DREHSCHEIBE_DIG_13 "drehscheibe_dig_13"
+#define CS2_GLEISBILD_TYP_STRING_DREHSCHEIBE_DIG_14 "drehscheibe_dig_14"
+#define CS2_GLEISBILD_TYP_STRING_DREHSCHEIBE_DIG_15 "drehscheibe_dig_15"
+#define CS2_GLEISBILD_TYP_STRING_DREHSCHEIBE_DIG_16 "drehscheibe_dig_16"
+#define CS2_GLEISBILD_TYP_STRING_DREHSCHEIBE_DIG_17 "drehscheibe_dig_17"
+#define CS2_GLEISBILD_TYP_STRING_DREHSCHEIBE_DIG_18 "drehscheibe_dig_18"
+#define CS2_GLEISBILD_TYP_STRING_DREHSCHEIBE_DIG_19 "drehscheibe_dig_19"
+#define CS2_GLEISBILD_TYP_STRING_DREHSCHEIBE_DIG_20 "drehscheibe_dig_20"
+#define CS2_GLEISBILD_TYP_STRING_DREHSCHEIBE_DIG_21 "drehscheibe_dig_21"
+#define CS2_GLEISBILD_TYP_STRING_DREHSCHEIBE_DIG_22 "drehscheibe_dig_22"
+#define CS2_GLEISBILD_TYP_STRING_DREHSCHEIBE_DIG_23 "drehscheibe_dig_23"
+#define CS2_GLEISBILD_TYP_STRING_DREHSCHEIBE_DIG_24 "drehscheibe_dig_24"
+#define CS2_GLEISBILD_TYP_STRING_DREHSCHEIBE_DIG_25 "drehscheibe_dig_25"
+#define CS2_GLEISBILD_TYP_STRING_DREHSCHEIBE_DIG_26 "drehscheibe_dig_26"
+#define CS2_GLEISBILD_TYP_STRING_DREHSCHEIBE_DIG_27 "drehscheibe_dig_27"
+#define CS2_GLEISBILD_TYP_STRING_DREHSCHEIBE_DIG_28 "drehscheibe_dig_28"
+#define CS2_GLEISBILD_TYP_STRING_DREHSCHEIBE_DIG_29 "drehscheibe_dig_29"
+#define CS2_GLEISBILD_TYP_STRING_DREHSCHEIBE_DIG_30 "drehscheibe_dig_30"
+#define CS2_GLEISBILD_TYP_STRING_DREHSCHEIBE_DIG_31 "drehscheibe_dig_31"</PRE>
+<P>
+<H4>Funktionen</H4>
+<P>
+<PRE>FILE *Cs2OpenByName(char *Name);
+FILE *Cs2OpenByType(int Cs2FileType);
+void Cs2Close(FILE *Stream);
+void Cs2WriteParagraphByName(FILE *Stream, char *Paragraph);
+void Cs2WriteParagraphByType(FILE *Stream, int Cs2ParagraphType);
+void Cs2WriteTitleByName(FILE *Stream, char *Title, int Level);
+void Cs2WriteStringValueByName(FILE *Stream, char *Title, char *Value, int Level);
+void Cs2WriteIntValueByName(FILE *Stream, char *Title, int Value, int Level);
+void Cs2WriteHexValueByName(FILE *Stream, char *Title, int Value, int Level);
+void Cs2WriteULongValueByName(FILE *Stream, char *Title, unsigned long Value, int Level);
+void Cs2WriteHexLongValueByName(FILE *Stream, char *Title, unsigned long Value, int Level);
+void Cs2WriteFloatValueByName(FILE *Stream, char *Title, float Value, int Level);</PRE>
+<P>
+<H2>Beschreibung</H2>
+<P>
+<H3>Einlesen einer *.cs2 Datei</H3>
+<P>
+Nach dem Anlegen eines Cs2parser Objektes kann der Parser f&uuml;r verschiedene
+*.cs Dateien initialisiert werden. Danach wird die Parse Funktion in einer
+Schleife so lange aufgerufen, bis das Ende der Daten erreicht ist.
+<P>
+<TABLE BORDER=1">
+<TR><TH>Funktion</TH><TD>Beschreibung</TD>
+<TR><TD>Cs2pCreate()</TD><TD>Die <VAR>Cs2pCreate</VAR> Funktion wird als erste
+Funktion aufgerufen, um die Struktur anzulegen.</TD></TR>
+<TR><TD>Cs2pDestroy()</TD><TD>Die <VAR>Cs2pDestroy</VAR> Funktion wird als
+letzte Funktion aufgerufen und gibt die Struktur wieder frei.</TD></TR>
+<TR><TD>Cs2pInit()</TD><TD>Die <VAR>Cs2pInit</VAR> Funktion initialisiert den
+Parser f&uuml;r einen bestimmten Typ von *.cs Datei.<BR>
+<TABLE BORDER="1">
+<TR><TH>Parameter</TH><TH>Bedeutung</TH></TR>
+<TR><TD>Data</TD><TD>Zeiger auf das Parser Objekt</TD></TR>
+<TR><TD>Type</TD><TD>Dieser Parameter legt fest, vonm welchem Typ die zu
+parsenden *.cs2 Daten sind. Also welche Informationen darin gespeichert sind.
+Damit wird auch festgelegt, welche Schl&uuml;sselworte erlaubt sind.
+M&ouml;gliche Werte sind:<BR>
+<TABLE BORDER=1">
+<TR><TH>Wert</TH><TD>Bedeutung</TH></TR>
+<TR><TD>PARSER_TYPE_LOKNAMEN</TD><TD>Die Daten sind die von der MS2
+angeforderten Loknamen</TD></TR>
+<TR><TD>PARSER_TYPE_LOKINFO</TD><TD>Die Daten sind die von der MS2 angeforderten
+Lokinfos zu einem Loknamen</TD></TR>
+<TR><TD>PARSER_TYPE_GERAET_VRS</TD><TD>geraet.vrs mit der Versionsnummer
+der Software und der UID</TD></TR>
+<TR><TD>PARSER_TYPE_LOK_CS2</TD><TD>lokomotive.cs2</TD></TR>
+<TR><TD>PARSER_TYPE_GLEISBILD_CS2</TD><TD>gleisbild.cs2</TD></TR>
+<TR><TD>PARSER_TYPE_GLEISBILD_SEITE</TD><TD>gleisbilder/XXX.cs2</TD></TR>
+<TR><TD>PARSER_TYPE_MAGNETARTIKEL_CS2</TD><TD>magnetartikel.cs2</TD></TR>
+<TR><TD>PARSER_TYPE_FAHRSTRASSEN_CS2</TD><TD>fahrstrassen.cs2</TD></TR>
+<TR><TD>PARSER_TYPE_HEADER_CS2</TD><TD>Hiermit wird nur der Header einer *.cs2
+kompatiblen Datenstruktur gelesen, um zu ermitteln ob es sich um einen Auszug
+der Loks, Fahrstra&szlig;en, Gleisbilder oder Magnetartikel handelt. Damit
+kann dann der entsprechende Parser initialisiert werden. Diese Parsertype kann
+verwendet werden, wenn eine CS2 Slave eine  Konfigdatei ver&auml;ndert und
+anmschlie&szlig;end die &Auml;nderungen zur&uuml;ck sendet.</TD></TR>
+</TABLE></TD></TR<TR><TD>InputLine</TD><TD>Zeiger auf die zu parsenden Daten</TD></TR>
+<TR><TD>Len</TD><TD>L&auml;nge (Anzahl Bytes) der zu parsenden Daten</TD></TR>
+</TABLE></TD></TR>
+<TR><TD>Cs2pParse()</TD><TD>Diese Funktion parst den Eingabestream. Sie liefert
+f&uuml;r jeden Aufruf den Typ der Information dieser Zeile bzw. den erkannten
+Typ der Information. Diese Funktion wird ein einer Schleife  aufgerufen, bis
+das Ende der Eingangsdaten erreicht ist. M&ouml;gliche Typen von Information
+sind:<BR>
+<TABLE BORDER=1">
+<TR><TH>Wert</TH><TD>Bedeutung</TH></TR>
+<TR><TD>PARSER_ERROR</TD><TD>Ein Fehler beim Parsen ist aufgetreten. Dies
+k&ouml;nnte z.B. ein Syntaxfehler sein. Oder ein neues Schl&uuml;sselwort, das
+der Parser noch nicht versteht.</TD></TR>
+<TR><TD>PARSER_EOF</TD><TD>Das Ende der Daten ist erreicht</TD></TR>
+<TR><TD>PARSER_PARAGRAPH</TD><TD>Es wurde ein neuer Absatz (Paragraph)
+gefunden</TD></TR>
+<TR><TD>PARSER_VALUE</TD><TD>Es wurde ein neuer Wert gefunden.</TD></TR>
+</TABLE>
+Wurde ein neuer Paragraph oder ein neuer Value gefunden, dann liefert das
+Makro <VAR>Cs2pGetSubType</VAR> um welchen Paragraphen bzw. welche Wert es
+sich handelt. F&uuml;r den Typ der Paragraphen  gibt es die folgenden
+Definitionen:<BR>
+<TABLE BORDER=1">
+<TR><TH>Wert</TH><TD>Bedeutung</TH></TR>
+<TR><TD>PARSER_PARAGRAPH_UNDEFINED</TD><TD>Der Paragraph ist dem Parser
+unbekannt.</TD>/TR>
+<TR><TD>...</TD><TD>...</TD></TR>
+<TR><TD>PARSER_PARAGRAPH_LOKSTATUS</TD><TD>Der Paragraph enth&auml;lt des
+Status der Loks</TD></TR>
+</TABLE>
+F&uuml;r einen Konfigurationswert gibt es die folgenden Definitionen:<BR>
+<TABLE BORDER=1">
+<TR><TH>Wert</TH><TD>Bedeutung</TH></TR>
+<TR><TD>PARSER_VALUE_LOK</TD><TD>Eine neue Lok, diese Varianble hat keinen
+Wert</TD></TR>
+<TR><TD>...</TD><TD>...</TD></TR>
+<TR><TD>PARSER_VALUE_ON</TD><TD>Diese Variable wird benutzt, um Werte ein-
+bzw. auszuschalten.</TD></TR></TABLE>
+Damit k&ouml;nnte eine Parserschleife wie folgt (Ausschnitt) aussehen:
+<PRE>do {
+   LineInfo = Cs2pParse(LokParser);
+   switch (LineInfo)
+   {
+      case PARSER_ERROR:
+         break;
+      case PARSER_EOF:
+         break;
+      case PARSER_PARAGRAPH:
+         switch (Cs2pGetSubType(LokParser))
+         {
+            default:
+               break;
+         }
+         break;
+      case PARSER_VALUE:
+         switch (Cs2pGetSubType(LokParser))
+         {
+            case PARSER_VALUE_LOKOMOTIVE:
+               break;
+            case PARSER_VALUE_LOK:
+               break;
+         }
+         break;
+   }
+} while (LineInfo != PARSER_EOF);</PRE></TD></TR></TABLE>
+</TD></TR></TABLE>
+<P>
+Um weiter Informationen, wie den Typ (Verwendung) der erkannten Variable oder
+den Wert selbst zu ermitteln, gibt es eine Reihe von Makros um auf die
+CS3parser Struktur zuzugreifen und Informationen zu lesen bzw. zu setzen. Dazu
+gibt es die folgenden Makros:
+<TABLE BORDER=1">
+<TR><TH>Makro</TH><TD>Bedeutung</TH></TR>
+<TR><TD>Cs2pGetType</TD><TD>Diese Makro liefert nochmals, welcher
+Konfigurationstyp (Paragraph, Wert, ...) erkant wurde. Also der Returnwert der
+Funktion <VAR>Cs2pParse()</VAR>.</TD></TR>
+<TR><TD>Cs2pGetSubType</TD><TD>Dieses Makro liefert, welcher Paragraph bzw.
+welche Konfigurationsvariable erkannt wurde.</TD></TR>
+<TR><TD>Cs2pGetLevel</TD><TD>Die *.cs2 Dateien haben eine Baumstruktur, wobei
+die Ebene durch die Anzahl Punkte vor dem Schl&uuml;sselwort festgelegt ist.
+Dieses Makro liefert die Ebene bzw. die Anzahl Punkte.</TD></TR>
+<TR><TD>Cs2pGetValue</TD><TD>Dieses Makrot liefert den Wert einer Variable als
+Zeichenkette. Also so, wie sie in der Datei steht. Wenn diese Zeichenkette
+einen numerischen Wert repr&auml;sentieren soll, mu&szlig; er noch in eine Zahl
+umgewandelt werden.</TD></TR>
+<TR><TD>...</TD><TD>...</TD></TR>
+</TABLE>
+<P>
+<H3>Schreiben einer *.cs2 Datei</H3>
+<P>
+Das Schreiben einer *.cs2 Datei erfolgt auf Basis der C I/O Streams (FILE *).
+F&uuml;r das &Ouml;ffnen der Datei zum Schreiben gibt es Funktionen, die den
+Pfad (zum Apache Standard Webroot) automatisch hinzuf&uuml;gen und auch
+automatisch den Namen der entsprechenden *.cs2 Datei kennen.
+<TABLE BORDER=1">
+<TR><TD>Cs2OpenByName</TD><TD>Diese Funktion &ouml;ffnet eine *.cs2 Datei
+anhand des Namens. Es wird automatisch der Webroot von apache2 mit dem Pfad
+f&uuml;r die CS Konfigdateien vorangestellt
+(<VAR>/var/www/config</VAR>)</TD></TR>
+<TR><TD>Cs2OpenByType</TD><TD>Diese Funktion &ouml;ffnet eine *.cs2 Datei
+anhand des Typs der Datei. M&ouml;gliche Konfigtypen sind:
+<TABLE BORDER="1">
+<TR><TH>Wert</TH><TD>Bedeutung</TH></TR>
+<TR><TD>CS2_FILE_STRRING_LOKOMOTIVE</TD><TD>lokomotive.cs2</TD></TR>
+</TABLE>
+Es wird automatisch der Webroot von apache2 mit dem Pfad f&uuml;r die CS
+Konfigdateien vorangestellt (<VAR>/var/www/config</VAR>)</TD></TR>
+<TR><TD>Cs2Close</TD><TD>Diese Funktion schlie&szlig;t die Konfigdatei und
+ruft nur <VAR>fclose()</VAR> auf.</TD></TR>
+</TABLE>
+<P>
+F&uuml;r das Schreiben der einzelnen Werte gibt es auch Funktionen, die mit
+den entsprechenden Parametern das Schreiben vereinfachen:
+<P>
+<TABLE BORDER=1">
+<TR><TH>Funktion</TH><TD>Beschreibung</TD>
+<TR><TD>Cs2WriteParagraphByName()</TD><TD>Diese Funktion schreibt die
+&Uuml;berschrift eines Absatz (Paragraph).<BR>
+<TABLE BORDER=1">
+<TR><TH>Parameter</TH><TD>Bedeutung</TH></TR>
+<TR><TD>Stream</TD><TD>Der Stream, auf den geschrieben werden soll.</TD></TR>
+<TR><TD>Paragraph</TD><TD>Titel des zu schriebenden Paragraphs als
+Text.</TD></TR>
+</TABLE></TD></TR>
+<TR><TD>Cs2WriteParagraphByType()</TD><TD>Diese Funktion schreibt die
+&Uuml;berschrift eines Absatz (Paragraph).<BR>
+<TABLE BORDER=1">
+<TR><TH>Parameter</TH><TD>Bedeutung</TH></TR>
+<TR><TD>Stream</TD><TD>Der Stream, auf den geschrieben werden soll.</TD></TR>
+<TR><TD>Cs2ParagraphType</TD><TD>Titel des zu schriebenden Paragraphs als
+Datentyp aus der <VAR>cs2parse.h</VAR></TD></TR>
+</TABLE></TD></TR>
+<TR><TD>Cs2WriteTitleByName</TD><TD>Diese Funktion schreibt einen Titel
+(Variable ohne Wert).<BR>
+<TABLE BORDER=1">
+<TR><TH>Parameter</TH><TD>Bedeutung</TH></TR>
+<TR><TD>Stream</TD><TD>Der Stream, auf den geschrieben werden soll</TD></TR>
+<TR><TD>Title</TD><TD>Name des zu schreibenden Titels (Variable ohne
+Wert)</TD></TR>
+<TR><TD>Level</TD><TD>Ebene im Baum (Anzahl Punkte)</TD></TR>
+</TABLE></TD></TR>
+<TR><TD>Cs2WriteStringValueByName()</TD><TD>Diese Funktion schreibt eine
+Variable als Text.<BR>
+<TABLE BORDER=1">
+<TR><TH>Parameter</TH><TD>Bedeutung</TH></TR>
+<TR><TD>Stream</TD><TD>Der Stream, auf den geschrieben werden soll</TD></TR>
+<TR><TD>Title</TD><TD>Name der zu schreibenden Variable</TD></TR>
+<TR><TD>Value</TD><TD>Wert der Variable</TD></TR>
+<TR><TD>Level</TD><TD>Ebene im Baum (Anzahl Punkte)</TD></TR>
+</TABLE></TD></TR>
+<TR><TD>Cs2WriteIntValueByName()</TD><TD>Diese Funktion schreibt eine Variable
+als Zahl.<BR>
+<TABLE BORDER=1">
+<TR><TH>Parameter</TH><TD>Bedeutung</TH></TR>
+<TR><TD>Stream</TD><TD>Der Stream, auf den geschrieben werden soll</TD></TR>
+<TR><TD>Title</TD><TD>Name der zu schreibenden Variable</TD></TR>
+<TR><TD>Value</TD><TD>Wert der Variable</TD></TR>
+<TR><TD>Level</TD><TD>Ebene im Baum (Anzahl Punkte)</TD></TR>
+</TABLE></TD></TR>
+<TR><TD>Cs2WriteHexValueByName()</TD><TD>Diese Funktion schreibt eine Variable
+als Hexwert.<BR>
+<TABLE BORDER=1">
+<TR><TH>Parameter</TH><TD>Bedeutung</TH></TR>
+<TR><TD>Stream</TD><TD>Der Stream, auf den geschrieben werden soll</TD></TR>
+<TR><TD>Title</TD><TD>Name der zu schreibende Variable</TD></TR>
+<TR><TD>Value</TD><TD>Wert der Variable</TD></TR>
+<TR><TD>Level</TD><TD>Ebene im Baum (Anzahl Punkte)</TD></TR>
+</TABLE></TD></TR>
+<TR><TD>Cs2WriteULongValueByName()</TD><TD>Diese Funktion schreibt eine
+Variable als vorzeichenlose lange Zahl.<BR>
+<TABLE BORDER=1">
+<TR><TH>Parameter</TH><TD>Bedeutung</TH></TR>
+<TR><TD>Stream</TD><TD>Der Stream, auf den geschrieben werden soll</TD></TR>
+<TR><TD>Title</TD><TD>Name der zu schreibenden Variable</TD></TR>
+<TR><TD>Value</TD><TD>Wert der Variable</TD></TR>
+<TR><TD>Level</TD><TD>Ebene im Baum (Anzahl Punkte)</TD></TR>
+</TABLE></TD></TR>
+<TR><TD>Cs2WriteHexLongValueByName()</TD><TD>Diese Funktion schreibt eine
+Variable als vorzeichenlosen langen Hexwert.<BR>
+<TABLE BORDER=1">
+<TR><TH>Parameter</TH><TD>Bedeutung</TH></TR>
+<TR><TD>Stream</TD><TD>Der Stream, auf den geschrieben werden soll</TD></TR>
+<TR><TD>Title</TD><TD>Name der zu schreibende Variable</TD></TR>
+<TR><TD>Value</TD><TD>Wert der Variable</TD></TR>
+<TR><TD>Level</TD><TD>Ebene im Baum (Anzahl Punkte)</TD></TR>
+</TABLE>
+</TD></TR>
+<TR><TD>Cs2WriteFloatValueByName()</TD><TD>Diese Funktion schreibt eine
+Variable als Gleitkommazahl.<BR>
+<TABLE BORDER=1">
+<TR><TH>Parameter</TH><TD>Bedeutung</TH></TR>
+<TR><TD>Stream</TD><TD>Der Stream, auf den geschrieben werden soll</TD></TR>
+<TR><TD>Title</TD><TD>Name der zu schreibende Variable</TD></TR>
+<TR><TD>Value</TD><TD>Wert der Variable</TD></TR>
+<TR><TD>Level</TD><TD>Ebene im Baum (Anzahl Punkte)</TD></TR>
+</TABLE></TD></TR>
+</TABLE>
+</TD></TR>
+</TABLE>
+</BODY>
+</HTML>

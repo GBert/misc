@@ -1,0 +1,14 @@
+[fahrstrassen]
+version
+ .minor=4
+fahrstrasse
+ .id=1
+ .name=F_603
+ .item
+ ..typ=mag
+ ..magnetartikel=1
+ ..stellung=2
+ .item
+ ..typ=mag
+ ..magnetartikel=6
+ ..stellung=0

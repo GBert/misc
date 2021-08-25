@@ -1,0 +1,14 @@
+12:09:19.884   ->TCP>CAN    CANID 0x420300   [7] 00 00 00 5f 21 70 7b(00)  ..._!p{.
+12:09:19.884   ->TCP>CAN    CANID 0x420300   [8] 00 00 00 aa 78 9c 8b 4e   ....x..N
+12:09:19.884   ->TCP>CAN    CANID 0x420300   [8] cf 49 cd 2c 4e ca cc 49   .I.,N..I
+12:09:19.884   ->TCP>CAN    CANID 0x420300   [8] 29 4e cd 2c 49 8d e5 2a   )N.,I..*
+12:09:19.884   ->TCP>CAN    CANID 0x420300   [8] 4b 2d 2a ce cc cf e3 52   K-*....R
+12:09:19.889   ->TCP>CAN    CANID 0x420300   [8] d0 cb 4d cc ca 2f b2 35   ..M../.5
+12:09:19.889   ->TCP>CAN    CANID 0x420300   [8] e4 4a cd 49 cd 4d cd 2b   .J.I.M.+
+12:09:19.889   ->TCP>CAN    CANID 0x420300   [8] 01 8a 64 a6 d8 1a 54 98   ..d...T.
+12:09:19.890   ->TCP>CAN    CANID 0x420300   [8] 18 98 01 99 25 95 05 b6   ....%...
+12:09:19.890   ->TCP>CAN    CANID 0x420300   [8] e9 a9 45 89 29 a9 40 4e   ..E.).@N
+12:09:19.895   ->TCP>CAN    CANID 0x420300   [8] 62 51 49 66 76 6a 8e ad   bQIfvj..
+12:09:19.895   ->TCP>CAN    CANID 0x420300   [8] 2e 16 c5 e6 a4 28 b6 c0   .....(..
+12:09:19.895   ->TCP>CAN    CANID 0x420300   [8] a3 18 00 a1 16 35 f1 00   .....5..
+

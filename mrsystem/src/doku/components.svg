@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/PR-SVG-20010719/DTD/svg10.dtd">
+<svg width="24cm" height="16cm" viewBox="31 11 475 309" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <g>
+    <rect style="fill: #ffffff" x="107.8" y="13" width="102.4" height="54"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="107.8" y="13" width="102.4" height="54"/>
+    <text style="fill: #000000;text-anchor:middle;font-size:12.7998;font-family:sanserif;font-style:normal;font-weight:normal" x="159" y="43.9">
+      <tspan x="159" y="43.9">Drehscheibe</tspan>
+    </text>
+  </g>
+  <g>
+    <rect style="fill: #ffffff" x="32.6" y="281" width="92.8" height="38"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="32.6" y="281" width="92.8" height="38"/>
+    <text style="fill: #000000;text-anchor:middle;font-size:12.7998;font-family:sanserif;font-style:normal;font-weight:normal" x="79" y="303.9">
+      <tspan x="79" y="303.9">Client_MS1</tspan>
+    </text>
+  </g>
+  <g>
+    <rect style="fill: #ffffff" x="133.6" y="281" width="92.8" height="38"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="133.6" y="281" width="92.8" height="38"/>
+    <text style="fill: #000000;text-anchor:middle;font-size:12.7998;font-family:sanserif;font-style:normal;font-weight:normal" x="180" y="303.9">
+      <tspan x="180" y="303.9">Client_MS2</tspan>
+    </text>
+  </g>
+  <g>
+    <rect style="fill: #ffffff" x="233.875" y="281" width="116.25" height="38"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="233.875" y="281" width="116.25" height="38"/>
+    <text style="fill: #000000;text-anchor:middle;font-size:12.7998;font-family:sanserif;font-style:normal;font-weight:normal" x="292" y="303.9">
+      <tspan x="292" y="303.9">Client_CS2ETH</tspan>
+    </text>
+  </g>
+  <g>
+    <rect style="fill: #ffffff" x="308.425" y="228" width="99.15" height="38"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="308.425" y="228" width="99.15" height="38"/>
+    <text style="fill: #000000;text-anchor:middle;font-size:12.7998;font-family:sanserif;font-style:normal;font-weight:normal" x="358" y="250.9">
+      <tspan x="358" y="250.9">Client_SCRP</tspan>
+    </text>
+  </g>
+  <g>
+    <rect style="fill: #ffffff" x="372.7" y="178" width="132.6" height="38"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="372.7" y="178" width="132.6" height="38"/>
+    <text style="fill: #000000;text-anchor:middle;font-size:12.7998;font-family:sanserif;font-style:normal;font-weight:normal" x="439" y="200.9">
+      <tspan x="439" y="200.9">Client_ZENTRALE</tspan>
+    </text>
+  </g>
+  <g>
+    <rect style="fill: #ffffff" x="369.7" y="128" width="92.6" height="38"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="369.7" y="128" width="92.6" height="38"/>
+    <text style="fill: #000000;text-anchor:middle;font-size:12.7998;font-family:sanserif;font-style:normal;font-weight:normal" x="416" y="150.9">
+      <tspan x="416" y="150.9">Client_LOG</tspan>
+    </text>
+  </g>
+  <g>
+    <rect style="fill: #ffffff" x="369.25" y="79" width="107.5" height="38"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="369.25" y="79" width="107.5" height="38"/>
+    <text style="fill: #000000;text-anchor:middle;font-size:12.7998;font-family:sanserif;font-style:normal;font-weight:normal" x="423" y="101.9">
+      <tspan x="423" y="101.9">Client_INJECT</tspan>
+    </text>
+  </g>
+  <text style="fill: #000000;text-anchor:start;font-size:12.7998;font-family:sanserif;font-style:normal;font-weight:normal" x="383" y="52">
+    <tspan x="383" y="52"></tspan>
+  </text>
+  <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="159" y1="67" x2="369.25" y2="98"/>
+  <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="159" y1="67" x2="369.7" y2="147"/>
+  <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="159" y1="67" x2="372.7" y2="197"/>
+  <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="159" y1="67" x2="358" y2="228"/>
+  <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="159" y1="67" x2="292" y2="281"/>
+  <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="159" y1="67" x2="180" y2="281"/>
+  <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="79" y1="281" x2="159" y2="67"/>
+</svg>

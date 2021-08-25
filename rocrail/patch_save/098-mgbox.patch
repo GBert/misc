@@ -1,0 +1,16 @@
+--- a/rocdigs/impl/mgbox.c
++++ b/rocdigs/impl/mgbox.c
+@@ -2419,11 +2419,11 @@ static void __reader( void* threadinst ) {
+      else if( in[1] == ( CAN_ID_PING | BIT_RESPONSE ) ) {
+       __evaluateMCS2Ping( data, in );
+     }
+-    else if( in[1] == ID_LOCO_DIRECTION | in[1] == ID_LOCO_VELOCITY ) {
++    else if((in[1] == ID_LOCO_DIRECTION + BIT_RESPONSE) | (in[1] == ID_LOCO_VELOCITY + BIT_RESPONSE)) {
+       /* loc speed or direction comamnd, not from Rocrail. */
+       __evaluateMCS2Loc( data, in );
+     }
+-    else if( in[1] == ID_LOCO_FUNCTION ) {
++    else if( in[1] == ID_LOCO_FUNCTION + BIT_RESPONSE ) {
+       /* locfunction command, not from Rocrail. */
+       __evaluateMCS2Function( data, in );
+     }

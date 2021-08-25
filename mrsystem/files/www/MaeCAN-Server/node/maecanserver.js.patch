@@ -1,0 +1,151 @@
+diff -Nru a/maecanserver.js b/maecanserver.js
+--- a/maecanserver.js	2017-05-07 15:29:26.000000000 +0200
++++ b/maecanserver.js	2017-06-15 22:40:12.287919244 +0200
+@@ -8,7 +8,7 @@
+ 
+ 
+ const ip = 'localhost';
+-const dest_port = 15734;
++const dest_port = 15731;
+ const frame_stop = new Buffer([0x00, 0x00, 0x03, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]);
+ const frame_go   = new Buffer([0x00, 0x00, 0x03, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00]);
+ 
+@@ -78,8 +78,8 @@
+     var int_key = parseInt(key, 16);
+     var uid = [(int_key & 0xff000000)>> 24, (int_key & 0x00ff0000)>> 16, (int_key & 0x0000ff00) >> 8, int_key & 0x000000ff];
+     if (!config[key].name) {
+-      console.log(`Device info request for UID ${key}.`);
+-      udpClient.send(new Buffer([0, 0x3A, 3, 0, 5, uid[0], uid[1], uid[2], uid[3], 0, 0, 0, 0]), dest_port, ip);
++      console.log('Device info request for UID ${key}.');
++      udpClient.send(new Buffer([0, 0x3A, 3, 0, 5, uid[0], uid[1], uid[2], uid[3], 0, 0, 0, 0]), 0, 13, dest_port, ip);
+       break;
+     }
+   }
+@@ -128,24 +128,24 @@
+ 		var value_low = (value & 0x00FF);
+ 
+ 		if (cmd == 'stop') {			// STOP-Taste
+-			udpClient.send(frame_stop, dest_port, ip);
++			udpClient.send(frame_stop, 0, 13, dest_port, ip);
+ 		} else if (cmd == 'go') {		// GO-Taste
+-			udpClient.send(frame_go, dest_port, ip);
++			udpClient.send(frame_go, 0, 13, dest_port, ip);
+ 		} else if (cmd == 'setSpeed') {
+-			udpClient.send(new Buffer([0, 8, 3, 0, 6, 0, 0, uid_high, uid_low, value_high, value_low, 0, 0]), dest_port, ip);
++			udpClient.send(new Buffer([0, 8, 3, 0, 6, 0, 0, uid_high, uid_low, value_high, value_low, 0, 0]), 0, 13, dest_port, ip);
+ 		} else if (cmd == 'getSpeed') {
+-			udpClient.send(new Buffer([0, 8, 3, 0, 4, 0, 0, uid_high, uid_low, 0, 0, 0, 0]), dest_port, ip);
++			udpClient.send(new Buffer([0, 8, 3, 0, 4, 0, 0, uid_high, uid_low, 0, 0, 0, 0]), 0, 13, dest_port, ip);
+ 		} else if (cmd == 'lokNothalt') {
+-			udpClient.send(new Buffer([0, 0, 3, 0, 5, 0, 0, uid_high, uid_low, 3, 0, 0, 0]), dest_port, ip);
++			udpClient.send(new Buffer([0, 0, 3, 0, 5, 0, 0, uid_high, uid_low, 3, 0, 0, 0]), 0, 13, dest_port, ip);
+ 		} else if (cmd == 'setFn') {
+-			udpClient.send(new Buffer([0, 0x0c, 3, 0, 6, 0, 0, uid_high, uid_low, value_high, value_low, 0, 0]), dest_port, ip);
++			udpClient.send(new Buffer([0, 0x0c, 3, 0, 6, 0, 0, uid_high, uid_low, value_high, value_low, 0, 0]), 0, 13, dest_port, ip);
+ 		} else if (cmd == 'getFn') {
+-			udpClient.send(new Buffer([0, 0x0c, 3, 0, 5, 0, 0, uid_high, uid_low, value, 0, 0, 0]), dest_port, ip);
++			udpClient.send(new Buffer([0, 0x0c, 3, 0, 5, 0, 0, uid_high, uid_low, value, 0, 0, 0]), 0, 13, dest_port, ip);
+ 		} else if (cmd == 'toggleDir') {
+-			udpClient.send(new Buffer([0, 0x0a, 3, 0, 5, 0, 0, uid_high, uid_low, 3, 0, 0, 0]), dest_port, ip);
+-			udpClient.send(new Buffer([0, 0x0a, 3, 0, 4, 0, 0, uid_high, uid_low, 0, 0, 0, 0]), dest_port, ip);
++			udpClient.send(new Buffer([0, 0x0a, 3, 0, 5, 0, 0, uid_high, uid_low, 3, 0, 0, 0]), 0, 13, dest_port, ip);
++			udpClient.send(new Buffer([0, 0x0a, 3, 0, 4, 0, 0, uid_high, uid_low, 0, 0, 0, 0]), 0, 13, dest_port, ip);
+ 		} else if (cmd == 'getDir') {
+-			udpClient.send(new Buffer([0, 0x0a, 3, 0, 4, 0, 0, uid_high, uid_low, 0, 0, 0, 0]), dest_port, ip);
++			udpClient.send(new Buffer([0, 0x0a, 3, 0, 4, 0, 0, uid_high, uid_low, 0, 0, 0, 0]), 0, 13, dest_port, ip);
+ 		} else if (cmd == 'getDevices') {
+       sendDeviceNames(connection);
+     }
+@@ -153,14 +153,16 @@
+ });
+ 
+ 
+-udpServer.on('error', (err) => {
+-  console.log(`server error:\n${err.stack}`);
++// udpServer.on('error', (err) => {
++udpServer.on('error', function(err) {
++  console.log('server error:\n${err.stack}');
+   udpServer.close();
+ });
+ 
+ 
+ // Befehle vom CAN verarbeiten:
+-udpServer.on('message', (udp_msg, rinfo) => {
++// udpServer.on('message', (udp_msg, rinfo) => {
++udpServer.on('message', function(udp_msg, rinfo) {
+   
+   //console.log(rinfo);
+ 
+@@ -181,16 +183,16 @@
+   		ws_msg = 'go';
+   		power = true;
+   	} else if (sub_cmd == 0x03){
+-  		ws_msg = `updateSpeed:${uid}:${0}`;
++  		ws_msg = 'updateSpeed:${uid}:${0}';
+   	} else if (sub_cmd == 0x0B && uid == gbox_uid && data[5] == 3) {
+-  		console.log(`GBox-Voltage: ${((data[6] << 8) + data[7])/85.5}V`)
++  		console.log('GBox-Voltage: ${((data[6] << 8) + data[7])/85.5}V')
+   	}
+   } else if (cmd == 0x09) {
+-  	ws_msg = `updateSpeed:${uid}:${value}`;
++  	ws_msg = 'updateSpeed:${uid}:${value}';
+   } else if (cmd == 0x0d) {
+-  	ws_msg = `updateFn:${uid}:${value}`;
++  	ws_msg = 'updateFn:${uid}:${value}';
+   } else if (cmd == 0x0b) {
+-  	ws_msg = `updateDir:${uid}:${parseInt(udp_msg[9])}`;
++  	ws_msg = 'updateDir:${uid}:${parseInt(udp_msg[9])}';
+   } else if (cmd == 0x3B) {
+     var str_data = '';
+     for (var i = 0; i < data.length; i++) {
+@@ -219,12 +221,12 @@
+     }
+   } else if (cmd == 0x31) {
+   	var str_uid = toUnsignedString(uid);
+-  	var str_ver = `${data[4]}.${data[5]}`
++  	var str_ver = '${data[4]}.${data[5]}'
+   	var str_typ = ((data[6] << 8) + data[7]).toString(16);
+-  	console.log(`Ping response from 0x${str_uid}, Version ${str_ver}, Type 0x${str_typ}`);
++  	console.log('Ping response from 0x${str_uid}, Version ${str_ver}, Type 0x${str_typ}');
+ 
+   	if (str_typ =="10" && !gbox_uid) {
+-  		console.log(`Found Gleisbox 0x${str_uid}`);
++  		console.log('Found Gleisbox 0x${str_uid}');
+   		gbox_uid = uid;
+   	}
+ 
+@@ -238,8 +240,8 @@
+   		fs.writeFileSync('./geraete.ini', ini.stringify(geraete));
+   	}
+ 
+-    /*udpClient.send(new Buffer([0, 0x3A, 3, 0, 5, data[0], data[1], data[2], data[3], 0, 0, 0, 0]), dest_port, ip);
+-    console.log(`Requesting device info from 0x${str_uid}:`)*/
++    /*udpClient.send(new Buffer([0, 0x3A, 3, 0, 5, data[0], data[1], data[2], data[3], 0, 0, 0, 0]), 0, 13, dest_port, ip);
++    console.log('Requesting device info from 0x${str_uid}:')*/
+   }
+ 
+   if (ws_msg != '') {
+@@ -249,17 +251,18 @@
+   }
+ });
+ 
+-udpServer.on('listening', () => {
++// udpServer.on('listening', () => {
++udpServer.on('listening', function() {
+   var address = udpServer.address();
+-  console.log(`UDP-Server listening on Port ${address.port}.`);
+-  udpClient.send(frame_stop, dest_port, ip);
++  console.log('UDP-Server listening on Port ${address.port}.');
++  udpClient.send(frame_stop, 0, 13, dest_port, ip);
+ });
+ 
+ udpServer.bind(15733);
+-udpClient.send(new Buffer([0,0x30,3,0,0,0,0,0,0,0,0,0,0]), dest_port, ip);
++udpClient.send(new Buffer([0,0x30,3,0,0,0,0,0,0,0,0,0,0]), 0, 13, dest_port, ip);
+ console.log('ping sent.');
+ 
+ var pinger = setInterval(function(){
+-	udpClient.send(new Buffer([0,0x30,3,0,0,0,0,0,0,0,0,0,0]), dest_port, ip);
++	udpClient.send(new Buffer([0,0x30,3,0,0,0,0,0,0,0,0,0,0]), 0, 13, dest_port, ip);
+ 	console.log('ping sent.');
+ }, 10000);

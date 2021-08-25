@@ -1,0 +1,14 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2016 OpenWrt.org
+
+START=99
+
+start() {
+	# s88udp -m 1 -b br-lan
+	# s88udp -p 15731 -m 1 -b wlan0
+	s88udp -c"PI13,PI11,PI14,PI10" -p 15731 -m 1 -b br-lan
+}
+
+stop() {
+	killall s88udp
+}

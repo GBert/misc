@@ -1,0 +1,62 @@
+.rangeslider,
+.rangeslider__fill {
+  display: block;
+}
+
+.rangeslider {
+  background: #adadad;
+  position: relative;
+  border-radius: 5px;
+}
+
+.rangeslider--vertical {
+  width: auto !important;
+  min-height: 362px;
+  max-height: 100%;
+}
+
+.rangeslider--disabled {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=40);
+  opacity: 0.4;
+}
+
+.rangeslider__fill {
+  background: #2FA938;
+  border: 1px solid #adadad;
+  position: absolute;
+  border-radius: 3px;
+}
+
+.rangeslider--vertical .rangeslider__fill {
+  bottom: 0;
+  width: calc(100% - 2px);
+}
+
+.rangeslider__handle {
+  background: #dadada;
+  cursor: pointer;
+  border-radius: 3px;
+  display: inline-block;
+  width: calc(100% - 2px);
+  height: 30px;
+  border: 1px solid #adadad;
+  position: absolute;
+}
+
+.rangeslider__handle:after {
+  content: "";
+  display: block;
+  width: 18px;
+  height: 18px;
+  margin: auto;
+  position: absolute;
+  top: 1.5rem;
+  right: 0;
+  bottom: -1.5rem;
+  left: 0;
+}
+
+.rangeslider--vertical .rangeslider__handle {
+  touch-action: pan-x;
+  -ms-touch-action: pan-x;
+}

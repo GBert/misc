@@ -1,0 +1,41 @@
+---------- Linux ---------
+
+nachdem ich etliche Versuche gestartet habe die CC-Schnitte unter Linux zum Laufen zu bekommen hat es Schlussendlich funktioniert. Es war eigentlich ganz simpel, wenn man weiss wie es funktioniert.
+In den neuen Linux Kerneln sind die VCP Treiber schon drin. Also muss da gar nichts installiert werden. Das einzige was man machen muss ist, dass die Berechtigungen für die Schnittstelle richtig erstellt sind. Entweder man packt sich als User in die dialout Gruppe oder aber man gewährt Schreibe/Lese Rechte für alle.
+
+---------- Windows - Delphi ---------
+
+Hier kurz mein Problem - programmiert in Delphi
+
+Die wesentlichen Teile hier angeführt:
+
+//Öffnen der Com-Schnittstelle (Treiber FTDI sind installiert)
+Openstring :='COM7:,500000,N,8,1';
+PortHandle:=CreateFile(PChar(OpenString),GENERIC_READ or GENERIC_WRITE,0,NIL,OPEN_EXISTING,0,0);
+// Gibt Porthandle zurück
+
+
+//Schicken der 13 Bytes an die CC-Schnitte
+Data[0]:=0;
+Data[1]:=35;
+Data[2]:=231;
+Data[3]:=85;
+Data[4]:=6; //DCL
+Data[5]:=30;
+Data[6]:=0;
+Data[7]:=0;
+Data[8]:=150: // Adresse des Monitors
+Data[9]:=1: //1-16 Nummer des einzelnen Monitors
+Data[10]:=1; //EIN=1 - AUS=0
+Data[11]:=0;
+Data[12]:=0;
+for ni:=0 to 12 do
+WriteFile(PortHandle,Data[ni],1,BytesWritten,NIL);
+
+Bei meinem Windows7-Rechner funktioniert das alles und ich kann die LED am Monitor (150)
+ein und ausschalten sowie Tastenbefehle empfangen!
+
+Warum funktioniert die oben angeführte Sequenz nicht auf dem Notebook mit XP???
+Die CC-Schnitte reagiert mit einem Dauerlicht- führt aber keinerlei Befehle aus!
+
+Hterm( von Hammer) funktioniert auf beiden Geräten!

@@ -1,0 +1,6 @@
+config RS485_BPI
+    tristate "S88 GPIO"
+    depends on GENERIC_GPIO
+    select RS485_BPI
+    help
+      BPi RS485 Support

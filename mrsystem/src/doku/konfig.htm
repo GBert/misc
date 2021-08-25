@@ -1,0 +1,346 @@
+<HTML>
+<HEAD>
+<LINK HREF="../../mrsystem.css" REL="stylesheet">
+<TITLE>Konfiguration</TITLE>
+</HEAD>
+<BODY>
+<DIV CLASS="odiv">
+<H1>Konfiguration</H1>
+</DIV>
+<P>
+Das Verhalten des Systems kann sowohl &uuml;ber die Kommandozeile beim Start
+als auch &uuml;ber eine Konfigurationsdatei angepa&szlig;t werden. Wobei ein
+Parameter der Kommandozeile einen Parameter der Konfigurationsdatei
+&uuml;berschreibt. Die Werte der Konfigurationsdatei k&ouml;nnen auch &uuml;ber
+ein Formular der Wegconfig gesetzt werden.
+<P>
+<H2>Die Konfigurationsdatei /etc/mrsystem</H2>
+<P>
+Die Konfiguration wird aus der Datei <VAR>/etc/mrsystem</VAR> von jedem
+Daemonen beim Programmstart eingelesen. Die Konfigurationsdatei enth&auml;lt
+die nachfolgend aufgef&uuml;hrten Werte.
+<P>
+<TABLE BORDER="1">
+<TR><TH>Name</TH><TH>Default</TH><TH>Beschreibung</TH></TR>
+<TR>
+<TD>zentrale</TD>
+<TD>1</TD>
+<TD>
+Dieser Wert bestimmt das Verhalten der Software.
+<TABLE BORDER="1">
+<TR><TH>Wert</TH><TH>Bedeutung</TH></TR>
+<TR>
+<TD>0</TD>
+<TD>Die Software verh&auml;lt sich passiv und versendet keine Ping <VAL>"member
+request"</VAL> Nachrichten. Jede CAN Nachricht wird zwischen CAN und Ethernet
+&uuml;bertragen (Proxy). Wenn eine CS2 bzw. cs2.exe erkannt wird, werden die
+"*.cs2* Konfigurationsdateien abgefragt. Verbindungen &uuml;ber Ethernet werden
+angenommen. Dieser Modus &auml;hnelt dem einer CS2 Slave. Die Lokanmeldung und
+Verwaltung der Objekte kann z.b. von einem Programm auf einem angeschlossenen
+PC erledigt werden. F&uuml;r diesen Mode sollte eine mit dem System verbundene
+cs2.exe im Mastermode laufen. Eine evtl. angeschlossene MS2 w&uuml;rde auch in
+den Slave Modus gehen.</TD>
+</TR>
+<TR>
+<TD>1</TD>
+<TD>Die Software versendet aktiv Ping <VAL>"member request"</VAL> Nachrichten.
+Die CAN Ping Nachrichten werden gefiltert, so da&szlig; eine MS2 nicht in den
+Slave Modus geht. Wenn eine MS2 erkannt wird, werden die Loks abgefragt.
+Verbindungen &uuml;ber Ethernet werden angenommen. In der Kombination aus MS2
+und dieser Software &auml;hnelt dieser Modus dem einer CS2 Master. F&uuml;
+diesen Mode sollte eine mit dem System verbundene cs2.exe im Slavemode
+laufen.</TD>
+</TR>
+</TABLE>
+</TD>
+</TR>
+<TR>
+<TD>broadcast</TD>
+<TD>1</TD>
+<TD>
+<TABLE BORDER="1">
+<TR><TH>Wert</TH><TH>Bedeutung</TH></TR>
+<TR>
+<TD>0</TD>
+<TD>Die UDP Nachrichten werden als Unicast an die Adresse verschickt, von der
+Nachrichten empfangen wurden.</TD>
+</TR>
+<TD>1</TD>
+<TD>Die UDP Nachrichten werden als Broadcast verschickt. Als Broadcast Adresse
+wird der unter <VAR>udpbc</VAR> eingetragene Adresse verwendet.</TD>
+</TR>
+</TABLE>
+</TD>
+</TR>
+<TR>
+<TD>udpbc</TD>
+<TD NOWRAP>"255.255.255.255"</TD>
+<TD>Dies ist die Broadcast Adresse, an die die UDP Broadcasts verschickt
+werden.</TD>
+</TR>
+<TR>
+<TD>address</TD>
+<TD NOWRAP>"0.0.0.0"</TD>
+<TD>Dies ist die IP Adresse, &uuml;ber die die interne Kommunikation
+stattfindet. Wenn der Wert <VAL>0.0.0.0</VAL> ist, wird das
+<VAR>interface</VAR> benutzt. Wenn hier eine Adresse eingetragen wird, sollte
+die interne Adresse des Loopback Interfaces <VAL>127.0.0.1</VAL> verwendet
+werden.</TD>
+</TR>
+<TR>
+<TD>port</TD>
+<TD>10234</TD>
+<TD>Dies ist die Portnummer, &uuml;ber die die interne Kommunikation
+stattfindet. Sollte einen andere Software diese Portnummer verwenden, kann hier
+der Wert auf eine andere Portnummer gesetzt werden.</TD>
+</TR>
+<TR>
+<TD>interface</TD>
+<TD NOWRAP>"lo"</TD>
+<TD>Dies ist das Interface, &uuml;ber die die interne Kommunikation
+stattfindet. Wenn als Adresse der Wert <VAL>0.0.0.0</VAL> eingetragen wird,
+findet dir Kommunikation &uuml;ber dieses Interface statt. Als Interface
+sollte das Loopback Interface <VAL>lo</VAL> eingetragen werden.</TD>
+</TR>
+<TR>
+<TD>can_interface</TD>
+<TD NOWRAP>"can0"</TD>
+<TD>Dies ist das CAN Interface zu M&auml;rklin Digital</TD>
+</TR>
+<TR>
+<TD>cs2_path</TD>
+<TD NOWRAP>"/var/www/config"</TD>
+<TD>Dies ist der Pfad zu den <VAL>*.cs2</VAL> Dateien. Diese Dateien
+m&uuml;ssen im Verzeichnis <VAL>config</VAL> des HTML Roots liegen. Damit
+findet auch Software, die diese Dateien per <VAL>http</VAL> abfragt, diese
+Dateien.</TD>
+</TR>
+<TR>
+<TD>wakeup_s88</TD>
+<TD NOWRAP>"0"</TD>
+<TD>Dies beschreibt, ob die M&auml;rklin S88 Module gestartet werden sollen.
+Der Wert von "0" bedeutet nein. Ansonsten entspricht der Wert dem Parameter
+"-c" des Programms "wake-up-links88" von Gerhard Bertelsmann:
+<PRE>-c &lt;config_string&gt;  config string "B1=1,B2=3"</PRE>
+Als Defaultwert kann "B3=1" benutzt werden.</TD>
+</TR>
+<TR>
+<TD>gpio_s88</TD>
+<TD NOWRAP>""</TD>
+<TD>Dies sind die Kommandozeilenparameter f&uuml;r den client_gpios88, so wie
+sie auch das Programm "s88udp-bpi" von Gerhard Bertelsmann erwartet.</TD>
+</TR>
+<TR>
+<TD>hide_ms2</TD>
+<TD>0</TD>
+<TD>
+Dieser Wert bestimmt, ob eine angeschlossene MS2 auf der Ethernet Seite
+sichtbar ist.
+<TABLE BORDER="1">
+<TR><TH>Wert</TH><TH>Bedeutung</TH></TR>
+<TR>
+<TD>0</TD>
+<TD>Die MS2 ist nicht versteckt. Pings (Nachricht <VAL>"member"</VAL>) der MS2
+werden auch auf Ethernet weitergeleitet.</TD>
+</TR>
+<TR>
+<TD>1</TD>
+<TD>Die MS2 ist versteckt. Pings (Nachricht <VAL>"member"</VAL>) der MS2 werden
+nicht auf Ethernet weitergeleitet. Damit ist die MS2 f&uuml;r einen &uuml;ber
+Ethernet verbundenen Client nicht sichtbar. Diese Einstellung mu&szlig;
+verwendet werden, wenn Win-Digipet als Steuerungssoftware benutzt wird.</TD>
+</TR>
+</TABLE>
+</TR>
+<TR>
+<TD>emu_host_com</TD>
+<TD>7970</TD>
+<TD>Dies ist die Portnummer, auf welcher der client_cceth auf Anfragen des
+virtuellen COM Port Treiber von HW group wartet.</TD>
+</TR>
+<TR>
+<TD>serial_line</TD>
+<TD>"tty0,500000"</TD>
+<TD>Dies ist der Name des seriellen Interface, auf dem der client_tty auf
+Anfragen eines Computers wartet. Durch ein Komma getrennt wird die
+gew&uuml;nschte Geschwindigkeit der Schnittstelle angegeben. Das Protokoll
+entspricht dem der CC-Schnitte. Jeweils 13 aufeinanderfolgende Bytes sind 
+ein CAN Frame.</TD>
+</TR>
+<TR>
+<TD>num_lokfkt</TD>
+<TD>32</TD>
+<TD>Dies ist die Anzahl der Lokfunktionen, die in die <VAR>lokomotive.cs2</VAR>
+geschrieben werden. Damit kann die Anzahl der Lokfunktionen von aktuell 32 auf
+16 beschr&auml;nkt werden, wenn Software nicht mit 32 Lokfunktionen zurecht
+kommt.</TD>
+</TR>
+</TABLE>
+</TD>
+</TR>
+</TABLE>
+<P>
+<H2>Webconfig</H2>
+<P>
+Da das System einen Webserver f&uuml;r die Anfordergung der cs2 Dateien durch
+die Handy/Tablet Apps enth&auml;lt, wurden auch Seiten zur Konfiguration
+angelegt. Die Startseite enth&auml;lt ein Men&uuml;, von der die Doku des BBB,
+die Doku der Software und Konfigurationsseiten aufgerufen werden k&ouml;nnen.
+<P>
+<IMG SRC="web_menu.gif">
+<P>
+Die Konfiguration enth&auml;lt eine Seite mit Tabs f&uuml;r verschiedene
+Teile der Konfiguration. Die erste Seite enth&auml;lt ein Formular f&uuml;r
+die Werte der Konfigurationsdatei <VAR>/etc/mrsystem</VAR>. Die Werte sind oben
+beschrieben.
+<P>
+<IMG SRC="web_mrsystem.gif">
+<P>
+Im zweiten Tab gibt es eine Seite, mit der ein Update eingespielt werden kann.
+Die Updates m&uuml;ssen per ftp als User <VAR>developer</VAR> in das
+Verzeichnis <VAR>/home/developer/updates</VAR> &uuml;bertragen werden. Der
+Name des Update Files wird als Wert eingetragen.
+<P>
+<IMG SRC="web_update.gif">
+<P>
+Im dritten Tab gibt es eine Seite, mit der Netzwerkparameter des Linux
+konfiguriert werden k&ouml;nnen. Es kann zwischen DHCP und einer statischen
+IP Adresse gew&auml;hlt werden.
+<P>
+<IMG SRC="web_linux.gif">
+<P>
+Der vierte Tab erlaubt es festzulegen, welche Teile des Systems gestarte werden
+sollen. Das System besteht aus einem zentralen Teil, der f&uuml;r die Verteilung
+der internen Nachrichten zust&auml,ndig ist. Und aus Clients, die mit diesem
+zentralen Daemon kommunizieren und ein bestimmtes Protokoll bzw. Bus
+unterst&uuml;tzen.
+<P>
+<TABLE BORDER="1">
+<TR><TH>Name</TH><TH>Default</TH><TH>Beschreibung</TH></TR>
+<TR>
+<TD>client_cc</TD><TD>disable</TD>
+<TD>Dieser Client kommuniziert mittels der CC-Schnitte mit einer MS2
+(ungetestet!)</TD>
+</TR>
+<TR>
+<TD>client_cs2eth</TD><TD>enable</TD>
+<TD>Dieser Client stellt auf der Ethernet Schnittstelle einen CS2 kompatiblen
+Server zur Verf&uuml;gung</TD>
+</TR>
+<TR>
+<TD>client_cs2sl</TD><TD>disable</TD>
+<TD>Dieser Client kommuniziert &uuml;ber Ethernet mit einer CS2 oder einem
+anderen Server,, der das CS2 Protokoll spricht</TD>
+</TR>
+<TR>
+<TD>client_ms1</TD><TD>disable</TD>
+<TD>Dieser Client kommuniziert mittels socketCAN mit einer MS1. Dieser Client
+kann nur gestartet werden, wenn das System als Schnittstelle zu CAN socketCAN
+unterst&uml;tzt und dieser Client compiliert wurde. (unvollst&auml;ndig!)</TD>
+</TR>
+<TR>
+<TD>client_ms2</TD><TD>enable</TD>
+<TD>Dieser Client kommuniziert mittels socketCAN mit einer MS2. Dieser Client
+kann nur gestartet werden, wenn das System als Schnittstelle zu CAN socketCAN
+unterst&uml;tzt und dieser Client compiliert wurde. </TD>
+</TR>
+<TR>
+<TD>client_ms24l</TD><TD>disable</TD>
+<TD>Dieser Client kommuniziert mittels can4linux mit einer MS2. Dieser Client
+kann nur gestartet werden, wenn das System als Schnittstelle zu CAN can4linux
+unterst&uml;tzt und dieser Client compiliert wurde. (ungetestet!)</TD>
+</TR>
+<TR>
+<TD>client_slcan</TD><TD>disable</TD>
+<TD>Dieser Client kommuniziert mittels eines CAN-USB Adapters, der serial line
+CAN spricht, mit einer MS2 (ungetestet!)</TD>
+</TR>
+<TR>
+<TD>client_zentrale</TD><TD>enable</TD>
+<TD>Dieser Client enth&auml;t die Logik f&uuml;r die Verwaltung der *.cs2
+Dateien und der Statusdateien. Dieser Teil ist n&ouml;tig, um z.B. die
+z-lib gepackten Dateien (lokomotive.cs2, ...) an Netzwerclients wie die cs2.exe
+zu &uuml;bertragen. Oder die Loks der MS2 auszulesen, abh&auml;ngig vom
+eingestellten Modus.</TD>
+</TR>
+<TR>
+<TD>drehscheibe</TD><TD>enable</TD>
+<TD>Dies ist das zentrale Element zur Verteilung der internen Nachrichten
+zwischen den Clients. Dieser Teil mu&szlig; immer gestartet werden.</TD>
+</TR>
+<TR>
+<TD>client_gpios88</TD><TD>disable</TD>
+<TD>Dieser Client kommuniziert per GPIO &uuml;ber den S88 Bus mit
+R&uuml;ckmeldemodulen. Da die GPIOs nicht konfiguriert werden k&ouml;nnen,
+kann dieser Client nur mit dem BPi und der von Gerhard Bertelsmann erstellter
+Platine benutzt werden.</TD>
+</TR>
+<TR>
+<TD>client_cceth</TD><TD>disable</TD>
+<TD>Dieser Client ist ein Server f&uuml;r den virtuellen COM Port Treiber von
+<A HREF="http://www.hw-group.com/products/hw_vsp/index_en.html">HW group</A>.
+Der COM Port Treiber setzt die Daten auf Ethernet um. Damit kann z.B. Software
+eingesetzt werden, die eine CC-Schnitte erwartet.</TD>
+</TR>
+</TABLE>
+<P>
+<IMG SRC="web_start.gif">
+<P>
+Der f&uuml;nfte Tab erlaubt es, das System zu booten. Wenn die
+Netzwerkeinstellungen ge&auml;ndert wurden, mu&szlig; das komplette BBB neu
+gestarte werden, Wenn die Konfigurationsdatei <VAR>/etc/mrsystem</VAR>
+ge&auml;ndert wird, mu&szlig; die Software neu gestartet werden, damit die
+ge&auml;nderte Konfiguration neu eingelesen wird. Zus&auml;tzlich kann hier
+auch das System angehalten werden.
+<P>
+<IMG SRC="web_boot.gif">
+<P>
+<H2>Die Konfigurationsdatei /etc/mrstart</H2>
+<P>
+Die Datei <VAR>/etc/mrstart</VAR> beschreibt, welche Daemons des
+<VAR>mrsystem</VAR> gestartet werden. Damit kann das Startscript
+<VAR>/etc/init.d/mrsystem</VAR> generisch arbeiten und mu&szlig; nicht f&uuml;r
+jede &Auml;nderung der zu startenden Programme ge&auml;ndert werden.
+<P>
+Jede Zeile der Datei enth&auml;lt einen Eintrag mit dem Namen des Daemons
+und durch ein Leerzeichen getrennt das Schl&uuml;sselwort <VAR>start</VAR>
+oder <VAR>stop</VAR>. Daemons mit dem Schl&uuml;sselwort <VAR>start</VAR>
+werden vom Startscipt gestartet. Die anderen Eintr&auml;ge werden
+&uuml;bersprungen. Ein Beispiel sieht wie folgt aus:
+<P>
+<PRE>drehscheibe start
+mrcc stop
+mrcs2eth start
+mrcs2sl stop
+startmrgpios88 stop
+mrcceth stop
+mrms1 stop
+mrms2 start
+mrms24l stop
+mrslcan stop
+mrsrcp stop
+mrzentrale start
+mrtty stop</PRE>
+<P>
+<H2>F&uuml;r Experten</H2>
+<P>
+Wenn der Minicomputer nicht permanet l&auml;uft, k&ouml;nnen die Logfiles in
+eine Ramdisk gelegt werden. Damit beanspruchen sie RAM und stehen nach einem
+Crash bzw. Reboot nicht mehr zur Verf&uuml;gung. Aber es wird die SD-Karte
+weniger mit Schreibzugriffen belastet.
+<P>
+Um die Logfiles in eine Ramdisk zu legen, mu&szlig; in der Datei
+<VAR>/etc/fstab</VAR> der folgende Eintrag hinzugef&uuml;gt werden:
+<PRE>tmpfs	/var/log	tmpfs	defaults	0	0</PRE>
+Danach kann der Inhalt des Verzeichnis <VAR>/var/log</VAR> gel&ouml;scht
+werden und der Computer neu gestartet werden.
+<P>
+<HR>
+<P>
+<CENTER>
+<A HREF="bbb.htm">Zur&uuml;ck zum BBB</A> -
+<A HREF="index.htm">Zur&uuml;ck zur Modellbahn Startseite</A> -
+<A HREF="../index.htm">Zur&uuml;ck zur Homepage</A>
+</CENTER>
+</BODY>
+</HTML>
