@@ -20,13 +20,13 @@
 ; Device Pinout
 ;-------------------------------------------------------------------------------
 ;
-; VDD        1-----14 VSS
-; RA5        2     13 RA0 PGD TX1
-; RA4        3     12 RA1 PGC RX1
-; MCLR       4     11 RA2
-; RC5        5     10 RC0 TX2
-; RC4        6      9 RC1 RX2
-; RC3        7      8 RC2 DE
+;       VDD  1-----14 VSS
+;       RA5  2     13 RA0 PGD TX1
+;       RA4  3     12 RA1 PGC RX1
+;       MCLR 4     11 RA2
+;       RC5  5     10 RC0 TX2
+;       RC4  6      9 RC1 RX2
+;   LED RC3  7------8 RC2 DE
 ;
 ;-------------------------------------------------------------------------------
 ; Device Constants
@@ -55,10 +55,10 @@ ERRORLEVEL      -1302
 #ENDIF
 
 #DEFINE UBAUD2   ((((CLOCK / BAUDRATE2) / 2) - 1) / 2)
-#IF UBAUD1 > 65535
+#IF UBAUD2 > 65535
     ERROR       "UART2 BRG overflow"
 #ENDIF
-#IF UBAUD1 == 0
+#IF UBAUD2 == 0
     ERROR       "UART2 BRG zero"
 #ENDIF
 
