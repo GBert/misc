@@ -16,9 +16,7 @@ https://viereck.ch/linux-mark-space-parity/
 
 ```
 	// Send first byte with mark parity
-	tio.c_cflag |= PARENB;
-	tio.c_cflag |= CMSPAR;
-	tio.c_cflag |= PARODD;
+	tio.c_cflag |= PARENB | CMSPAR | PARODD;
 	tcsetattr(ttyHandle, TCSADRAIN, &tio);
 	write(ttyHandle, packet, 1);
 
@@ -27,6 +25,14 @@ https://viereck.ch/linux-mark-space-parity/
 	tcsetattr(ttyHandle, TCSADRAIN, &tio);
 	write(ttyHandle, packet+1, len-1);
 ```
+
+CP2104
+------
+
+RS-485 assert time 600ns - 700ns
+RS-485 active time after Stop Bit — 1 Bit time
+
+
 OSX + FTDI
 ----------
 
