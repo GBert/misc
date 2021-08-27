@@ -27,8 +27,7 @@
 #include <time.h>
 
 #define XPN_SPEED	62500
-// #define XPN_SPEED	57600
-
+// #define XPN_SPEED    57600
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <interface>\n", prg);
@@ -47,28 +46,28 @@ int time_stamp(char *timestamp) {
     return 0;
 }
 
-int xpn_send(int fd,struct termios2 *config, unsigned char *data, int length) {
+int xpn_send(int fd, struct termios2 *config, unsigned char *data, int length) {
     int ret;
 
-    /* use parity mark for address*/
+    /* use parity mark for address */
     config->c_cflag |= PARENB | CMSPAR | PARODD;
-    ioctl(fd,  TCSADRAIN, config);
+    // ioctl(fd, TCSANOW, config);
+    ioctl(fd, TCSETS2, config);
     ret = write(fd, data, 1);
     if (ret < 0) {
 	fprintf(stderr, "can't write address\n");
 	return EXIT_FAILURE;
     }
 
-    /* use parity space for data*/
+    /* use parity space for data */
     config->c_cflag &= ~PARODD;
-    ioctl(fd,  TCSADRAIN, config);
+    // ioctl(fd, TCSANOW, config);
+    ioctl(fd, TCSETS2, config);
     ret = write(fd, data + 1, length - 1);
     if (ret < 0) {
 	fprintf(stderr, "can't write data\n");
 	return EXIT_FAILURE;
     }
-
-    //config->c_iflag = INPCK | PARMRK;    
     //ioctl(fd, TCSANOW, config);
     return EXIT_SUCCESS;
 }
@@ -76,7 +75,7 @@ int xpn_send(int fd,struct termios2 *config, unsigned char *data, int length) {
 int main(int argc, char **argv) {
     int fd, opt, ret;
 
-    unsigned char data [] = {0xff,0x20,0x55,0x55};
+    unsigned char data[] = { 0xff, 0x20, 0x55, 0x55 };
 
     struct termios2 config;
 
@@ -99,11 +98,11 @@ int main(int argc, char **argv) {
     fd = open("/dev/ttyUSB2", O_RDWR);
     if (fd < 0) {
 	printf("Failed to open /dev/ttyUSB2 - fd = %d\n", fd);
-        return EXIT_FAILURE;
+	return EXIT_FAILURE;
     }
 
-    config.c_cflag &= ~CBAUD;
-    config.c_cflag |= BOTHER | CS8 | PARENB | CMSPAR| PARODD;
+    // config.c_cflag &= ~CBAUD;
+    config.c_cflag |= BOTHER | CS8 | PARENB | CMSPAR | PARODD;
     config.c_ispeed = XPN_SPEED;
     config.c_ospeed = XPN_SPEED;
     ret = ioctl(fd, TCSETS2, &config);
