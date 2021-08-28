@@ -27,12 +27,12 @@
 #include <time.h>
 
 #define XPN_SPEED	62500
-// #define XPN_SPEED    57600
+char *interface = "/dev/ttyUSB2";
 
 void print_usage(char *prg) {
     fprintf(stderr, "\nUsage: %s -i <interface>\n", prg);
     fprintf(stderr, "   Version 0.1\n\n");
-    fprintf(stderr, "         -i <interface>\n");
+    fprintf(stderr, "         -i <interface> - default %s\n", interface);
 }
 
 int time_stamp(char *timestamp) {
@@ -55,7 +55,7 @@ int xpn_send(int fd, struct termios2 *config, unsigned char *data, int length) {
     ioctl(fd, TCSETS2, config);
     ret = write(fd, data, 1);
     if (ret < 0) {
-	fprintf(stderr, "can't write address\n");
+	fprintf(stderr, "can't write address - %s\n", strerror(errno));
 	return EXIT_FAILURE;
     }
 
@@ -65,7 +65,7 @@ int xpn_send(int fd, struct termios2 *config, unsigned char *data, int length) {
     ioctl(fd, TCSETS2, config);
     ret = write(fd, data + 1, length - 1);
     if (ret < 0) {
-	fprintf(stderr, "can't write data\n");
+	fprintf(stderr, "can't write data - %s\n", strerror(errno));
 	return EXIT_FAILURE;
     }
     //ioctl(fd, TCSANOW, config);
@@ -83,6 +83,9 @@ int main(int argc, char **argv) {
 
     while ((opt = getopt(argc, argv, "i:h?")) != -1) {
 	switch (opt) {
+	case 'i':
+	    interface = optarg;
+	    break;
 	case 'h':
 	case '?':
 	    print_usage(basename(argv[0]));
@@ -95,20 +98,19 @@ int main(int argc, char **argv) {
 	}
     }
 
-    fd = open("/dev/ttyUSB2", O_RDWR);
+    fd = open(interface, O_RDWR);
     if (fd < 0) {
-	printf("Failed to open /dev/ttyUSB2 - fd = %d\n", fd);
-	return EXIT_FAILURE;
+	fprintf(stderr, "Failed to open %s - %s\n", interface, strerror(errno));
+	exit(EXIT_FAILURE);
     }
-
     // config.c_cflag &= ~CBAUD;
     config.c_cflag |= BOTHER | CS8 | PARENB | CMSPAR | PARODD;
     config.c_ispeed = XPN_SPEED;
     config.c_ospeed = XPN_SPEED;
     ret = ioctl(fd, TCSETS2, &config);
     if (ret < 0) {
-	fprintf(stderr, "can't set speed\n");
-	return EXIT_FAILURE;
+	fprintf(stderr, "can't set speed - %s\n", strerror(errno));
+	exit(EXIT_FAILURE);
     }
     xpn_send(fd, &config, data, 4);
 
