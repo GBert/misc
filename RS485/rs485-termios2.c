@@ -16,7 +16,7 @@
 #include <signal.h>
 #include <errno.h>
 #include <ctype.h>
-#include <termios.h>
+#include <asm/termbits.h>
 #include <unistd.h>
 
 #include <sys/ioctl.h>
@@ -24,7 +24,6 @@
 #include <sys/socket.h>
 #include <sys/stat.h>
 #include <sys/time.h>
-#include <linux/serial.h>
 #include <time.h>
 
 #define XPN_SPEED	62500
@@ -47,13 +46,13 @@ int time_stamp(char *timestamp) {
     return 0;
 }
 
-int xpn_send(int fd, struct termios *config, unsigned char *data, int length) {
+int xpn_send(int fd, struct termios2 *config, unsigned char *data, int length) {
     int ret;
 
     /* use parity mark for address */
     config->c_cflag |= PARENB | CMSPAR | PARODD;
     // ioctl(fd, TCSANOW, config);
-    ioctl(fd, TCSETS, config);
+    ioctl(fd, TCSETS2, config);
     ret = write(fd, data, 1);
     if (ret < 0) {
 	fprintf(stderr, "can't write address - %s\n", strerror(errno));
@@ -63,7 +62,7 @@ int xpn_send(int fd, struct termios *config, unsigned char *data, int length) {
     /* use parity space for data */
     config->c_cflag &= ~PARODD;
     // ioctl(fd, TCSANOW, config);
-    ioctl(fd, TCSETS, config);
+    ioctl(fd, TCSETS2, config);
     ret = write(fd, data + 1, length - 1);
     if (ret < 0) {
 	fprintf(stderr, "can't write data - %s\n", strerror(errno));
@@ -74,14 +73,13 @@ int xpn_send(int fd, struct termios *config, unsigned char *data, int length) {
 }
 
 int main(int argc, char **argv) {
-    int fd, opt;
+    int fd, opt, ret;
 
     unsigned char data[] = { 0xff, 0x20, 0x55, 0x55 };
 
-    struct termios termios_config;
-    struct serial_struct serinfo;
+    struct termios2 config;
 
-    memset(&termios_config, 0, sizeof(struct termios));
+    memset(&config, 0, sizeof(struct termios2));
 
     while ((opt = getopt(argc, argv, "i:h?")) != -1) {
 	switch (opt) {
@@ -105,39 +103,16 @@ int main(int argc, char **argv) {
 	fprintf(stderr, "Failed to open %s - %s\n", interface, strerror(errno));
 	exit(EXIT_FAILURE);
     }
-
-    serinfo.reserved_char[0] = 0;
-    if (ioctl(fd, TIOCGSERIAL, &serinfo) < 0) {
-	fprintf(stderr, "can't get serial info - %s\n", strerror(errno));
-	exit(EXIT_FAILURE);
-    }
-    serinfo.flags &= ~ASYNC_SPD_MASK;
-    serinfo.flags |= ASYNC_SPD_CUST;
-    serinfo.custom_divisor = (serinfo.baud_base + (XPN_SPEED / 2)) / XPN_SPEED;
-    if (serinfo.custom_divisor < 1)
-	serinfo.custom_divisor = 1;
-    if (ioctl(fd, TIOCSSERIAL, &serinfo) < 0) {
-	fprintf(stderr, "can't set devisor - %s\n", strerror(errno));
-	exit(EXIT_FAILURE);
-    }
-    if (ioctl(fd, TIOCGSERIAL, &serinfo) < 0) {
-	fprintf(stderr, "can't get serial info - %s\n", strerror(errno));
-	exit(EXIT_FAILURE);
-    }
-    printf(" actual rate %d", serinfo.baud_base/serinfo.custom_divisor);
-
     // config.c_cflag &= ~CBAUD;
-    tcgetattr(fd, &termios_config);
-    cfsetispeed(&termios_config, B38400);
-    cfsetospeed(&termios_config, B38400);
-    cfmakeraw(&termios_config);
-
-    termios_config.c_cflag |= CS8 | PARENB | CMSPAR | PARODD;
-    if (ioctl(fd, TCSETS, &termios_config) < 0) {
+    config.c_cflag |= BOTHER | CS8 | PARENB | CMSPAR | PARODD;
+    config.c_ispeed = XPN_SPEED;
+    config.c_ospeed = XPN_SPEED;
+    ret = ioctl(fd, TCSETS2, &config);
+    if (ret < 0) {
 	fprintf(stderr, "can't set speed - %s\n", strerror(errno));
 	exit(EXIT_FAILURE);
     }
-    xpn_send(fd, &termios_config, data, 4);
+    xpn_send(fd, &config, data, 4);
 
     return 0;
 }
