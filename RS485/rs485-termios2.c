@@ -59,6 +59,9 @@ int xpn_send(int fd, struct termios2 *config, unsigned char *data, int length) {
 	return EXIT_FAILURE;
     }
 
+    if (length == 1)
+	return EXIT_SUCCESS;
+
     /* use parity space for data */
     config->c_cflag &= ~PARODD;
     // ioctl(fd, TCSANOW, config);
@@ -75,7 +78,7 @@ int xpn_send(int fd, struct termios2 *config, unsigned char *data, int length) {
 int main(int argc, char **argv) {
     int fd, opt, ret;
 
-    unsigned char data[] = { 0xff, 0x20, 0x55, 0x55 };
+    unsigned char data[] = { 0x40, 0x00 };
 
     struct termios2 config;
 
@@ -112,7 +115,7 @@ int main(int argc, char **argv) {
 	fprintf(stderr, "can't set speed - %s\n", strerror(errno));
 	exit(EXIT_FAILURE);
     }
-    xpn_send(fd, &config, data, 4);
+    xpn_send(fd, &config, data, 1);
 
     return 0;
 }
