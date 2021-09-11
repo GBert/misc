@@ -48,11 +48,16 @@ int time_stamp(char *timestamp) {
 
 int xpn_send(int fd, struct termios2 *config, unsigned char *data, int length) {
     int ret;
+    int mask;
 
     /* use parity mark for address */
-    config->c_cflag |= PARENB | CMSPAR | PARODD;
-    // ioctl(fd, TCSANOW, config);
-    ioctl(fd, TCSETS2, config);
+    /* check if we need to change */
+    mask = PARENB | CMSPAR | PARODD;
+    if ((config->c_cflag & mask) != mask) {
+	config->c_cflag |= PARENB | CMSPAR | PARODD;
+	// ioctl(fd, TCSANOW, config);
+	ioctl(fd, TCSETS2, config);
+    }
     ret = write(fd, data, 1);
     if (ret < 0) {
 	fprintf(stderr, "can't write address - %s\n", strerror(errno));
