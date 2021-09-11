@@ -78,6 +78,8 @@ SCHEDULE
                 INCFSZ  TIMER3+1,F
                 INCF    TIMER3,F
 
+                CALL    XPNTEST
+
 SCHEDULE_NEXT1
                 DECFSZ  PIOTCOUNTER,F	; PIO routine
                 BRA     SCHEDULE_NEXT2

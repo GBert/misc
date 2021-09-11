@@ -137,13 +137,10 @@ INIT
                 RTSCLR                      ; Init. RTS
                 CLRF    DDR                 ; All O/P
 
-                ; test pins
-                BCF     TRISC,0
-                BCF     TRISC,1
-
                 CALL    INITUART            ; Init. UART
                 CALL    INITRING            ; Init. Rx/Tx Ring Buffer
                 CALL    INITCAN             ; Init. CAN Bus
+                CALL    INITXPN             ; Init. XpressNet (aka RS485)
                 CALL    TIMER0INIT          ; Init. TIMER0
                 CALL    TIMER3INIT          ; Init. TIMER3
                 CALL    I2CINIT             ; Init. I2C
@@ -164,6 +161,7 @@ MAIN
                 CALL    CANINSPECT
                 CALL    TXCAN               ; SEND CAN
                 CALL    CANINSPECT
+                CALL    XPNTESTREADY
 
                 BTFSC   INTCON, TMR0IF
                 RCALL   SCHEDULE
