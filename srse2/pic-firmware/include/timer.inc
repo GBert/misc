@@ -77,7 +77,6 @@ SCHEDULE
                 BCF     PIR2,TMR3IF
                 INCFSZ  TIMER3+1,F
                 INCF    TIMER3,F
-
                 CALL    XPNTEST
 
 SCHEDULE_NEXT1

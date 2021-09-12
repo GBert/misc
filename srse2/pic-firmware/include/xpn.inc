@@ -21,7 +21,8 @@
 ; event ring variables
 ;------------------------------------------------------------------------------
 
-                CBLOCK 	0xF80
+                CBLOCK
+                XPNCALLCOUNT : 1
                 XPNTMP : 1		; tmp buffer
                 XPNCNT : 1		; event counter
                 EVENTXPN : 1		; event counter
@@ -36,9 +37,6 @@
 ;------------------------------------------------------------------------------
 
 XPNBUF          EQU 0x800		; event ring
-                CBLOCK 0x100
-                XPNBUFFER : 32
-                ENDC
 
 ;------------------------------------------------------------------------------
 ; XPressNet
@@ -72,6 +70,8 @@ INITXPN
                 BCF	TRISC,6		; UART1 TX
                 BSF	TRISC,7		; UART1 RX
 
+                CLRF    XPNCALLCOUNT
+
                 MOVLW   (1 << BRG16)
                 MOVWF   BAUDCON1
 
@@ -99,26 +99,6 @@ INITXPNAGAIN
 
                 RETURN
 
-; -------------
-;
-;
-
-XPNTESTREADY
-		BTFSS	TXSTA1,TRMT
-		RETURN
-		BTG	PORTC,1
-		BCF     PORTC,0
-		RETURN
-
-XPNTEST
-		BSF	PORTC,0
-		NOP
-		NOP
-		MOVLW	0x50
-		MOVWF	TXREG1
-		RETURN
-
-
 ;------------------------------------------------------------------------------
 ; Event ring macros
 ;------------------------------------------------------------------------------
@@ -144,18 +124,18 @@ INITXPNTRING
 ; This routine will calculate the parity of a 7-bit
 ; integer and place the result in the 8-position
 
-XPN_PARITY:	MACRO
+XPN_PARITY	MACRO
 
                 SWAPF	XPN_SEND_DATA,W		;W = efghabcd
                 XORWF	XPN_SEND_DATA,W		;W = ea.fb.gc.hd.ea.fb.gc.hd
 						; where ea means e^a, etc
                 MOVWF	XPNTMP
-                RLF	XPNTMP,F		;XPNTMP = fb.gc.hd.ea.fb.gc.hd.??
-                RLF	XPNTMP,F		;XPNTMP = gc.hd.ea.fb.gc.hd.??.ea
+                RLCF	XPNTMP,F		;XPNTMP = fb.gc.hd.ea.fb.gc.hd.??
+                RLCF	XPNTMP,F		;XPNTMP = gc.hd.ea.fb.gc.hd.??.ea
                 XORWF	XPNTMP,F		;XPNTMP = gcea.hdfb.gcea.hdfb.gcea.?.?
 						;again, gcea means g^c^e^a
-                RLF	XPNTMP,W		;W = hdfb.gcea.hdfb.gcea.hdfb.?.fb
-                XORWF	XPNTMP,W		;W = abcdefgh.abcdefgh.....
+                RLCF	XPNTMP,W		;W = hdfb.gcea.hdfb.gcea.hdfb.?.fb
+                XORWF   XPNTMP,W		;W = abcdefgh.abcdefgh.....
 						;ie, the upper 5-bits of w each contain
 						;the parity calculation.
                 ANDLW	0x80			;We only need one of them
@@ -190,6 +170,30 @@ XPNTXCAN
                 ; ....
                 RETURN
 
+
+; -------------
+;
+;
+
+XPNTESTREADY
+		BTFSC	TXSTA1,TRMT
+		BCF     PORTC,0
+		RETURN
+
+XPNTEST
+		BSF	PORTC,0
+		INCF	XPNCALLCOUNT,W
+		ANDLW	0x07
+		; set 0 to 1
+		BTFSC	STATUS,Z
+		IORLW	1
+		MOVWF	XPNCALLCOUNT
+		IORLW	XPN_CALL_INQUIRY
+		MOVWF   XPN_SEND_DATA
+		XPN_PARITY
+		BSF	TXSTA1,TX9D
+		MOVWF	TXREG1
+		RETURN
 
 ;------------------------------------------------------------------------------
 ;
