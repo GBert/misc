@@ -145,6 +145,7 @@ INIT
                 CALL    TIMER3INIT          ; Init. TIMER3
                 CALL    I2CINIT             ; Init. I2C
                 CALL    INITEVENTRING       ; Init. Event Ring Buffer
+                CALL    INITXPNBUFFER       ; Init. XpressnetBuffer
                 CALL    S88INIT
                 CALL    READCANHASH
 
@@ -161,7 +162,7 @@ MAIN
                 CALL    CANINSPECT
                 CALL    TXCAN               ; SEND CAN
                 CALL    CANINSPECT
-                CALL    XPNTESTREADY
+                CALL    XPNSERVICE
 
                 BTFSC   INTCON, TMR0IF
                 RCALL   SCHEDULE

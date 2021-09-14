@@ -22,13 +22,11 @@
 ;------------------------------------------------------------------------------
 
                 CBLOCK
-                XPNCALLCOUNT : 1
+                XPNSLOTNUMBER : 1
                 XPNTMP : 1		; tmp buffer
                 XPNCNT : 1		; event counter
-                EVENTXPN : 1		; event counter
                 XPN_SEND_DATA : 1
-                XPNPP : 2		; event pointer
-                XPNPG : 2		; event pointer
+                EVENTXPN: 1
                 ENDC
 
 
@@ -36,7 +34,10 @@
 ; Event ring
 ;------------------------------------------------------------------------------
 
-XPNBUF          EQU 0x800		; event ring
+XPNREADBUF	EQU 0x800		; event buffer
+XPNSENDBUF	EQU 0x900		; send buffer
+XPNREADP	EQU 0xA00
+XPNSENDP	EQU 0xA02
 
 ;------------------------------------------------------------------------------
 ; XPressNet
@@ -70,7 +71,7 @@ INITXPN
                 BCF	TRISC,6		; UART1 TX
                 BSF	TRISC,7		; UART1 RX
 
-                CLRF    XPNCALLCOUNT
+                CLRF    XPNSLOTNUMBER
 
                 MOVLW   (1 << BRG16)
                 MOVWF   BAUDCON1
@@ -103,16 +104,27 @@ INITXPNAGAIN
 ; Event ring macros
 ;------------------------------------------------------------------------------
 
-INITXPNTRING
+INITXPNBUFFER
 
                 ; CLRF	XPNCNT		; event counter
 		MOVLW	0
-		MOVFF	W,XPNCNT
-                LFSR	FSR0,XPNBUF
-                MOVFF	FSR0H,XPNPP
-                MOVFF	FSR0H,XPNPG
-                MOVFF	FSR0L,XPNPP+1
-                MOVFF	FSR0L,XPNPG+1
+		MOVWF	XPNCNT
+		MOVWF	XPNSLOTNUMBER
+		LFSR	FSR0,XPNREADBUF
+		MOVFF	FSR0H,XPNREADP
+		MOVFF	FSR0L,XPNREADP+1
+
+CLEARXPNREADBUF
+		DCFSNZ	XPNCNT
+		BRA	INITXPNBUFFER_NEXT
+		CLRF	POSTINC0
+		BRA	CLEARXPNREADBUF
+
+INITXPNBUFFER_NEXT
+		LFSR	FSR0,XPNSENDBUF
+		MOVFF	FSR0H,XPNSENDP
+		MOVFF	FSR0L,XPNSENDP+1
+
                 RETURN
 
 ;------------------------------------------------------------------------------
@@ -175,25 +187,111 @@ XPNTXCAN
 ;
 ;
 
-XPNTESTREADY
+XPNSERVICE
+		; send data check missing
 		BTFSC	TXSTA1,TRMT
 		BCF     PORTC,0
+		; check incoming data
+		BTFSS	PIR1,RC1IF
 		RETURN
 
-XPNTEST
+		MOVFF	XPNREADP,FSR0H
+		MOVFF	XPNREADP+1,FSR0L
+		MOVF	RCREG1,W
+		MOVWF	POSTINC0
+		; RETURN ; <---------
+		; store the lower poniter part only
+		MOVFF	FSR0L,XPNREADP+1
+		INCF	XPNCNT
+		; check if received frame is complete
+		MOVFF	XPNREADBUF,WREG
+		ANDLW	0x0F
+		ADDLW   1
+		SUBWF   XPNCNT,W
+		BTFSS	STATUS,Z
+		; back if uncomplete
+		RETURN
+
+		; check the received frame
+		; BRA	DEBUG_XPNREADBUF_CAN
+		MOVFF	XPNREADBUF,WREG
+		ANDLW	0xF0
+		XORLW	0x20
+		BTFSC   STATUS,Z
+		BRA	XPN_INFO
+
+		BRA	XPN_READCOMPLETE
+
+; -----
+
+XPN_INFO	MOVFF   XPNREADBUF+1,WREG
+		XORLW	0x21
+		BTFSS   STATUS,Z
+		BRA	XPN_INFO_NEXT1
+		;
+		GOTO	XPN_READCOMPLETE
+XPN_INFO_NEXT1
+		MOVFF   XPNREADBUF+1,WREG
+		XORLW	0x24
+		BTFSS   STATUS,Z
+		GOTO    XPN_READCOMPLETE
+
+		GOTO    XPN_READCOMPLETE
+
+; -------
+; starting new
+
+XPN_READCOMPLETE
+		RETURN
+
+
+
+;---------------------------------------------------
+; periodic task
+
+XPNSLOT
 		BSF	PORTC,0
-		INCF	XPNCALLCOUNT,W
+		CLRF	XPNCNT
+		LFSR	FSR0,XPNREADBUF
+		MOVFF	FSR0H,XPNREADP
+		MOVFF	FSR0L,XPNREADP+1
+		INCF	XPNSLOTNUMBER,W
 		ANDLW	0x07
 		; set 0 to 1
 		BTFSC	STATUS,Z
 		IORLW	1
-		MOVWF	XPNCALLCOUNT
+		MOVWF	XPNSLOTNUMBER
 		IORLW	XPN_CALL_INQUIRY
 		MOVWF   XPN_SEND_DATA
 		XPN_PARITY
 		BSF	TXSTA1,TX9D
 		MOVWF	TXREG1
 		RETURN
+
+; ----------------------------------
+
+
+DEBUG_XPNREADBUF_CAN
+                MOVFF	EVENTPP,FSR0H
+                MOVFF	EVENTPP+1,FSR0L
+                ; mark with 0x84 as Debug Message
+                MOVLW	0x00
+                MOVWF	POSTINC0
+                MOVLW	0x84
+                MOVWF	POSTINC0
+                MOVFF	CANHASH_HIGH,POSTINC0
+                MOVFF	CANHASH_LOW,POSTINC0
+                MOVLW	8
+                MOVWF	POSTINC0
+                MOVFF	XPNREADBUF,POSTINC0
+                MOVFF	XPNREADBUF+1,POSTINC0
+                MOVFF	XPNREADBUF+2,POSTINC0
+                MOVFF	XPNREADBUF+3,POSTINC0
+                MOVFF	XPNREADBUF+5,POSTINC0
+                MOVFF	XPNREADP,POSTINC0
+                MOVFF	XPNREADP+1,POSTINC0
+                MOVFF	XPNCNT,INDF0
+                BRA	EVENT_RING_NORMALIZE
 
 ;------------------------------------------------------------------------------
 ;
