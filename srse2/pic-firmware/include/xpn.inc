@@ -27,6 +27,7 @@
                 XPN_RCNT : 1		; byte receive counter
                 XPN_SCNT : 1		; byte send counter
                 XPN_SEND_DATA : 1
+                XPN_XOR : 1
                 EVENTXPN: 1
                 ENDC
 
@@ -232,8 +233,11 @@ XPNS_NEXT1	BTFSC   TXSTA1,TRMT
 		ANDLW	0xF0
 		XORLW	0x20
 		BZ	XPN_INFO
+		MOVFF   XPNREADBUF,WREG
+		XORLW   0xE3
+		BZ      XPN_LOCO_INFO
 
-		BRA	XPN_READCOMPLETE
+		RETURN
 ; -----
 
 XPN_INFO	; software version
@@ -255,13 +259,12 @@ XPN_INFO	; software version
 		MOVFF	WREG,XPNSENDBUF+4
 		;
 		BRA	XPN_DATA_SEND
-		GOTO	XPN_READCOMPLETE
 
 XPN_INFO_NEXT1	; status central
 		MOVFF   XPNREADBUF+1,WREG
 		XORLW	0x24
 		BTFSS   STATUS,Z
-		GOTO    XPN_READCOMPLETE
+		RETURN
 		; TODO
 		MOVLW	4
 		MOVWF	XPN_SCNT
@@ -273,17 +276,34 @@ XPN_INFO_NEXT1	; status central
 		MOVFF	WREG,XPNSENDBUF+2
 		MOVLW	0x40
 		MOVFF	WREG,XPNSENDBUF+3
-
+		;
 		BRA	XPN_DATA_SEND
-		GOTO    XPN_READCOMPLETE
 
-; -------
-; starting new
-
-XPN_READCOMPLETE
-		RETURN
-
-
+		;
+XPN_LOCO_INFO
+		MOVLW	0x6
+		MOVWF	XPN_SCNT
+		MOVLW	0xE4
+		MOVWF	XPN_XOR
+		MOVFF	WREG,XPNSENDBUF
+		MOVLW	0x02
+		XORWF	XPN_XOR
+		MOVFF	WREG,XPNSENDBUF+1
+		MOVLW	0x00
+		XORWF	XPN_XOR
+		MOVFF	WREG,XPNSENDBUF+2
+		; loco speed
+		MOVFF	XPNREADBUF+2,WREG
+		XORWF	XPN_XOR
+		MOVFF	WREG,XPNSENDBUF+3
+		; loco id
+		MOVFF	XPNREADBUF+3,WREG
+		MOVFF	WREG,XPNSENDBUF+4
+		XORWF	XPN_XOR,W
+		MOVFF	WREG,XPNSENDBUF+5
+		; CALL	DEBUG_XPNSENDBUF_CAN
+		;
+		BRA	XPN_DATA_SEND
 
 XPN_DATA_SEND
 		BSF     PORTC,0
@@ -344,7 +364,28 @@ DEBUG_XPNREADBUF_CAN
                 MOVFF	XPNREADBUF+5,POSTINC0
                 MOVFF	XPN_SCNT,POSTINC0
                 MOVFF	XPN_RCNT,INDF0
-                BRA	EVENT_RING_NORMALIZE
+                GOTO	EVENT_RING_NORMALIZE
+
+DEBUG_XPNSENDBUF_CAN
+                MOVFF	EVENTPP,FSR0H
+                MOVFF	EVENTPP+1,FSR0L
+                ; mark with 0x84 as Debug Message
+                CLRF	POSTINC0
+                MOVLW	0x84
+                MOVWF	POSTINC0
+                MOVFF	CANHASH_HIGH,POSTINC0
+                MOVFF	CANHASH_LOW,POSTINC0
+                MOVLW	8
+                MOVWF	POSTINC0
+                MOVFF	XPNSENDBUF,POSTINC0
+                MOVFF	XPNSENDBUF+1,POSTINC0
+                MOVFF	XPNSENDBUF+2,POSTINC0
+                MOVFF	XPNSENDBUF+3,POSTINC0
+                MOVFF	XPNSENDBUF+4,POSTINC0
+                MOVFF	XPNSENDBUF+5,POSTINC0
+                MOVFF	XPNSENDBUF+6,POSTINC0
+                MOVFF	XPN_SCNT,INDF0
+                GOTO	EVENT_RING_NORMALIZE
 
 ;------------------------------------------------------------------------------
 ;
