@@ -105,11 +105,8 @@ INITXPNAGAIN
 ;------------------------------------------------------------------------------
 
 INITXPNBUFFER
-
-                ; CLRF	XPNCNT		; event counter
-		MOVLW	0
-		MOVWF	XPNCNT
-		MOVWF	XPNSLOTNUMBER
+		CLRF	XPNCNT
+		CLRF	XPNSLOTNUMBER
 		LFSR	FSR0,XPNREADBUF
 		MOVFF	FSR0H,XPNREADP
 		MOVFF	FSR0L,XPNREADP+1
@@ -213,15 +210,12 @@ XPNSERVICE
 		RETURN
 
 		; check the received frame
-		; BRA	DEBUG_XPNREADBUF_CAN
 		MOVFF	XPNREADBUF,WREG
 		ANDLW	0xF0
 		XORLW	0x20
-		BTFSC   STATUS,Z
-		BRA	XPN_INFO
+		BZ	XPN_INFO
 
 		BRA	XPN_READCOMPLETE
-
 ; -----
 
 XPN_INFO	MOVFF   XPNREADBUF+1,WREG
@@ -235,6 +229,7 @@ XPN_INFO_NEXT1
 		XORLW	0x24
 		BTFSS   STATUS,Z
 		GOTO    XPN_READCOMPLETE
+		CALL	DEBUG_XPNREADBUF_CAN
 
 		GOTO    XPN_READCOMPLETE
 
@@ -275,8 +270,7 @@ DEBUG_XPNREADBUF_CAN
                 MOVFF	EVENTPP,FSR0H
                 MOVFF	EVENTPP+1,FSR0L
                 ; mark with 0x84 as Debug Message
-                MOVLW	0x00
-                MOVWF	POSTINC0
+                CLRF	POSTINC0
                 MOVLW	0x84
                 MOVWF	POSTINC0
                 MOVFF	CANHASH_HIGH,POSTINC0
