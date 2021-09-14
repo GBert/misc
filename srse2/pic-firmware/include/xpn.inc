@@ -301,7 +301,7 @@ XPN_LOCO_INFO
 		MOVFF	WREG,XPNSENDBUF+4
 		XORWF	XPN_XOR,W
 		MOVFF	WREG,XPNSENDBUF+5
-		; CALL	DEBUG_XPNSENDBUF_CAN
+		CALL	DEBUG_XPNSENDBUF_CAN
 		;
 		BRA	XPN_DATA_SEND
 
@@ -371,7 +371,7 @@ DEBUG_XPNSENDBUF_CAN
                 MOVFF	EVENTPP+1,FSR0L
                 ; mark with 0x84 as Debug Message
                 CLRF	POSTINC0
-                MOVLW	0x84
+                MOVLW	0x85
                 MOVWF	POSTINC0
                 MOVFF	CANHASH_HIGH,POSTINC0
                 MOVFF	CANHASH_LOW,POSTINC0
