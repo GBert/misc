@@ -36,6 +36,12 @@ CANINSPECT
                 BTFSC   STATUS,Z
                 BRA     SYSYTEM_CMD
 
+                ; System CMD reponse 0x01 ? (looking for on/off state)
+                MOVF    CANFRAME+1,F
+                XORLW   0x01
+                BTFSC   STATUS,Z
+                BRA     SYSTEM_CMD_RESPONSE
+
                 ; Switch Accessoir 0x16 (Zubehoer schalten)?
                 MOVF    CANFRAME+1,W
                 XORLW   0x16
@@ -188,6 +194,21 @@ SYSYTEM_CMD_OTHER
                 MOVWF	POSTINC0
                 MOVWF	POSTINC0
                 BRA	EVENT_RING_NORMALIZE
+
+;------------------------------------------------------------------------------
+; System CMD response 0x01 / status on/off
+;------------------------------------------------------------------------------
+
+SYSTEM_CMD_RESPONSE
+                MOVF    CANFRAME+4,W
+                XORLW   5
+                BTFSS   STATUS,Z
+                RETURN
+                MOVFF   CANFRAME+9,POWER_ONOFF
+                ; mark as new state
+                MOVLW   0x80
+                XORWF   POWER_ONOFF
+                RETURN
 
 ;------------------------------------------------------------------------------
 ; System CMD 0x0B -> channel value

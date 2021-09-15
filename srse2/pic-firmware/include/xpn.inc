@@ -107,6 +107,7 @@ INITXPNAGAIN
 ;------------------------------------------------------------------------------
 
 INITXPNBUFFER
+		CLRF	POWER_ONOFF
 		CLRF	XPN_RCNT
 		CLRF	XPN_SCNT
 		CLRF	XPNSLOTNUMBER

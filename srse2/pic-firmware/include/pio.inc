@@ -45,6 +45,7 @@
                 S88C_H : 1
                 S88C_L : 1
                 SCAN_INTERVAL : 1
+                POWER_ONOFF : 1
                 ENDC
 
 PIOTIME         EQU   0x310
