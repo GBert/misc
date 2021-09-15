@@ -187,14 +187,14 @@ XPNTXCAN
 ;
 ;
 
-XPNSERVICE	BTFSS	PIR1,TX1IF
+XPNSERVICE	BTFSS	PIR1,TX1IF		; return if we already send data
 		RETURN
 
 		; check: data to send ?
 		MOVF	XPN_SCNT,W
 		BZ	XPNS_NEXT1
 
-		BCF	TXSTA1,TX9D
+		BCF	TXSTA1,TX9D		; data bytes (9th bit off)
 		MOVFF	XPNSENDP,FSR0H
 		MOVFF	XPNSENDP+1,FSR0L
 		MOVFF	POSTINC0,WREG
@@ -203,29 +203,26 @@ XPNSERVICE	BTFSS	PIR1,TX1IF
 		DECF	XPN_SCNT
 		MOVFF	FSR0L,XPNSENDP+1
 
-XPNS_NEXT1	BTFSC   TXSTA1,TRMT
-		BCF     PORTC,0
+XPNS_NEXT1	BTFSC   TXSTA1,TRMT		; last bit send ?
+		BCF     PORTC,0			;  free RS485 (DE) transceiver
 
 		; check incoming data
-		BTFSS	PIR1,RC1IF
+		BTFSS	PIR1,RC1IF		; check for incoming data
 		RETURN
 
-		MOVFF	XPNREADP,FSR0H
-		MOVFF	XPNREADP+1,FSR0L
+		MOVFF	XPNREADP,FSR0H		; we have some new incoming data
+		MOVFF	XPNREADP+1,FSR0L	;  restore receiving pointer
 		MOVF	RCREG1,W
 		MOVWF	POSTINC0
-		; store the lower poniter part only
-		MOVFF	FSR0L,XPNREADP+1
+		MOVFF	FSR0L,XPNREADP+1	; store the lower poniter part only
 		INCF	XPN_RCNT
-		; check if received frame is complete
-		MOVFF	XPNREADBUF,WREG
+		MOVFF	XPNREADBUF,WREG		; check if received frame is complete
 		ANDLW	0x0F
 		ADDLW   2
 		SUBWF   XPN_RCNT,W
-		BTFSS	STATUS,Z
-		; back if uncomplete
+		BTFSS	STATUS,Z		; back if incomplete
 		RETURN
-
+		; TODO: looking for checksum
 		CALL	DEBUG_XPNREADBUF_CAN
 
 		; check the received frame
@@ -238,13 +235,31 @@ XPNS_NEXT1	BTFSC   TXSTA1,TRMT
 		BZ      XPN_LOCO_INFO
 
 		RETURN
-; -----
+; ----------------------------
+; XpressNet different types
 
-XPN_INFO	; software version
+
+XPN_INFO	; start/stop ?
+		MOVFF   XPNREADBUF+1,WREG
+		XORLW	0x80
+		BTFSS   STATUS,Z
+		BRA	XPN_INFO_NEXT1
+		MOVLW   3
+		MOVWF   XPN_SCNT
+		MOVLW   0x61
+		MOVFF   WREG,XPNSENDBUF
+		MOVFF   WREG,XPNSENDBUF+2
+		MOVLW	0
+		MOVFF   WREG,XPNSENDBUF+1
+		CALL	DEBUG_XPNSENDBUF_CAN
+		BRA	XPN_BROADCAST_SEND
+		;
+
+XPN_INFO_NEXT1	; software version
 		MOVFF   XPNREADBUF+1,WREG
 		XORLW	0x21
 		BTFSS   STATUS,Z
-		BRA	XPN_INFO_NEXT1
+		BRA	XPN_INFO_NEXT2
 		MOVLW	5
 		MOVWF	XPN_SCNT
 		MOVLW	0x63
@@ -257,10 +272,11 @@ XPN_INFO	; software version
 		MOVFF	WREG,XPNSENDBUF+3
 		MOVLW	0x72
 		MOVFF	WREG,XPNSENDBUF+4
+		CALL	DEBUG_XPNSENDBUF_CAN
 		;
 		BRA	XPN_DATA_SEND
 
-XPN_INFO_NEXT1	; status central
+XPN_INFO_NEXT2	; status central
 		MOVFF   XPNREADBUF+1,WREG
 		XORLW	0x24
 		BTFSS   STATUS,Z
@@ -276,10 +292,10 @@ XPN_INFO_NEXT1	; status central
 		MOVFF	WREG,XPNSENDBUF+2
 		MOVLW	0x40
 		MOVFF	WREG,XPNSENDBUF+3
+		CALL	DEBUG_XPNSENDBUF_CAN
 		;
 		BRA	XPN_DATA_SEND
 
-		;
 XPN_LOCO_INFO
 		MOVLW	0x6
 		MOVWF	XPN_SCNT
@@ -306,20 +322,33 @@ XPN_LOCO_INFO
 		BRA	XPN_DATA_SEND
 
 XPN_DATA_SEND
+		; we assume that the RS485 bus is free so let's do it
 		BSF     PORTC,0
 		MOVF	XPNSLOTNUMBER,W
 		IORLW	XPN_CALL_RESPONSE
 		MOVWF	XPN_SEND_DATA
 		XPN_PARITY
-		BSF	TXSTA1,TX9D
+		BSF	TXSTA1,TX9D	; address byte (set)
+		MOVWF	TXREG1
+		RETURN
+
+		; Slot              XOR
+		; 0x160  0x61 0x00 0x61  Broadcast all off
+		; 0x160  0x61 0x01 0x60  Broadcast all on
+		; 0x160  0x81 0x00 0x81  Broadcast all locos off
+XPN_BROADCAST_SEND
+		; we assume that the RS485 bus is free so let's do it
+		BSF     PORTC,0
+		MOVLW	XPN_CALL_BROADCAST
+		BSF	TXSTA1,TX9D	; address byte (set)
 		MOVWF	TXREG1
 		RETURN
 
 ;---------------------------------------------------
-; periodic task
+; periodic task - will be called every ~4 ms
 
 XPNSLOT
-		BSF	PORTC,0
+		BSF	PORTC,0		; set RS485 transceiver (DE) on
 		CLRF	XPN_RCNT
 		CLRF	XPN_SCNT
 		LFSR	FSR0,XPNREADBUF
