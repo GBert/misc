@@ -323,12 +323,12 @@ XPN_LOCO_INFO
 
 XPN_DATA_SEND
 		; we assume that the RS485 bus is free so let's do it
-		BSF     PORTC,0
+		BSF     PORTC,0		; enable RS485 (DE) transceiver
 		MOVF	XPNSLOTNUMBER,W
 		IORLW	XPN_CALL_RESPONSE
 		MOVWF	XPN_SEND_DATA
-		XPN_PARITY
-		BSF	TXSTA1,TX9D	; address byte (set)
+		XPN_PARITY		; calculate parity
+		BSF	TXSTA1,TX9D	; address byte (9th bit set)
 		MOVWF	TXREG1
 		RETURN
 
