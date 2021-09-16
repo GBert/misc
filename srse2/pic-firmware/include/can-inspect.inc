@@ -37,7 +37,7 @@ CANINSPECT
                 BRA     SYSYTEM_CMD
 
                 ; System CMD reponse 0x01 ? (looking for on/off state)
-                MOVF    CANFRAME+1,F
+                MOVF    CANFRAME+1,W
                 XORLW   0x01
                 BTFSC   STATUS,Z
                 BRA     SYSTEM_CMD_RESPONSE
