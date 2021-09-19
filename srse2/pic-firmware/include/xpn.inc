@@ -262,7 +262,6 @@ XPN_INFO	; start/stop ?
 		CLRF	POSTINC0
 		MOVFF	XPNREADBUF+1,WREG
 		ANDLW	1
-		XORLW	1
 		MOVWF	POSTINC0
 		GOTO	EVENT_RING_NORMALIZE
 
@@ -299,6 +298,8 @@ XPN_INFO_NEXT2	; status central
 		MOVFF	WREG,XPNSENDBUF
 		MOVLW	0x22
 		MOVFF	WREG,XPNSENDBUF+1
+		; Bit 0: =1 - Command station is in emergency off
+		; Bit 1: =1 - Command station is in emergency stop
 		MOVF	POWER_ONOFF,W
 		ANDLW	0x1
 		XORLW	1			; Maerklin uses 1 for Go
