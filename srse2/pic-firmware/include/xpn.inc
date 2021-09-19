@@ -155,35 +155,6 @@ XPN_PARITY	MACRO
                 IORWF	XPN_SEND_DATA,W		;copy it to the MSB of the byte to send
                 ENDM
 
-;------------------------------------------------------------------------------
-; send XpressNet to CAN/UART
-;------------------------------------------------------------------------------
-
-SENDXPNCANUART
-                ; check if an event is in the buffer
-                MOVF	EVENTXPN,F
-                BTFSC	STATUS,Z
-                RETURN
-                ; check if UART send buffer is available
-                MOVLW	OVERFLOW - 5    ; 5 buffers spare for CAN -> UART
-                SUBWF	TXCNT,W
-                BTFSC	STATUS,C
-                RETURN
-
-                ; last: check for CAN buffer
-                ; Find a Tx slot - check if TX buffer 1 is empty
-                MOVLW	CAN_WIN_TXB1        ; Window mode on TXB1
-                MOVWF	CANCON
-                BTFSS	TXB1CON,TXREQ
-                BRA	XPNTXCAN
-
-                RETURN
-
-XPNTXCAN
-                ; ....
-                RETURN
-
-
 ; -------------
 ;
 ;
