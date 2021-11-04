@@ -789,7 +789,7 @@ void Calc_Uin(void)
     uin_raw = uin_raw >> 3;
     mathdummy = (uint32_t) uin_raw;
     mathdummy *= 100u;
-    mathdummy = mathdummy / 500u;
+    mathdummy = mathdummy / 388u;
     uin_100mV = (uint16_t) mathdummy;
     if(uin_100mV > EEP_Settings.values.umax)
     {
