@@ -6,7 +6,7 @@ encoding utf-8
 Sheet 1 1
 Title "Smallest Rocrail Server Ever II"
 Date "2021-11-29"
-Rev "1.6"
+Rev "1.7"
 Comp "Gerhard Bertelsmann"
 Comment1 ""
 Comment2 ""
@@ -116,7 +116,7 @@ F 0 "R16" V 12600 3825 50  0000 C CNN
 F 1 "270" V 12700 3825 50  0000 C CNN
 F 2 "Resistors_SMD:R_0805_HandSolderingII" H 12630 3825 50  0001 C CNN
 F 3 "" H 12700 3825 50  0000 C CNN
-F 4 "C17477" V 12700 3825 50  0001 C CNN "LCSC"
+F 4 "C17590" V 12700 3825 50  0001 C CNN "LCSC"
 	1    12700 3825
 	0    1    1    0   
 $EndComp
@@ -305,7 +305,7 @@ F 0 "R12" V 9950 3625 50  0000 C CNN
 F 1 "270" V 10050 3625 50  0000 C CNN
 F 2 "Resistors_SMD:R_0805_HandSolderingII" H 9980 3625 50  0001 C CNN
 F 3 "" H 10050 3625 50  0000 C CNN
-F 4 "C17477" V 10050 3625 50  0001 C CNN "LCSC"
+F 4 "C17590" V 10050 3625 50  0001 C CNN "LCSC"
 	1    10050 3625
 	-1   0    0    1   
 $EndComp
