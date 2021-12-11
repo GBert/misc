@@ -210,8 +210,10 @@ XPNS_NEXT1	BTFSC   TXSTA1,TRMT		; last bit send ?
 ; ----------------------------
 ; XpressNet different types
 
-
-XPN_INFO	; start/stop ?
+		;  Header  Data XOR
+		; 0x21    0x80 0xA1	Stop operations request (emergency off)
+		; 0x21    0x81 0xA0	Resume operations request
+XPN_INFO
 		MOVFF   XPNREADBUF+1,WREG
 		ANDLW	0xFE
 		XORLW	0x80
