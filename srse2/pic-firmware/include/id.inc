@@ -253,13 +253,13 @@ SEND_INDEX_LOOP3
                 DECFSZ  INDEX_N,F
                 BRA     SEND_INDEX_LOOP1
 
-                ; send last entry with DLC = 6
+                ; send last entry with DLC = 5
                 CLRF    POSTINC0
                 MOVLW   0x3B
                 MOVWF   POSTINC0
                 MOVFF   CANHASH_HIGH,POSTINC0
                 MOVFF   CANHASH_LOW,POSTINC0
-                MOVLW   6
+                MOVLW   5
                 MOVWF   POSTINC0
                 MOVLW   'C'
                 MOVWF   POSTINC0
@@ -268,7 +268,7 @@ SEND_INDEX_LOOP3
                 MOVFF   ID_H,POSTINC0
                 MOVFF   ID_L,POSTINC0
                 MOVFF   INDEX,POSTINC0
-                MOVFF   INDEX_C,POSTINC0
+                ; MOVFF   INDEX_C,POSTINC0
 
                 BRA     EVENT_RING_NORMALIZE
 
@@ -277,17 +277,19 @@ SEND_INDEX_LOOP3
 ;------------------------------------------------------------------------------
 INDEX0
 #IFDEF PWM
-                DB        4 ,  0
+                DB        5 ,  0
                 DB        0 ,  5 ,  0 ,  0 ,  1 ,  2,   0 ,  1
                 DB       'P', 'W', 'M',  0 ,  0 ,  0,   0 ,  0
                 DB       'C', 'A', 'N', 'B', 'u', 's', 't', 'e'
                 DB       'r',  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0
+                DB        0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0
 #ELSE
-                DB        4 ,  0
+                DB        5 ,  0
                 DB        0 ,  4 ,  0 ,  0 ,  1 ,  2 ,  0 ,  1
                 DB       'S', '8', '8',  0 ,  0 ,  0 ,  0 ,  0
                 DB       'C', 'A', 'N', 'B', 'u', 's', 't', 'e'
                 DB       'r',  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0
+                DB        0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0
 #ENDIF
 
 INDEX1

@@ -77,7 +77,7 @@ SCHEDULE
                 BCF     PIR2,TMR3IF
                 INCFSZ  TIMER3+1,F
                 INCF    TIMER3,F
-                CALL    XPNSLOT
+                ; CALL    XPNSLOT
 
 SCHEDULE_NEXT1
                 DECFSZ  PIOTCOUNTER,F	; PIO routine
