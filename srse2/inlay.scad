@@ -48,3 +48,6 @@ screw_place();
 
 translate([33,-20,0])
 screw_place();
+
+translate([-20,-5,0])
+cube([40,5,3]);
