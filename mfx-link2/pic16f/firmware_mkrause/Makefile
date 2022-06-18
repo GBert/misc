@@ -2,7 +2,7 @@ PROJ_DIR	= .
 XC8DIR		= /opt/microchip/xc8/v2.32
 CC_INCLUDE	= -I$(XC8DIR)/include
 
-PROCESSOR	= 16F1705
+PROCESSOR	= 16F1709
 MAIN		= main
 SRC		= main.c i2c_lcd_states.c memory.c
 CC_FLAGS	= -P -N255 --warn=0 --addrqual=ignore --mode=free# --echo
@@ -17,7 +17,7 @@ $(MAIN).hex: $(SRC)
 	$(CC) $(SRC) $(CC_FLAGS) $(OPTIMISATION) --chip=$(PROCESSOR) $(CC_INCLUDE) --ASMLIST -M
 
 flash: all
-	pk2cmd -B/usr/share/pickit2 -PPIC16F1705 -Fmain.hex -M -R
+	pk2cmd -B/usr/share/pickit2 -PPIC16F1709 -Fmain.hex -M -R
 #	p14 lvp p main.hex
 
 clean:
