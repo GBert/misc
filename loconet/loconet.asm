@@ -4,6 +4,9 @@
 	ERRORLEVEL  -302,-1302
 
         include p16f873.inc
+;
+
+
 
 ; The recognition of labels and registers is not always good, therefore
 ; be treated cautiously the results.
@@ -20,6 +23,10 @@
 
         __idlocs 0x1632
 
+#DEFINE LN_TX   RA0
+#DEFINE LN_RX   RA1
+#DEFINE LED     RA2
+
 ;===============================================================================
 ; DATA address definitions
 
@@ -35,7 +42,7 @@ Common_RAM      equ     0x0070                              ; size: 16 bytes
 vector_reset:                                               ; address: 0x0000
 
         nop
-        goto    label_002
+        goto    START
         nop
         nop
 
@@ -43,13 +50,13 @@ vector_int:                                                 ; address: 0x0004
 
         goto    vector_reset
 
-label_002:                                                  ; address: 0x0005
-
-        bcf     STATUS, RP0                                 ; reg: 0x003, bit: 5
-        bcf     STATUS, RP1                                 ; reg: 0x003, bit: 6
-        clrf    PORTA                                       ; reg: 0x005
+START: 	                                                    ; address: 0x0005
+        ; BANK0
+        bcf     STATUS, RP0
+        bcf     STATUS, RP1
+        clrf    PORTA
         movlw   0x04
-        movwf   PORTB                                       ; reg: 0x006
+        movwf   PORTB
         movlw   0x40
         movwf   PORTC                                       ; reg: 0x007
         bsf     STATUS, RP0                                 ; reg: 0x003, bit: 5
@@ -59,6 +66,7 @@ label_002:                                                  ; address: 0x0005
         movwf   TRISB                                       ; reg: 0x086
         movlw   0x80
         movwf   TRISC                                       ; reg: 0x087
+        ; only digital I/O
         movlw   0x06
         movwf   ADCON1                                      ; reg: 0x09f
         clrwdt
@@ -76,41 +84,41 @@ label_002:                                                  ; address: 0x0005
 
 label_003:                                                  ; address: 0x0021
 
-        btfss   PORTA, RA1                                  ; reg: 0x005, bit: 1
+        btfss   PORTA, LN_RX                                ; reg: 0x005, bit: 1
         goto    label_005
         bsf     0x20, 0x1                                   ; reg: 0x020
         call    function_017
         call    function_005
-        btfss   PORTA, RA1                                  ; reg: 0x005, bit: 1
+        btfss   PORTA, LN_RX                                ; reg: 0x005, bit: 1
         goto    label_005
         bsf     0x20, 0x1                                   ; reg: 0x020
         call    function_017
         call    function_006
-        btfss   PORTA, RA1                                  ; reg: 0x005, bit: 1
+        btfss   PORTA, LN_RX                                ; reg: 0x005, bit: 1
         goto    label_005
         bsf     0x20, 0x1                                   ; reg: 0x020
         call    function_017
         call    function_002
-        bcf     PORTA, RA2                                  ; reg: 0x005, bit: 2
+        bcf     PORTA, LED                                  ; reg: 0x005, bit: 2
 
 label_004:                                                  ; address: 0x0031
 
         call    function_018
-        btfss   PORTA, RA1                                  ; reg: 0x005, bit: 1
+        btfss   PORTA, LN_RX                                ; reg: 0x005, bit: 1
         goto    label_005
         bsf     0x20, 0x1                                   ; reg: 0x020
         call    function_017
         btfsc   (Common_RAM + 14), 0x7                      ; reg: 0x07e
         call    function_019
-        btfss   PORTA, RA1                                  ; reg: 0x005, bit: 1
+        btfss   PORTA, LN_RX                                ; reg: 0x005, bit: 1
         goto    label_005
         call    function_012
-        btfss   PORTA, RA1                                  ; reg: 0x005, bit: 1
+        btfss   PORTA, LN_RX                                ; reg: 0x005, bit: 1
         goto    label_005
         bsf     0x20, 0x1                                   ; reg: 0x020
         call    function_017
         call    function_005
-        btfss   PORTA, RA1                                  ; reg: 0x005, bit: 1
+        btfss   PORTA, LN_RX                                ; reg: 0x005, bit: 1
         goto    label_005
         call    function_007
         goto    label_003
@@ -123,9 +131,9 @@ label_005:                                                  ; address: 0x0044
 
 function_000:                                               ; address: 0x0047
 
-        bsf     PORTA, RA2                                  ; reg: 0x005, bit: 2
+        bsf     PORTA, LED                                  ; reg: 0x005, bit: 2
         call    function_001
-        bcf     PORTA, RA2                                  ; reg: 0x005, bit: 2
+        bcf     PORTA, LED                                  ; reg: 0x005, bit: 2
         xorlw   0x00
         btfsc   STATUS, Z                                   ; reg: 0x003, bit: 2
         goto    label_006
@@ -167,7 +175,7 @@ label_008:                                                  ; address: 0x0065
 label_009:                                                  ; address: 0x0066
 
         call    function_005
-        btfsc   PORTA, RA1                                  ; reg: 0x005, bit: 1
+        btfsc   PORTA, LN_RX                                ; reg: 0x005, bit: 1
         goto    label_010
         call    function_018
         btfss   0x20, 0x3                                   ; reg: 0x020
@@ -191,12 +199,12 @@ function_001:                                               ; address: 0x0070
         bcf     0x20, 0x7                                   ; reg: 0x020
         bcf     0x20, 0x0                                   ; reg: 0x020
         clrf    0x25                                        ; reg: 0x025
-        btfsc   PORTA, RA1                                  ; reg: 0x005, bit: 1
+        btfsc   PORTA, LN_RX                                ; reg: 0x005, bit: 1
         bsf     0x25, 0x0                                   ; reg: 0x025
         movlw   0x02
         call    function_021
         movlw   0x00
-        btfsc   PORTA, RA1                                  ; reg: 0x005, bit: 1
+        btfsc   PORTA, LN_RX                                ; reg: 0x005, bit: 1
         movlw   0x01
         xorwf   0x25, W                                     ; reg: 0x025
         btfsc   STATUS, Z                                   ; reg: 0x003, bit: 2
@@ -204,7 +212,7 @@ function_001:                                               ; address: 0x0070
         movlw   0x01
         call    function_021
         movlw   0x00
-        btfsc   PORTA, RA1                                  ; reg: 0x005, bit: 1
+        btfsc   PORTA, LN_RX                                ; reg: 0x005, bit: 1
         movlw   0x01
         movwf   0x25                                        ; reg: 0x025
 
@@ -237,12 +245,12 @@ label_013:                                                  ; address: 0x0099
         movlw   0x13
         call    function_020
         clrf    0x25                                        ; reg: 0x025
-        btfsc   PORTA, RA1                                  ; reg: 0x005, bit: 1
+        btfsc   PORTA, LN_RX                                ; reg: 0x005, bit: 1
         bsf     0x25, 0x0                                   ; reg: 0x025
         movlw   0x02
         call    function_021
         movlw   0x00
-        btfsc   PORTA, RA1                                  ; reg: 0x005, bit: 1
+        btfsc   PORTA, LN_RX                                ; reg: 0x005, bit: 1
         movlw   0x01
         xorwf   0x25, W                                     ; reg: 0x025
         btfsc   STATUS, Z                                   ; reg: 0x003, bit: 2
@@ -250,7 +258,7 @@ label_013:                                                  ; address: 0x0099
         movlw   0x01
         call    function_021
         movlw   0x00
-        btfsc   PORTA, RA1                                  ; reg: 0x005, bit: 1
+        btfsc   PORTA, LN_RX                                ; reg: 0x005, bit: 1
         movlw   0x01
         movwf   0x25                                        ; reg: 0x025
 
@@ -286,12 +294,12 @@ label_016:                                                  ; address: 0x00bf
         nop
         nop
         clrf    0x25                                        ; reg: 0x025
-        btfsc   PORTA, RA1                                  ; reg: 0x005, bit: 1
+        btfsc   PORTA, LN_RX                                ; reg: 0x005, bit: 1
         bsf     0x25, 0x0                                   ; reg: 0x025
         movlw   0x02
         call    function_021
         movlw   0x00
-        btfsc   PORTA, RA1                                  ; reg: 0x005, bit: 1
+        btfsc   PORTA, LN_RX                                ; reg: 0x005, bit: 1
         movlw   0x01
         xorwf   0x25, W                                     ; reg: 0x025
         btfsc   STATUS, Z                                   ; reg: 0x003, bit: 2
@@ -299,7 +307,7 @@ label_016:                                                  ; address: 0x00bf
         movlw   0x01
         call    function_021
         movlw   0x00
-        btfsc   PORTA, RA1                                  ; reg: 0x005, bit: 1
+        btfsc   PORTA, LN_RX                                ; reg: 0x005, bit: 1
         movlw   0x01
         movwf   0x25                                        ; reg: 0x025
 
@@ -342,14 +350,14 @@ function_002:                                               ; address: 0x00e6
         movwf   0x25                                        ; reg: 0x025
         movf    0x28, W                                     ; reg: 0x028
         movwf   0x26                                        ; reg: 0x026
-        btfss   PORTA, RA1                                  ; reg: 0x005, bit: 1
+        btfss   PORTA, LN_RX                                  ; reg: 0x005, bit: 1
         return
 
 label_020:                                                  ; address: 0x00f4
 
-        bsf     PORTA, RA0                                  ; reg: 0x005, bit: 0
+        bsf     PORTA, LN_TX                                  ; reg: 0x005, bit: 0
         bcf     0x20, 0x7                                   ; reg: 0x020
-        bsf     PORTA, RA2                                  ; reg: 0x005, bit: 2
+        bsf     PORTA, LED                                  ; reg: 0x005, bit: 2
         movf    0x22, W                                     ; reg: 0x022
         movwf   FSR                                         ; reg: 0x004
         movf    INDF, W                                     ; reg: 0x000
@@ -440,7 +448,7 @@ label_027:                                                  ; address: 0x0136
 
 label_028:                                                  ; address: 0x0139
 
-        bsf     PORTA, RA0                                  ; reg: 0x005, bit: 0
+        bsf     PORTA, LN_TX                                  ; reg: 0x005, bit: 0
         clrf    TMR0                                        ; reg: 0x001
         movf    0x25, W                                     ; reg: 0x025
         movwf   0x22                                        ; reg: 0x022
@@ -455,7 +463,7 @@ label_029:                                                  ; address: 0x013f
         btfss   STATUS, C                                   ; reg: 0x003, bit: 0
         goto    label_029
         bcf     0x20, 0x0                                   ; reg: 0x020
-        bcf     PORTA, RA0                                  ; reg: 0x005, bit: 0
+        bcf     PORTA, LN_TX                                  ; reg: 0x005, bit: 0
         call    function_023
         return
 
@@ -541,7 +549,7 @@ function_004:                                               ; address: 0x018c
         nop
         movlw   0x17
         call    function_020
-        btfsc   PORTA, RA1                                  ; reg: 0x005, bit: 1
+        btfsc   PORTA, LN_RX                                ; reg: 0x005, bit: 1
         retlw   0x01
         movlw   0x19
         call    function_020
@@ -554,10 +562,10 @@ label_032:                                                  ; address: 0x0196
         btfsc   0x2b, 0x0                                   ; reg: 0x02b
         goto    label_033
         nop
-        bsf     PORTA, RA0                                  ; reg: 0x005, bit: 0
+        bsf     PORTA, LN_TX                                ; reg: 0x005, bit: 0
         movlw   0x1a
         call    function_020
-        btfsc   PORTA, RA1                                  ; reg: 0x005, bit: 1
+        btfsc   PORTA, LN_RX                                ; reg: 0x005, bit: 1
         retlw   0x01
         movlw   0x18
         call    function_020
@@ -570,10 +578,10 @@ label_032:                                                  ; address: 0x0196
 
 label_033:                                                  ; address: 0x01a6
 
-        bcf     PORTA, RA0                                  ; reg: 0x005, bit: 0
-        movlw   0x1a
+        bcf     PORTA, LN_TX                                ; reg: 0x005, bit: 0
+        movlw   0x1A
         call    function_020
-        btfss   PORTA, RA1                                  ; reg: 0x005, bit: 1
+        btfss   PORTA, LN_RX                                ; reg: 0x005, bit: 1
         retlw   0x01
         movlw   0x18
         call    function_020
@@ -588,10 +596,10 @@ label_034:                                                  ; address: 0x01b3
 
         nop
         nop
-        bcf     PORTA, RA0                                  ; reg: 0x005, bit: 0
+        bcf     PORTA, LN_TX                                ; reg: 0x005, bit: 0
         movlw   0x19
         call    function_020
-        btfss   PORTA, RA1                                  ; reg: 0x005, bit: 1
+        btfss   PORTA, LN_RX                                ; reg: 0x005, bit: 1
         retlw   0x01
         nop
         movlw   0x16
@@ -757,7 +765,7 @@ label_047:                                                  ; address: 0x0229
 
 label_048:                                                  ; address: 0x022b
 
-        btfss   PORTA, RA1                                  ; reg: 0x005, bit: 1
+        btfss   PORTA, LN_RX                                ; reg: 0x005, bit: 1
         return
         btfsc   INDF, 0x7                                   ; reg: 0x000
         goto    label_052
@@ -840,7 +848,7 @@ label_056:                                                  ; address: 0x025a
 
 label_057:                                                  ; address: 0x0263
 
-        btfss   PORTA, RA1                                  ; reg: 0x005, bit: 1
+        btfss   PORTA, LN_RX                                ; reg: 0x005, bit: 1
         return
         movf    0x28, W                                     ; reg: 0x028
         movwf   0x2f                                        ; reg: 0x02f
@@ -869,7 +877,7 @@ label_058:                                                  ; address: 0x0278
 
 label_059:                                                  ; address: 0x027a
 
-        btfss   PORTA, RA1                                  ; reg: 0x005, bit: 1
+        btfss   PORTA, LN_RX                                ; reg: 0x005, bit: 1
         return
         call    function_011
         btfss   PORTA, RA5                                  ; reg: 0x005, bit: 5
@@ -915,7 +923,7 @@ label_063:                                                  ; address: 0x0297
 
         movf    INDF, W                                     ; reg: 0x000
         xorwf   0x2b, F                                     ; reg: 0x02b
-        btfss   PORTA, RA1                                  ; reg: 0x005, bit: 1
+        btfss   PORTA, LN_RX                                ; reg: 0x005, bit: 1
         retlw   0x02
         decfsz  0x2f, F                                     ; reg: 0x02f
         goto    label_062
@@ -966,7 +974,7 @@ label_068:                                                  ; address: 0x02b8
 
         btfsc   INDF, 0x7                                   ; reg: 0x000
         retlw   0x02
-        btfss   PORTA, RA1                                  ; reg: 0x005, bit: 1
+        btfss   PORTA, LN_RX                                ; reg: 0x005, bit: 1
         retlw   0x00
         goto    label_065
 
@@ -1018,7 +1026,7 @@ function_012:                                               ; address: 0x02d4
 
 label_070:                                                  ; address: 0x02df
 
-        btfss   PORTA, RA1                                  ; reg: 0x005, bit: 1
+        btfss   PORTA, LN_RX                                ; reg: 0x005, bit: 1
         return
         btfsc   INDF, 0x7                                   ; reg: 0x000
         goto    label_073
@@ -1095,7 +1103,7 @@ label_077:                                                  ; address: 0x030b
 
 label_078:                                                  ; address: 0x0314
 
-        btfss   PORTA, RA1                                  ; reg: 0x005, bit: 1
+        btfss   PORTA, LN_RX                                  ; reg: 0x005, bit: 1
         return
         movf    0x29, W                                     ; reg: 0x029
         movwf   0x2f                                        ; reg: 0x02f
@@ -1124,7 +1132,7 @@ label_079:                                                  ; address: 0x0329
 
 label_080:                                                  ; address: 0x032b
 
-        btfss   PORTA, RA1                                  ; reg: 0x005, bit: 1
+        btfss   PORTA, LN_RX                                ; reg: 0x005, bit: 1
         return
         bsf     0x20, 0x4                                   ; reg: 0x020
         return
@@ -1155,7 +1163,7 @@ label_083:                                                  ; address: 0x033c
 
         movf    INDF, W                                     ; reg: 0x000
         xorwf   0x25, F                                     ; reg: 0x025
-        btfss   PORTA, RA1                                  ; reg: 0x005, bit: 1
+        btfss   PORTA, LN_RX                                ; reg: 0x005, bit: 1
         retlw   0x02
         decfsz  0x2f, F                                     ; reg: 0x02f
         goto    label_082
@@ -1206,7 +1214,7 @@ label_088:                                                  ; address: 0x035d
 
         btfsc   INDF, 0x7                                   ; reg: 0x000
         retlw   0x02
-        btfss   PORTA, RA1                                  ; reg: 0x005, bit: 1
+        btfss   PORTA, LN_RX                                ; reg: 0x005, bit: 1
         retlw   0x00
         goto    label_085
 
@@ -1467,7 +1475,7 @@ label_105:                                                  ; address: 0x0418
         goto    label_105
         movlw   0x05
         call    function_021
-        bcf     PORTA, RA2                                  ; reg: 0x005, bit: 2
+        bcf     PORTA, LED                                  ; reg: 0x005, bit: 2
         return
         addlw   0xff
         addlw   0xff
@@ -1482,7 +1490,7 @@ label_106:                                                  ; address: 0x0423
 
         movlw   0x05
         call    function_021
-        btfss   PORTA, RA1                                  ; reg: 0x005, bit: 1
+        btfss   PORTA, LN_RX                                ; reg: 0x005, bit: 1
         return
         decfsz  0x25, F                                     ; reg: 0x025
         goto    label_106
