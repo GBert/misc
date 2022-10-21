@@ -1,0 +1,20 @@
+
+
+LM7812 -> LM3117 Kostenersparniss (LCSC Basic Part)
+PIC18F25K80 SO18 -> ISS LCSC vorrätig (Extended Part)
+Quarz gegen SMD Equivalent (LCSC Basic Part) ausgetauscht
+ -> C3 & C4 auf 18pF gemindert 
+MCP2562 gegen SN65HN230 getauscht
+R25 Bauteilseite gewechselt
+P12 12V anstatt 5V für RS485 -> XpressNet
+R22 & R23 auf 3k3 erhöht
+R12 & R16 auf 270 erhöht
+RC0 (RS485 DI/RO) von P10 genommen
+GPIO15 Bezeichnung gefixt
+Omega Reset eingefügt
+R8 und Cx gestrichen
+LCSC Bauteil-Nummern eingefügt, um Bestückungsservice nutzen zu können
+
+
+
+
