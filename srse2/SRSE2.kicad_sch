@@ -6,7 +6,7 @@
 
   (title_block
     (title "Smallest Rocrail Server Ever II")
-    (date "2022-10-16")
+    (date "2022-10-21")
     (rev "1.8")
     (company "Gerhard Bertelsmann")
     (comment 3 "http://lnxpps.de/maerklin/srse2")
@@ -4424,7 +4424,6 @@
     )
   )
 
-
   (junction (at 312.42 186.69) (diameter 0) (color 0 0 0 0)
     (uuid 038ad3eb-0b27-4500-8e1d-b0483111aa71)
   )
@@ -4624,10 +4623,10 @@
   (no_connect (at 302.26 46.355) (uuid cffab55f-c21a-45ed-af4b-3660c83f5e26))
   (no_connect (at 70.485 152.4) (uuid e9d13429-a794-4179-b078-0a5e003962b4))
   (no_connect (at 111.125 167.64) (uuid f71aa041-b895-4315-becd-79c3d2ad1a47))
-  (no_connect (at 111.125 162.56) (uuid f71aa041-b895-4315-becd-79c3d2ad1a47))
-  (no_connect (at 111.125 172.72) (uuid f71aa041-b895-4315-becd-79c3d2ad1a47))
-  (no_connect (at 133.985 172.72) (uuid f71aa041-b895-4315-becd-79c3d2ad1a47))
-  (no_connect (at 133.985 167.64) (uuid f71aa041-b895-4315-becd-79c3d2ad1a47))
+  (no_connect (at 111.125 162.56) (uuid f71aa041-b895-4315-becd-79c3d2ad1a48))
+  (no_connect (at 111.125 172.72) (uuid f71aa041-b895-4315-becd-79c3d2ad1a49))
+  (no_connect (at 133.985 172.72) (uuid f71aa041-b895-4315-becd-79c3d2ad1a4a))
+  (no_connect (at 133.985 167.64) (uuid f71aa041-b895-4315-becd-79c3d2ad1a4b))
 
   (wire (pts (xy 106.68 95.25) (xy 106.68 73.66))
     (stroke (width 0) (type default) (color 0 0 0 0))
