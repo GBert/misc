@@ -3,14 +3,14 @@
 set -x 
 BOARD='SRSE2'
 
-cp ${BOARD}-F_Cu.gtl      ${BOARD}.GTL
-cp ${BOARD}-B_Cu.gbl      ${BOARD}.GBL
-cp ${BOARD}-F_Mask.gts    ${BOARD}.GTS
-cp ${BOARD}-B_Mask.gbs    ${BOARD}.GBS
-cp ${BOARD}-F_SilkS.gto   ${BOARD}.GTO
-cp ${BOARD}-B_SilkS.gbo   ${BOARD}.GBO
-cp ${BOARD}-PTH.drl           ${BOARD}-PTH.TXT
-cp ${BOARD}-Edge_Cuts.gm1 ${BOARD}.GML
+cp ${BOARD}-F_Cu.gtl           ${BOARD}.GTL
+cp ${BOARD}-B_Cu.gbl           ${BOARD}.GBL
+cp ${BOARD}-F_Mask.gts         ${BOARD}.GTS
+cp ${BOARD}-B_Mask.gbs         ${BOARD}.GBS
+cp ${BOARD}-F_Silkscreen.gto   ${BOARD}.GTO
+cp ${BOARD}-B_Silkscreen.gbo   ${BOARD}.GBO
+cp ${BOARD}-PTH.drl            ${BOARD}-PTH.TXT
+cp ${BOARD}-Edge_Cuts.gm1      ${BOARD}.GML
 
 if [ -f ${BOARD}-NPTH.drl ]; then
     cp ${BOARD}-NPTH.drl      ${BOARD}-NPTH.TXT
