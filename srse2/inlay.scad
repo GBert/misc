@@ -1,16 +1,16 @@
 module screw_place() {
   difference() {
-    cylinder(h=3,r=5);
+    cylinder(h=3,r=4.8);
     cylinder(h=3,r=1);
   }
 }
 
 
 translate([-35,-18,0])
-    cube([4,35,2]);
+    cube([4,35,3]);
 
 translate([31,-18,0])
-    cube([4,35,2]);
+    cube([4,35,3]);
 
 translate([-28,-20,0]) {
     rotate(45,0,0)
@@ -51,3 +51,5 @@ screw_place();
 
 translate([-20,-5,0])
 cube([40,5,3]);
+
+$fn=90;
