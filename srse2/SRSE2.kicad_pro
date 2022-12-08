@@ -409,8 +409,6 @@
           "+24V",
           "+5V",
           "/Vdd",
-          "/Vout",
-          "Net-(C100-Pad2)",
           "Net-(J1-Pad8)",
           "Net-(J2-Pad6)",
           "VCC"
