@@ -8,6 +8,5 @@ MPLABXLog.*
 *.pre
 *.cmf
 *.d
-*.hex
 *.as
 *.cof
