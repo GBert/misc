@@ -1,3 +1,8 @@
+;	20Mhz crystal
+;
+;	LocoNet 16.66 kBaud / 8N1 - 60us Timing
+;	CSMA/CD
+
         processor p16f873
         radix dec
 
@@ -73,9 +78,9 @@ START: 	                                                    ; address: 0x0005
         movlw   0xc4
         movwf   OPTION_REG                                  ; reg: 0x081
         bcf     STATUS, RP0                                 ; reg: 0x003, bit: 5
-        bcf     T1CON, TMR1CS                               ; reg: 0x010, bit: 1
-        bsf     T1CON, T1CKPS0                              ; reg: 0x010, bit: 4
-        bsf     T1CON, T1CKPS1                              ; reg: 0x010, bit: 5
+        bcf     T1CON, TMR1CS                               ; internal clock Fosc/4 => 5MHz
+        bsf     T1CON, T1CKPS0                              ; 1:8 Prescale Value
+        bsf     T1CON, T1CKPS1                              ;
         clrf    0x20                                        ; reg: 0x020
         bsf     0x20, 0x3                                   ; reg: 0x020
         bsf     0x20, 0x2                                   ; reg: 0x020
@@ -1344,20 +1349,20 @@ function_018:                                               ; address: 0x03be
         btfsc   0x20, 0x1                                   ; reg: 0x020
         bcf     T1CON, TMR1ON                               ; reg: 0x010, bit: 0
         btfss   T1CON, TMR1ON                               ; reg: 0x010, bit: 0
-        goto    label_095
-        btfss   PIR1, TMR1IF                                ; reg: 0x00c, bit: 0
+        goto    RESTART_TIMER1
+        btfss   PIR1, TMR1IF                                ; skip if Timer1 overflow
         return
-        bcf     T1CON, TMR1ON                               ; reg: 0x010, bit: 0
+        bcf     T1CON, TMR1ON                               ; stop Timer1
         bsf     0x20, 0x3                                   ; reg: 0x020
         bsf     0x20, 0x2                                   ; reg: 0x020
         return
 
-label_095:                                                  ; address: 0x03ca
+RESTART_TIMER1:                                             ; address: 0x03ca
 
-        clrf    TMR1L                                       ; reg: 0x00e
-        clrf    TMR1H                                       ; reg: 0x00f
-        bcf     PIR1, TMR1IF                                ; reg: 0x00c, bit: 0
-        bsf     T1CON, TMR1ON                               ; reg: 0x010, bit: 0
+        clrf    TMR1L                                       ; clear Timer1
+        clrf    TMR1H                                       ;
+        bcf     PIR1, TMR1IF                                ; clear Timer1 overflow flag
+        bsf     T1CON, TMR1ON                               ; start Timer1
         return
 
 label_096:                                                  ; address: 0x03cf
@@ -1371,13 +1376,13 @@ label_097:                                                  ; address: 0x03d3
 
         btfsc   0x20, 0x2                                   ; reg: 0x020
         goto    label_098
-        btfss   PIR1, TMR1IF                                ; reg: 0x00c, bit: 0
+        btfss   PIR1, TMR1IF                                ; skip Return if Timer1 overflow is set
         return
         decfsz  0x26, F                                     ; reg: 0x026
         goto    label_099
-        bcf     T1CON, TMR1ON                               ; reg: 0x010, bit: 0
-        bsf     T1CON, T1CKPS0                              ; reg: 0x010, bit: 4
-        bsf     T1CON, T1CKPS1                              ; reg: 0x010, bit: 5
+        bcf     T1CON, TMR1ON                               ; Stop Timer 1
+        bsf     T1CON, T1CKPS0                              ; Prescaler 1:8
+        bsf     T1CON, T1CKPS1                              ;
         bcf     0x20, 0x3                                   ; reg: 0x020
         return
 
@@ -1387,11 +1392,11 @@ label_098:                                                  ; address: 0x03de
         movlw   0x05
         movwf   0x26                                        ; reg: 0x026
         call    function_019
-        bcf     T1CON, T1CKPS0                              ; reg: 0x010, bit: 4
-        bsf     T1CON, T1CKPS1                              ; reg: 0x010, bit: 5
-        clrf    TMR1L                                       ; reg: 0x00e
-        clrf    TMR1H                                       ; reg: 0x00f
-        bsf     T1CON, TMR1ON                               ; reg: 0x010, bit: 0
+        bcf     T1CON, T1CKPS0                              ; Prescaler 1:4
+        bsf     T1CON, T1CKPS1                              ;
+        clrf    TMR1L                                       ; clear Timer1 value
+        clrf    TMR1H                                       ;
+        bsf     T1CON, TMR1ON                               ; Start Timer1
 
 label_099:                                                  ; address: 0x03e7
 
