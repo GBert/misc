@@ -1,0 +1,26 @@
+Hinweis: Verarbeite Symbol "J1:Maerklin:megbp8".
+Hinweis: Verarbeite Symbol "D1:LED_THT:LED_D3.0mm".
+Hinweis: Verarbeite Symbol "R2:Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P5.08mm_Horizontal".
+Hinweis: Verarbeite Symbol "R1:Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P5.08mm_Horizontal".
+Hinweis: Verarbeite Symbol "P4:Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical".
+Hinweis: Verarbeite Symbol "J3:Maerklin:B4B-ZR_LF_SN".
+Hinweis: Verarbeite Symbol "J4:Maerklin:Grove_1x04".
+Hinweis: Verarbeite Symbol "J5:Maerklin:megbp8".
+Hinweis: Verarbeite Symbol "P3:Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical".
+Hinweis: Verarbeite Symbol "P2:Maerklin:minidin-7".
+Hinweis: Verarbeite Symbol "P1:Maerklin:minidin-10".
+Hinweis: Verarbeite Symbol "JP1:Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical".
+Unbenutztes Netz "unconnected-(J5-PadSH)" entfernt.
+Unbenutztes Netz "unconnected-(J1-PadSH)" entfernt.
+J5 Pin SH von unconnected-(J5-PadSH) nach Net-(J5-PadSH) wieder verbunden.
+J5 Pin SH von unconnected-(J5-PadSH) nach Net-(J5-PadSH) wieder verbunden.
+J5 Pin SH von unconnected-(J5-PadSH) nach Net-(J5-PadSH) wieder verbunden.
+J5 Pin SH von unconnected-(J5-PadSH) nach Net-(J5-PadSH) wieder verbunden.
+J1 Pin SH von unconnected-(J1-PadSH) nach Net-(J5-PadSH) wieder verbunden.
+J1 Pin SH von unconnected-(J1-PadSH) nach Net-(J5-PadSH) wieder verbunden.
+J1 Pin SH von unconnected-(J1-PadSH) nach Net-(J5-PadSH) wieder verbunden.
+J1 Pin SH von unconnected-(J1-PadSH) nach Net-(J5-PadSH) wieder verbunden.
+Netz Net-(J5-PadSH) hinzufügen.
+
+
+Hinweis: Warnungen insgesamt: 0, Fehler insgesamt: 0.
