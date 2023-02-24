@@ -1408,7 +1408,7 @@
     (in_bom yes) (on_board yes)
     (uuid 42594506-dfaa-4fbf-9cfd-7bc8bb436674)
     (property "Reference" "JP2" (id 0) (at 68.58 106.68 0))
-    (property "Value" "MS1 Slave" (id 1) (at 68.58 103.6574 0)
+    (property "Value" "MS1 Master" (id 1) (at 68.58 103.6574 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" (id 2) (at 68.58 107.315 0)
@@ -1670,7 +1670,7 @@
       (reference "JP1") (unit 1) (value "5V") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical")
     )
     (path "/42594506-dfaa-4fbf-9cfd-7bc8bb436674"
-      (reference "JP2") (unit 1) (value "MS1 Slave") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical")
+      (reference "JP2") (unit 1) (value "MS1 Master") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical")
     )
     (path "/57d36429-653e-430a-8f5a-a444bf8d1ed5"
       (reference "P1") (unit 1) (value "DIN10-1") (footprint "Maerklin:minidin-10")
