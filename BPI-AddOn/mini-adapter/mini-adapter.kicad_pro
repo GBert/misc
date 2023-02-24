@@ -380,7 +380,8 @@
         "name": "DefaultII",
         "nets": [
           "/5V",
-          "/Vcc"
+          "/Vcc",
+          "Net-(P1-Pad5)"
         ],
         "pcb_color": "rgba(0, 0, 0, 0.000)",
         "schematic_color": "rgba(0, 0, 0, 0.000)",
