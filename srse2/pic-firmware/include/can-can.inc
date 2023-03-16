@@ -47,6 +47,14 @@ CANRECV         MACRO
 #ENDIF
                 ENDM
 
+POWER_LED_ON    MACRO
+                BCF     GPIO,1              ; Maerklin Power LED on
+                ENDM
+
+POWER_LED_OFF   MACRO
+                BSF     GPIO,1              ; Maerklin Power LED off
+                ENDM
+
 UARTOVFL        MACRO
 #IF LEDON == 0
                 BCF     GPIO,0              ; LED2 UART Packet dropped
@@ -195,7 +203,7 @@ MAIN
 #INCLUDE        "can-inspect.inc"           ; CAN Inspector
 #IFDEF	XPN_CODE
 #INCLUDE        "xpn.inc"                   ; XpressNet routines
-#ELSE
+#ENDIF
 #INCLUDE        "bindecascii.inc"           ; 16 binary to decimal converter
 
 ;------------------------------------------------------------------------------

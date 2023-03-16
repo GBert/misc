@@ -101,25 +101,35 @@ DO_HEARTBEAT
                 ; for other blinking events
                 MOVLW	0
                 CPFSGT	HEARTBEAT
-                BRA	STATUS_LED_ON
+                BRA	STATUS_P1
                 MOVLW	4
                 CPFSGT	HEARTBEAT
-                BRA	STATUS_LED_OFF
+                BRA	STATUS_P2
                 MOVLW	8
                 CPFSGT	HEARTBEAT
-                BRA	STATUS_LED_ON
+                BRA	STATUS_P3
                 MOVLW	12
                 CPFSGT	HEARTBEAT
-                BRA	STATUS_LED_OFF
+                BRA	STATUS_P4
 
                 RETURN
 
-STATUS_LED_OFF
+STATUS_P1
+                BCF	LATA, LED
+                POWER_LED_ON
+                RETURN
+STATUS_P3
+                BCF	LATA, LED
+                RETURN
+STATUS_P2
                 BSF	LATA, LED
                 RETURN
-
-STATUS_LED_ON
-                BCF	LATA, LED
+STATUS_P4
+                BSF	LATA, LED
+                MOVF	POWER_ONOFF,W
+                ANDLW	1
+                BTFSC	STATUS,Z
+                POWER_LED_OFF
                 RETURN
 
 ;

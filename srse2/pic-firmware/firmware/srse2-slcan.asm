@@ -72,6 +72,7 @@
 #DEFINE		PIO	    0
 #DEFINE		LEDON       0
 #DEFINE		PIOINVERT   1
+#DEFINE		NO_CAN_LED  1
 
 ;------------------------------------------------------------------------------
 ; Device firmware

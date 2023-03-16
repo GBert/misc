@@ -502,7 +502,7 @@ CAN_PING_CONT
                 ; Version 1.13
                 MOVLW	1
                 MOVWF	POSTINC0
-                MOVLW	13
+                MOVLW	14
                 MOVWF	POSTINC0
                 MOVLW	0
                 MOVWF	POSTINC0
@@ -562,7 +562,7 @@ CAN_BOOTLOADER_PING
                 ; Version 1.13
                 MOVLW	1
                 MOVWF	POSTINC0
-                MOVLW	13
+                MOVLW	14
                 MOVWF	POSTINC0
                 MOVLW	0
                 MOVWF	POSTINC0
