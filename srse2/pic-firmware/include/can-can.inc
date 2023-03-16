@@ -28,18 +28,22 @@ DJNZ            MACRO   REG,LOC
                 ENDM
 
 CANOVFL         MACRO
+#IFNDEF NO_CAN_LED
 #IF LEDON == 0
                 BCF     GPIO,1              ; LED1 CAN Packet dropped
 #ELSE
                 BSF     GPIO,1
 #ENDIF
+#ENDIF
                 ENDM
 
 CANRECV         MACRO
+#IFNDEF NO_CAN_LED
 #IF LEDON == 0
                 BSF     GPIO,1              ; LED1 CAN Packet received
 #ELSE
                 BCF     GPIO,1
+#ENDIF
 #ENDIF
                 ENDM
 
@@ -140,12 +144,16 @@ INIT
                 CALL    INITUART            ; Init. UART
                 CALL    INITRING            ; Init. Rx/Tx Ring Buffer
                 CALL    INITCAN             ; Init. CAN Bus
+#IFDEF XPN_CODE
                 CALL    INITXPN             ; Init. XpressNet (aka RS485)
+#ENDIF
                 CALL    TIMER0INIT          ; Init. TIMER0
                 CALL    TIMER3INIT          ; Init. TIMER3
                 CALL    I2CINIT             ; Init. I2C
                 CALL    INITEVENTRING       ; Init. Event Ring Buffer
+#IFDEF XPN_CODE
                 CALL    INITXPNBUFFER       ; Init. XpressnetBuffer
+#ENDIF
                 CALL    S88INIT
                 CALL    READCANHASH
 
@@ -162,7 +170,9 @@ MAIN
                 CALL    CANINSPECT
                 CALL    TXCAN               ; SEND CAN
                 CALL    CANINSPECT
+#IFDEF XPN_CODE
                 CALL    XPNSERVICE
+#ENDIF
 
                 BTFSC   INTCON, TMR0IF
                 RCALL   SCHEDULE
@@ -183,7 +193,9 @@ MAIN
 #INCLUDE        "s88.inc"                   ; S88
 #INCLUDE        "event-ring.inc"            ; Event ring
 #INCLUDE        "can-inspect.inc"           ; CAN Inspector
+#IFDEF	XPN_CODE
 #INCLUDE        "xpn.inc"                   ; XpressNet routines
+#ELSE
 #INCLUDE        "bindecascii.inc"           ; 16 binary to decimal converter
 
 ;------------------------------------------------------------------------------
