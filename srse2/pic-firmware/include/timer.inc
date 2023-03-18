@@ -116,7 +116,9 @@ DO_HEARTBEAT
 
 STATUS_P1
                 BCF	LATA, LED
+#IFDEF NO_CAN_LED
                 POWER_LED_ON
+#ENDIF
                 RETURN
 STATUS_P3
                 BCF	LATA, LED
@@ -129,7 +131,9 @@ STATUS_P4
                 MOVF	POWER_ONOFF,W
                 ANDLW	1
                 BTFSC	STATUS,Z
+#IFDEF NO_CAN_LED
                 POWER_LED_OFF
+#ENDIF
                 RETURN
 
 ;
