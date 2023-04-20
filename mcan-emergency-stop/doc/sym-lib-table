@@ -1,0 +1,4 @@
+(sym_lib_table
+  (lib (name "Emergengy-Stop-rescue")(type "Legacy")(uri "${KIPRJMOD}/Emergengy-Stop-rescue.lib")(options "")(descr ""))
+  (lib (name "STM32-BARE")(type "Legacy")(uri "${KIPRJMOD}/STM32-BARE.lib")(options "")(descr ""))
+)
