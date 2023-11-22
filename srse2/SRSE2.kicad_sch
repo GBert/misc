@@ -4381,7 +4381,6 @@
     )
   )
 
-
   (junction (at 312.42 186.69) (diameter 0) (color 0 0 0 0)
     (uuid 038ad3eb-0b27-4500-8e1d-b0483111aa71)
   )
@@ -9007,14 +9006,14 @@
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid ac4015fa-5ed9-43ef-8f0a-9cdc21f06b2c)
     (property "Reference" "L100" (id 0) (at 347.98 162.56 90))
-    (property "Value" "18uH" (id 1) (at 347.98 165.1 90))
+    (property "Value" "15uH" (id 1) (at 347.98 165.1 90))
     (property "Footprint" "Inductor_SMD:L_10.4x10.4_H4.8" (id 2) (at 347.98 168.91 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (id 3) (at 347.98 168.91 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "LCSC" "C225049" (id 4) (at 347.98 168.91 90)
+    (property "LCSC" "C225048" (id 4) (at 347.98 168.91 90)
       (effects (font (size 1.524 1.524)) hide)
     )
     (pin "1" (uuid 3f5e49fe-a7c5-4d6a-b9d4-fb6db908baa1))
@@ -9350,7 +9349,7 @@
       (reference "J2") (unit 1) (value "CAN") (footprint "w_conn_pc:megb8-8")
     )
     (path "/ac4015fa-5ed9-43ef-8f0a-9cdc21f06b2c"
-      (reference "L100") (unit 1) (value "18uH") (footprint "Inductor_SMD:L_10.4x10.4_H4.8")
+      (reference "L100") (unit 1) (value "15uH") (footprint "Inductor_SMD:L_10.4x10.4_H4.8")
     )
     (path "/00000000-0000-0000-0000-000057c12a4e"
       (reference "P1") (unit 1) (value "I2S") (footprint "Pin_Headers:Pin_Header_Straight_1x06")

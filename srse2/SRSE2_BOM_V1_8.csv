@@ -5,7 +5,7 @@ Comment,Designator,Footprint,LCSC
 "18pF","C3,C4","Capacitors_SMD:C_0805_HandSoldering","C1797"
 "10uF","C5,C18,C100","Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder","C13585"
 "SS54","D100","Diode_SMD:D_SMA","C22452"
-"18uH","L100","Inductor_SMD:L_10.4x10.4_H4.8","C225049"
+"15uH","L100","Inductor_SMD:L_10.4x10.4_H4.8","C225048"
 "10k","R1","Resistors_SMD:R_0805_HandSolderingII","C17414"
 "10k","R101","Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder","C25804"
 "5k6","R102","Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder","C23189"

@@ -334,10 +334,10 @@
       <value>18uH</value>
       <footprint>Inductor_SMD:L_10.4x10.4_H4.8</footprint>
       <fields>
-        <field name="LCSC">C225049</field>
+        <field name="LCSC">C225048</field>
       </fields>
       <libsource lib="Device" part="L" description="Inductor"/>
-      <property name="LCSC" value="C225049"/>
+      <property name="LCSC" value="C225048"/>
       <property name="Sheetname" value=""/>
       <property name="Sheetfile" value="SRSE2.kicad_sch"/>
       <sheetpath names="/" tstamps="/"/>
