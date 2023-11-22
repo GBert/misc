@@ -31,7 +31,6 @@ Designator,Val,Package,Mid X,Mid Y,Rotation,Layer
 "R10","3k3","R_0805_HandSolderingII",171.000000,-99.500000,90.000000,top
 "R11","120","R_1206_HandSolderingII",137.871200,-123.215400,90.000000,top
 "R12","270","R_0805_HandSolderingII",149.631400,-125.907800,90.000000,top
-"R13","0","R_0805_HandSolderingII",170.053000,-136.525000,-90.000000,top
 "R14","3k3","R_0805_HandSolderingII",169.557700,-93.814900,180.000000,top
 "R15","3k3","R_0805_HandSolderingII",169.583100,-95.961200,0.000000,top
 "R16","270","R_0805_HandSolderingII",170.053000,-131.191000,-90.000000,top
