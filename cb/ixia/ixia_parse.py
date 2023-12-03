@@ -34,27 +34,50 @@ with zipfile.ZipFile('Cte', 'r') as zip_ref:
 # &lt; ->  <
 # &gt; ->  >
 # &amp;quot; -> "
-
 ixia_xml_file = open('CteStorage','r')
 ixia_xml = ixia_xml_file.read()
 ixia_xml = ixia_xml.replace('&lt;','<')
 ixia_xml = ixia_xml.replace('&gt;','>')
 ixia_xml = ixia_xml.replace('&amp;quot;','"')
 ixia_xml_file.close()
-# print(ixia_xml)
+# save the clean XML file
 ixia_xml_file = open('ixia.xml', 'w')
 ixia_xml_file.write(ixia_xml)
 ixia_xml_file.close()
 
-# now we read the XML file
+# now we read the XML file with included JSON obejects
 xmlroot = ET.parse('ixia.xml').getroot()
 
+# use dictionary (aka associative array)
+ixia_data = {}
+ixia_data_port = {}
+ixia_data_filter = {}
 for xml_tag in xmlroot.findall('mObjectXML/CteDataStore/mObjects/CteDataItem'):
     for child in xml_tag:
         if (child.tag == 'mType'):
-            print(child.text)
+            ixia_data_type = child.text
+            # print(child.text)
         if (child.tag == 'mData'):
             json_object = json.loads(child.text)
             json_formatted_str = json.dumps(json_object, indent=2)
-            print(json_formatted_str)
+            # print(json_formatted_str)
+            if ixia_data_type == 'CTE_PORT':
+                ixia_data_port[json_object['uuid']] = child.text
+            if ixia_data_type == 'CTE_FILTER':
+                ixia_data_filter[json_object['uuid']] = child.text
+
+# print ports
+for key in ixia_data_port:
+    data = json.loads(ixia_data_port[key])
+#    print(data['default_name'],",",data['name'])
+
+# print filters
+for key in ixia_data_filter:
+    data = json.loads(ixia_data_filter[key])
+    print(data['default_name'], ",", end="")
+    # get the uuids for the source ports
+    for interface in data['source_port_uuid_list']:
+        port_data = json.loads(ixia_data_port[interface])
+        print(" ", port_data['default_name'], end="")
+    print("")
 
