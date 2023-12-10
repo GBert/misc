@@ -69,15 +69,23 @@ for xml_tag in xmlroot.findall('mObjectXML/CteDataStore/mObjects/CteDataItem'):
 # print ports
 for key in ixia_data_port:
     data = json.loads(ixia_data_port[key])
-#    print(data['default_name'],",",data['name'])
+    print(data['default_name'],",",data['name'], ",", end="")
+    for filter in data['source_filter_uuid_list']:
+        filter_data = json.loads(ixia_data_filter[filter])
+        print(" ", filter_data['default_name'], end="")
+    print(",",end ="")
+    for filter in data['dest_filter_uuid_list']:
+        filter_data = json.loads(ixia_data_filter[filter])
+        print(" ", filter_data['default_name'], end="")
+    print("")
 
 # print filters
 for key in ixia_data_filter:
     data = json.loads(ixia_data_filter[key])
-    print(data['default_name'], ",", end="")
+#    print(data['default_name'], ",", end="")
     # get the uuids for the source ports
     for interface in data['source_port_uuid_list']:
         port_data = json.loads(ixia_data_port[interface])
-        print(" ", port_data['default_name'], end="")
-    print("")
+#        print(" ", port_data['default_name'], end="")
+#    print("")
 
