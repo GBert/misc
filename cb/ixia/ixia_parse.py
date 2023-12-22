@@ -19,7 +19,9 @@ import json, xml.etree.ElementTree as ET
 
 ixia_data = {}
 ixia_data_port = {}
+ixia_data_port_sort = {}
 ixia_data_filter = {}
+ixia_data_filter_sort = {}
 
 def deflate_config(inputfile):
     # first zlib inflate
@@ -61,16 +63,19 @@ def parse_xml_json():
                 # print(child.text)
             if (child.tag == 'mData'):
                 json_object = json.loads(child.text)
-                json_formatted_str = json.dumps(json_object, indent=2)
+                # json_formatted_str = json.dumps(json_object, indent=2)
                 # print(json_formatted_str)
                 if ixia_data_type == 'CTE_PORT':
                     ixia_data_port[json_object['uuid']] = child.text
+                    ixia_data_port_sort[json_object['uuid']] = json_object['default_name']
                 if ixia_data_type == 'CTE_FILTER':
                     ixia_data_filter[json_object['uuid']] = child.text
+                    ixia_data_filter_sort[json_object['uuid']] = json_object['default_name']
 
 def print_ports():
-    for key in ixia_data_port:
-        data = json.loads(ixia_data_port[key])
+    # sorted by item1 -> 'default_name'
+    for uuid in dict(sorted(ixia_data_port_sort.items(), key=lambda item: item[1])):
+        data = json.loads(ixia_data_port[uuid])
         print(f'{data["default_name"]},{data["name"]},', end='')
         for filter in data['source_filter_uuid_list']:
             filter_data = json.loads(ixia_data_filter[filter])
@@ -82,8 +87,9 @@ def print_ports():
         print()
 
 def print_filters():
-    for key in ixia_data_filter:
-        data = json.loads(ixia_data_filter[key])
+    # sorted by item1 -> 'default_name'
+    for uuid in dict(sorted(ixia_data_filter_sort.items(), key=lambda item: item[1])):
+        data = json.loads(ixia_data_filter[uuid])
         print(f'{data["default_name"]},', end='')
         # get the uuids for the source ports
         for interface in data['source_port_uuid_list']:
