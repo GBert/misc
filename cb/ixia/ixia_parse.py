@@ -73,7 +73,7 @@ def parse_xml_json():
                     ixia_data_filter[json_object['uuid']] = child.text
                     ixia_data_filter_sort[json_object['uuid']] = json_object['default_name']
 
-def sort_list(x):
+def mysort_list(x):
     # TODO
     return sorted(x, key=lambda item: (int(re.search('\D(\d+)', item).group(1)), item))
 
@@ -81,26 +81,34 @@ def print_ports():
     # sorted by item1 -> 'default_name' -> naturally
     for uuid in dict(sorted(ixia_data_port_sort.items(), key=lambda item: (int(re.search('\D(\d+)', item[1]).group(1)), item[1]))):
         data = json.loads(ixia_data_port[uuid])
-        print(f'{data["default_name"]},{data["name"]},', end='')
+        print(f'{data["default_name"]} ,{data["name"]},', end='')
+        filter_list = []
         for filter in data['source_filter_uuid_list']:
             filter_data = json.loads(ixia_data_filter[filter])
-            print(f'{filter_data["default_name"]} ', end='')
-        print(',', end='')
+            filter_list.append(filter_data["default_name"])
+        filter_list = mysort_list(filter_list)
+        print(' '.join(map(str, filter_list)), end='')
+        print(', ', end ='')
+
+        filter_list = []
         for filter in data['dest_filter_uuid_list']:
             filter_data = json.loads(ixia_data_filter[filter])
-            print(f'{filter_data["default_name"]} ', end='')
-        print()
+            filter_list.append(filter_data["default_name"])
+        filter_list = mysort_list(filter_list)
+        print(' '.join(map(str, filter_list)))
 
 def print_filters():
     # sorted by item1 -> 'default_name' -> naturally
     for uuid in dict(sorted(ixia_data_filter_sort.items(), key=lambda item: (int(re.search('\D(\d+)', item[1]).group(1)), item[1]))):
         data = json.loads(ixia_data_filter[uuid])
-        print(f'{data["default_name"]},', end='')
+        print(f'{data["default_name"]}, ', end='')
         # get the uuids for the source ports
+        port_list = []
         for interface in data['source_port_uuid_list']:
             port_data = json.loads(ixia_data_port[interface])
-            print(f' {port_data["default_name"]}', end='')
-        print()
+            port_list.append(port_data["default_name"])
+        port_list = mysort_list(port_list)
+        print(' '.join(map(str, port_list)))
 
 def main(argv):
     inputfile =''
