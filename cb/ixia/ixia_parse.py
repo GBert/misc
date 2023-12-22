@@ -74,7 +74,7 @@ def parse_xml_json():
                     ixia_data_filter_sort[json_object['uuid']] = json_object['default_name']
 
 def mysort_list(x):
-    # TODO
+    # sort like humans do
     return sorted(x, key=lambda item: (int(re.search('\D(\d+)', item).group(1)), item))
 
 def print_ports():
