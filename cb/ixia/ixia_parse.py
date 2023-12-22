@@ -71,25 +71,25 @@ def parse_xml_json():
 def print_ports():
     for key in ixia_data_port:
         data = json.loads(ixia_data_port[key])
-        print(data['default_name'],",",data['name'], ",", end="")
+        print(f'{data["default_name"]},{data["name"]},', end='')
         for filter in data['source_filter_uuid_list']:
             filter_data = json.loads(ixia_data_filter[filter])
-            print(" ", filter_data['default_name'], end="")
-            print(",",end ="")
+            print(f'{filter_data["default_name"]} ', end='')
+        print(',', end='')
         for filter in data['dest_filter_uuid_list']:
             filter_data = json.loads(ixia_data_filter[filter])
-            print(" ", filter_data['default_name'], end="")
-        print("")
+            print(f'{filter_data["default_name"]} ', end='')
+        print()
 
 def print_filters():
     for key in ixia_data_filter:
         data = json.loads(ixia_data_filter[key])
-        print(data['default_name'], ",", end="")
+        print(f'{data["default_name"]},', end='')
         # get the uuids for the source ports
         for interface in data['source_port_uuid_list']:
             port_data = json.loads(ixia_data_port[interface])
-            print(" ", port_data['default_name'], end="")
-        print("")
+            print(f' {port_data["default_name"]}', end='')
+        print()
 
 def main(argv):
     inputfile =''
