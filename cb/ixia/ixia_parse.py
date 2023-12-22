@@ -16,6 +16,7 @@
 import sys, getopt
 import zipfile, zlib
 import json, xml.etree.ElementTree as ET
+import re
 
 ixia_data = {}
 ixia_data_port = {}
@@ -72,9 +73,13 @@ def parse_xml_json():
                     ixia_data_filter[json_object['uuid']] = child.text
                     ixia_data_filter_sort[json_object['uuid']] = json_object['default_name']
 
+def sort_list(x):
+    # TODO
+    return sorted(x, key=lambda item: (int(re.search('\D(\d+)', item).group(1)), item))
+
 def print_ports():
-    # sorted by item1 -> 'default_name'
-    for uuid in dict(sorted(ixia_data_port_sort.items(), key=lambda item: item[1])):
+    # sorted by item1 -> 'default_name' -> naturally
+    for uuid in dict(sorted(ixia_data_port_sort.items(), key=lambda item: (int(re.search('\D(\d+)', item[1]).group(1)), item[1]))):
         data = json.loads(ixia_data_port[uuid])
         print(f'{data["default_name"]},{data["name"]},', end='')
         for filter in data['source_filter_uuid_list']:
@@ -87,8 +92,8 @@ def print_ports():
         print()
 
 def print_filters():
-    # sorted by item1 -> 'default_name'
-    for uuid in dict(sorted(ixia_data_filter_sort.items(), key=lambda item: item[1])):
+    # sorted by item1 -> 'default_name' -> naturally
+    for uuid in dict(sorted(ixia_data_filter_sort.items(), key=lambda item: (int(re.search('\D(\d+)', item[1]).group(1)), item[1]))):
         data = json.loads(ixia_data_filter[uuid])
         print(f'{data["default_name"]},', end='')
         # get the uuids for the source ports
