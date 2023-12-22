@@ -89,22 +89,31 @@ def print_filters():
         for interface in data['source_port_uuid_list']:
             port_data = json.loads(ixia_data_port[interface])
             print(" ", port_data['default_name'], end="")
-    print("")
+        print("")
 
 def main(argv):
     inputfile =''
-    opts, args = getopt.getopt(argv,"hi:")
+    pports = 0
+    pfilter = 0
+    opts, args = getopt.getopt(argv,"hi:pf")
     for opt, arg in opts:
         if opt == '-h':
-            print ('test.py -i <inputfile>')
+            print ('ixia_parse.py -i <inputfile> -p -f')
             sys.exit()
         elif opt in ("-i"):
             inputfile = arg
+        elif opt in ("-p"):
+            pports = 1
+        elif opt in ("-f"):
+            pfilter = 1
     if inputfile == '':
         sys.exit()
     deflate_config(inputfile)
     parse_xml_json()
-    print_ports()
+    if pports == 1:
+        print_ports()
+    if pfilter == 1:
+        print_filters()
 
 if __name__ == "__main__":
     main(sys.argv[1:])
