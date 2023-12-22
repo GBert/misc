@@ -13,18 +13,17 @@
 # The config file is JSON embedded in XML
 # uuid seems to be the uniq key for the obejcts
 
-import zlib
-import zipfile
-import json
-import xml.etree.ElementTree as ET
+import sys, getopt
+import zipfile, zlib
+import json, xml.etree.ElementTree as ET
 
 ixia_data = {}
 ixia_data_port = {}
 ixia_data_filter = {}
 
-def deflate_config():
+def deflate_config(inputfile):
     # first zlib inflate
-    ixia_file = open('ixia.ata','rb').read()
+    ixia_file = open(inputfile,'rb').read()
     ixia_pkzip = zlib.decompress(ixia_file)
     pkzip = open('Cte','wb')
     pkzip.write(ixia_pkzip)
@@ -92,11 +91,21 @@ def print_filters():
             print(" ", port_data['default_name'], end="")
     print("")
 
-def main():
-    deflate_config()
+def main(argv):
+    inputfile =''
+    opts, args = getopt.getopt(argv,"hi:")
+    for opt, arg in opts:
+        if opt == '-h':
+            print ('test.py -i <inputfile>')
+            sys.exit()
+        elif opt in ("-i"):
+            inputfile = arg
+    if inputfile == '':
+        sys.exit()
+    deflate_config(inputfile)
     parse_xml_json()
     print_ports()
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1:])
 
