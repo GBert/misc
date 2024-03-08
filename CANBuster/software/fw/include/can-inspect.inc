@@ -32,19 +32,19 @@ CANINSPECT
                 RETURN
 
                 ; System CMD 0x00 ?
-                MOVF	CANFRAME+1,F
+                MOVF    CANFRAME+1,F
                 BTFSC   STATUS,Z
                 BRA     SYSYTEM_CMD
 
                 ; Switch Accessoir 0x16 (Zubehoer schalten)?
-                MOVF	CANFRAME+1,W
-                XORLW	0x16
+                MOVF    CANFRAME+1,W
+                XORLW   0x16
                 BTFSC   STATUS,Z
                 BRA     CAN_SWITCH_ACC
 
                 ; CAN PING 0x30 ?
-                MOVF	CANFRAME+1,W
-                XORLW	0x30
+                MOVF    CANFRAME+1,W
+                XORLW   0x30
                 BTFSC   STATUS,Z
                 BRA     CAN_PING
 
@@ -131,7 +131,7 @@ SYSYTEM_CMD
 SYSYTEM_CMD_NEXT1
                 ; Reboot ?
                 ; DLC = 6
-                MOVF	CANFRAME+4,W
+                MOVF    CANFRAME+4,W
                 XORLW	6
                 BNZ	SYSYTEM_CMD_NEXT2
                 MOVF    CANFRAME+9,W
@@ -212,13 +212,13 @@ SETUP_VALUE_WRITE
 SETUP_VALUE_RESPONSE
                 MOVFF   EVENTPP,FSR0H
                 MOVFF   EVENTPP+1,FSR0L
-                CLRF	POSTINC0
-                MOVLW	0x01
-                MOVWF	POSTINC0
+                CLRF    POSTINC0
+                MOVLW   0x01
+                MOVWF   POSTINC0
                 MOVFF   CANHASH_HIGH,POSTINC0
                 MOVFF   CANHASH_LOW,POSTINC0
-                MOVLW	7
-                MOVWF	POSTINC0
+                MOVLW   7
+                MOVWF   POSTINC0
                 MOVFF   CANFRAME+5,POSTINC0
                 MOVFF   CANFRAME+6,POSTINC0
                 MOVFF   CANFRAME+7,POSTINC0
@@ -228,7 +228,7 @@ SETUP_VALUE_RESPONSE
                 ; 1 -> success
                 MOVLW   1
                 MOVWF   POSTINC0
-                BRA	EVENT_RING_NORMALIZE
+                BRA     EVENT_RING_NORMALIZE
 
                 RETURN
 
@@ -380,10 +380,12 @@ CAN_BOOTLOADER_CONT
                 MOVWF	POSTINC0
                 MOVFF	ID_H,POSTINC0
                 MOVFF	ID_L,POSTINC0
+                ; Version 1.1
                 MOVLW	1
                 MOVWF	POSTINC0
-                MOVLW	0
+                MOVLW	1
                 MOVWF	POSTINC0
+                MOVLW   0
                 MOVWF	POSTINC0
                 ; this is a back detector (german Rueckmelder)
                 MOVLW	0x40
