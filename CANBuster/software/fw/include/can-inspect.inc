@@ -42,6 +42,12 @@ CANINSPECT
                 BTFSC   STATUS,Z
                 BRA     CAN_SWITCH_ACC
 
+                ; S88 Event Status 0x22 ?
+                MOVF    CANFRAME+1,W
+                XORLW   0x22
+                BTFSC   STATUS,Z
+                BRA     S88_EVENT
+
                 ; CAN PING 0x30 ?
                 MOVF    CANFRAME+1,W
                 XORLW   0x30
@@ -114,21 +120,40 @@ NORM_POINTER1
                 RETURN
 
 ;------------------------------------------------------------------------------
+; System Sub CMD Reset 0x80 -> reboot - e.g. for updates
+;------------------------------------------------------------------------------
+
+CAN_REBOOT
+                GOTO	0
+
+;------------------------------------------------------------------------------
 ; answer System Command (0x00)
 ;------------------------------------------------------------------------------
 
 SYSYTEM_CMD
                 RCALL   CHECK_ID
-                BNZ	SYSYTEM_CMD_EXIT
-                ; Configuration DLC = 8 & Sub Command 0x0b
-                ; DLC = 8
-                MOVF	CANFRAME+4,W
-                XORLW	8
-                BNZ	SYSYTEM_CMD_NEXT1
+                BNZ     SYSYTEM_CMD_EXIT
+
+                ; System Command & Sub Command 0x0B
                 MOVF    CANFRAME+9,W
-                XORLW	0x0B
-                BZ	SETUP_VALUE
+                XORLW   0x0B
+                BNZ     SYSYTEM_CMD_NEXT
+
+                ; DLC = 6 Status
+                MOVF    CANFRAME+4,W
+                XORLW   6
+                BNZ     SYSYTEM_CMD_NEXT1
+                ; TODO
+                BRA     CHANNEL_GET
+
 SYSYTEM_CMD_NEXT1
+                ; DLC = 8 Configuration
+                MOVF    CANFRAME+4,W
+                XORLW   8
+                BZ      SETUP_VALUE
+                RETURN
+
+SYSYTEM_CMD_NEXT
                 ; Reboot ?
                 ; DLC = 6
                 MOVF    CANFRAME+4,W
@@ -166,6 +191,63 @@ SYSYTEM_CMD_OTHER
 
 ;------------------------------------------------------------------------------
 ; System Sub CMD Reset 0x0B -> save value
+;------------------------------------------------------------------------------
+; System CMD 0x0B -> channel value
+;------------------------------------------------------------------------------
+
+CHANNEL_GET
+                MOVFF   EVENTPP,FSR0H
+                MOVFF   EVENTPP+1,FSR0L
+                CLRF    POSTINC0
+                MOVLW   0x01
+                MOVWF   POSTINC0
+                MOVFF   CANHASH_HIGH,POSTINC0
+                MOVFF   CANHASH_LOW,POSTINC0
+                MOVLW   8
+                MOVWF   POSTINC0
+                MOVFF   CANFRAME+5,POSTINC0
+                MOVFF   CANFRAME+6,POSTINC0
+                MOVFF   CANFRAME+7,POSTINC0
+                MOVFF   CANFRAME+8,POSTINC0
+		; system sub command 0x0B
+                MOVFF   CANFRAME+9,POSTINC0
+                ; number of channel
+                MOVFF   CANFRAME+10,POSTINC0
+                MOVFF   CANFRAME+10,WREG
+                XORLW   2
+                BNZ     CHANNEL_CHECK_3
+                MOVFF   S88C_H,POSTINC0
+                MOVFF   S88C_L,POSTINC0
+                BRA     EVENT_RING_NORMALIZE
+
+CHANNEL_CHECK_3
+                MOVFF   CANFRAME+10,WREG
+                XORLW   3
+                BNZ     CHANNEL_CHECK_4
+                MOVLW	0
+                MOVWF   POSTINC0
+#IFNDEF PWM_FW
+		MOVFF   S88LENGTH,POSTINC0
+#ENDIF
+                BRA     EVENT_RING_NORMALIZE
+
+CHANNEL_CHECK_4
+                MOVFF   CANFRAME+10,WREG
+                XORLW   4
+                BNZ     CHANNEL_CHECK_UNKNOWN
+                MOVLW	0
+                MOVWF   POSTINC0
+                MOVFF   SCAN_INTERVAL,POSTINC0
+                BRA     EVENT_RING_NORMALIZE
+
+CHANNEL_CHECK_UNKNOWN
+                MOVLW	0xFF
+                MOVWF   POSTINC0
+                MOVWF   POSTINC0
+                BRA     EVENT_RING_NORMALIZE
+
+;------------------------------------------------------------------------------
+; System CMD 0x0B -> save value
 ;------------------------------------------------------------------------------
 
 SETUP_VALUE
@@ -233,13 +315,6 @@ SETUP_VALUE_RESPONSE
                 RETURN
 
 ;------------------------------------------------------------------------------
-; System Sub CMD Reset 0x80 -> reboot - e.g. for updates
-;------------------------------------------------------------------------------
-
-CAN_REBOOT
-                GOTO	0
-
-;------------------------------------------------------------------------------
 ; Switch Accessois (0x1B)
 ;------------------------------------------------------------------------------
 
@@ -298,6 +373,73 @@ CAN_SWITCH_ACC_FAULT
                 RETURN
 
 ;------------------------------------------------------------------------------
+; S88 Event
+;------------------------------------------------------------------------------
+
+S88_EVENT
+                ; test S88 bus length and return if 0
+                MOVFF	S88LENGTH,WREG
+                IORLW	0
+                ; return if 0
+                BTFSC	STATUS,Z
+                RETURN
+
+                MOVF	CANFRAME+4,W
+                XORLW	4
+                BTFSC	STATUS,Z
+                BRA     S88_SINGLE_IO
+                ; if DLC != 7 -> return
+                MOVF	CANFRAME+4,W
+                XORLW	7
+                BTFSS	STATUS,Z
+                RETURN
+                ; if not S88 Counter Start -> return
+                MOVF	CANFRAME+7,W
+                XORWF   S88C_H,W
+                BTFSS	STATUS,Z
+                RETURN
+                MOVF	CANFRAME+8,W
+                XORWF   S88C_L,W
+                BTFSS	STATUS,Z
+                RETURN
+                ; skip if no read command
+                MOVF	CANFRAME+11,W
+                XORLW	1
+                BTFSS	STATUS,Z
+                RETURN
+
+                ; reset S88 as we need fresh infos
+                GOTO	S88INIT
+
+S88_SINGLE_IO
+                MOVFF	CANFRAME+7,TEMP16
+                MOVFF	CANFRAME+8,TEMP16+1
+                MOVF	S88C_L,W
+                SUBWF	TEMP16+1
+                MOVF	S88C_H,W
+                BTFSS	STATUS,C
+                INCFSZ	S88C_H,W
+                SUBWF	TEMP16,F
+
+                ; skip if IO > 256
+                MOVF    TEMP16,W
+                XORLW   0
+                BTFSS	STATUS,Z
+                RETURN
+                ; skip uf IO > module number * 16
+                MOVFF	S88LENGTH,WREG
+                SWAPF	WREG
+                ADDLW	1
+                BCF	STATUS,C
+                SUBFWB	TEMP16+1,W
+                BTFSS	STATUS,C
+                RETURN
+
+                MOVF	TEMP16+1,W
+                CALL	S88_N_GENEVENT
+                RETURN
+
+;------------------------------------------------------------------------------
 ; answer CAN Ping (0x30)
 ;------------------------------------------------------------------------------
 
@@ -341,10 +483,10 @@ CAN_PING_CONT
                 MOVWF	POSTINC0
                 MOVFF	ID_H,POSTINC0
                 MOVFF	ID_L,POSTINC0
-                ; Version 1.1
+                ; Version 1.2
                 MOVLW	1
                 MOVWF	POSTINC0
-                MOVLW	1
+                MOVLW	2
                 MOVWF	POSTINC0
                 MOVLW	0
                 MOVWF	POSTINC0
@@ -358,12 +500,33 @@ CAN_PING_CONT
 ;------------------------------------------------------------------------------
 
 CAN_BOOTLOADER
-                ; if DLC != 0 -> return
-                MOVF	CANFRAME+4,F
-                BZ	CAN_BOOTLOADER_CONT
+                ; cold state ?
+                MOVF    STATE,W
+                IORLW   0
+                ; return if != 0 (warm state)
+                BTFSS   STATUS,Z
                 RETURN
 
-CAN_BOOTLOADER_CONT
+                ; if DLC == 0
+                MOVF	CANFRAME+4,F
+                BZ	CAN_BOOTLOADER_PING
+                ; if DLC == 5
+                MOVF	CANFRAME+4,W
+                XORLW   5
+                BZ	CAN_BOOTLOADER_SYSTEM
+                RETURN
+
+CAN_BOOTLOADER_SYSTEM
+                RCALL	CHECK_ID
+                BNZ	CAN_BOOTLOADER_EXIT
+                ; check for CAN-Bootloader Go 0x11
+                MOVF	CANFRAME+9,W
+                XORLW   0x11
+                BZ	CAN_BOOTLOADER_GO
+CAN_BOOTLOADER_EXIT
+                RETURN
+
+CAN_BOOTLOADER_PING
                 MOVFF	EVENTPP,FSR0H
                 MOVFF	EVENTPP+1,FSR0L
                 ; mark with 0x37 as CAN Bootloader response
@@ -380,15 +543,42 @@ CAN_BOOTLOADER_CONT
                 MOVWF	POSTINC0
                 MOVFF	ID_H,POSTINC0
                 MOVFF	ID_L,POSTINC0
-                ; Version 1.1
+                ; Version 1.2
                 MOVLW	1
                 MOVWF	POSTINC0
-                MOVLW	1
+                MOVLW	2
                 MOVWF	POSTINC0
-                MOVLW   0
+                MOVLW	0
                 MOVWF	POSTINC0
                 ; this is a back detector (german Rueckmelder)
                 MOVLW	0x40
+                MOVWF	POSTINC0
+                BRA	EVENT_RING_NORMALIZE
+
+CAN_BOOTLOADER_GO
+                ; we are now in warm state
+                MOVLW   1
+                MOVWF   STATE
+                ; respond to CAN Bootloader Go with System Reset CAN Frame
+                ; w/o doing something
+                MOVFF	EVENTPP,FSR0H
+                MOVFF	EVENTPP+1,FSR0L
+                CLRF	POSTINC0
+                MOVLW	1
+                MOVWF	POSTINC0
+                MOVFF   CANHASH_HIGH,POSTINC0
+                MOVFF   CANHASH_LOW,POSTINC0
+                MOVLW	6
+                MOVWF	POSTINC0
+                MOVLW	'C'
+                MOVWF	POSTINC0
+                MOVLW	'B'
+                MOVWF	POSTINC0
+                MOVFF	ID_H,POSTINC0
+                MOVFF	ID_L,POSTINC0
+                MOVLW	0x80
+                MOVWF	POSTINC0
+                MOVLW	0
                 MOVWF	POSTINC0
                 BRA	EVENT_RING_NORMALIZE
 

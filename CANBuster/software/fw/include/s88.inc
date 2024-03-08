@@ -165,6 +165,7 @@ S88INIT
                 CLRF    S88_BYTE_COUNT
                 CLRF    S88STATE
 
+S88_RESET_MEM
                 ; TODO
                 MOVLW   S88_MAX_LENGTH * 2
                 MOVWF   S88COUNT
@@ -369,6 +370,50 @@ S88_GENEVENTLOOP
                 BNC     S88_GENEVENTLOOP
 
                 RETURN
+
+TABLE_SET_MASK
+                MOVLW	HIGH TABLE_MASK
+                MOVWF	PCLATH
+                MOVF	TEMP,W
+                ANDLW	0x7
+                RLNCF	WREG,W
+                ADDLW	LOW TABLE_MASK
+                BTFSC	STATUS,C
+                INCF	PCLATH,F
+                MOVWF	PCL
+TABLE_MASK      RETLW	b'00000001'
+                RETLW	b'00000010'
+                RETLW	b'00000100'
+                RETLW	b'00001000'
+                RETLW	b'00010000'
+                RETLW	b'00100000'
+                RETLW	b'01000000'
+                RETLW	b'10000000'
+
+S88_N_GENEVENT
+                MOVWF	TEMP
+                DECF	TEMP,F
+                CALL	TABLE_SET_MASK
+                MOVWF	MASK
+                ; S88 storage address = x / 8 * 5 + 3
+                ; just wipe out bits before schift (PIC can't do simple logical shift)
+                MOVLW   0xf8
+                ; ony the first 32 bytes are valid
+                ANDWF	TEMP,F
+                RRNCF	TEMP,F
+                RRNCF	TEMP,F
+                RRNCF	TEMP,F
+                MOVLW	5
+                MULWF	TEMP
+                ; data stored in PRODL and PRODH
+                LFSR	FSR0,S88_DATA_P+3
+                MOVF	PRODL,W
+                MOVFF	PLUSW0,ACTUAL
+                MOVFF	FSR0L,TEMP
+                ; saved value is inverted
+                MOVLW	0xff
+                XORWF	ACTUAL,F
+                GOTO	PUTEVENT
 
 ;
 ; vim: set syntax=pic18f shiftwidth=4 tabstop=4 softtabstop=4 expandtab
