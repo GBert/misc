@@ -67,10 +67,10 @@ PUTEVENT
                 MOVWF	POSTINC0
                 ; DATA
                 MOVF    ID_H,W
-                ADDLW   -'U'
+                ADDLW   -'8'
                 MOVWF	POSTINC0
                 MOVF    ID_L,W
-                ADDLW   -'S'
+                ADDLW   0
                 MOVWF	POSTINC0
                 MOVFF	TEMP16,POSTINC0
                 MOVFF	TEMP16+1,POSTINC0

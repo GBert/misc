@@ -174,10 +174,10 @@ SETUP_VALUE
                 XORWF   CANFRAME+10,W
                 BNZ     SETUP_VALUE_CONT1
                 MOVFF   CANFRAME+11,ID_H
-                MOVLW   'U'
+                MOVLW   '8'
                 ADDWF   ID_H
                 MOVFF   CANFRAME+12,ID_L
-                MOVLW   'S'
+                MOVLW   0
                 ADDWF   ID_L
                 BRA     SETUP_VALUE_WRITE
 SETUP_VALUE_CONT1
