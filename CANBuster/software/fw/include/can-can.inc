@@ -140,9 +140,11 @@ INIT
                 CALL    INITEVENTRING       ; Init. Event Ring Buffer
 #IFDEF PWM_FW
                 CALL    PWMINIT
-#ELSE
-                CALL    S88INIT
+                MOVLW   0
+                MOVFF   WREG,S88LENGTH
 #ENDIF
+
+                CALL    S88INIT
                 CALL    READ_UID
 
                 BSF     RCON,IPEN           ; Enable priority interrupts
@@ -161,7 +163,8 @@ MAIN
 #IFDEF PWM_FW
                 CALL    PWM_TEST
 #ENDIF
-                BTFSC	INTCON, TMR0IF
+
+                BTFSC   INTCON, TMR0IF
                 RCALL   SCHEDULE
                 BRA     MAIN
 
@@ -179,9 +182,8 @@ MAIN
 #INCLUDE        "pio.inc"                   ; PIO
 #IFDEF PWM_FW
   #INCLUDE      "pwm.inc"                   ; PWM
-#ELSE
-  #INCLUDE      "s88.inc"                   ; S88
 #ENDIF
+#INCLUDE      "s88.inc"                     ; S88
 #INCLUDE        "event-ring.inc"            ; Event ring
 #INCLUDE        "can-inspect.inc"           ; CAN Inspector
 

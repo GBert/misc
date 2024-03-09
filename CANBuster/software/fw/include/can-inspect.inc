@@ -226,9 +226,7 @@ CHANNEL_CHECK_3
                 BNZ     CHANNEL_CHECK_4
                 MOVLW	0
                 MOVWF   POSTINC0
-#IFNDEF PWM_FW
-		MOVFF   S88LENGTH,POSTINC0
-#ENDIF
+                MOVFF   S88LENGTH,POSTINC0
                 BRA     EVENT_RING_NORMALIZE
 
 CHANNEL_CHECK_4
@@ -378,11 +376,11 @@ CAN_SWITCH_ACC_FAULT
 
 S88_EVENT
                 ; test S88 bus length and return if 0
-                MOVFF	S88LENGTH,WREG
-                IORLW	0
+                ; MOVFF	S88LENGTH,WREG
+                ; IORLW	0
                 ; return if 0
-                BTFSC	STATUS,Z
-                RETURN
+                ; BTFSC	STATUS,Z
+                ; RETURN
 
                 MOVF	CANFRAME+4,W
                 XORLW	4
