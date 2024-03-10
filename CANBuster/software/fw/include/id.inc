@@ -31,32 +31,6 @@
 ; Generic Flash routines
 ;------------------------------------------------------------------------------
 
-EEPROM_REFRESH
-                CLRF    EEADR		; Start at address 0
-                CLRF    EEADRH
-                BCF     EECON1, CFGS	; Set for memory
-                BCF     EECON1, EEPGD	; Set for Data EEPROM
-                BCF     INTCON, GIE	; Disable interrupts
-                BSF     EECON1, WREN	; Enable writes
-
-EEPROM_REFRESH_LOOP	; Loop to refresh array
-                BSF     EECON1, RD	; Read current address
-                MOVLW   55h
-                MOVWF   EECON2
-                MOVLW   0AAh
-                MOVWF   EECON2
-                BSF     EECON1, WR	; Set WR bit to begin write
-                BTFSC   EECON1, WR	; Wait for write to complete
-                BRA $-2
-                INCFSZ  EEADR, F	; Increment address
-                BRA     EEPROM_REFRESH_LOOP	; Not zero, do it again
-                INCFSZ  EEADRH, F	; Increment the high address
-                BRA     EEPROM_REFRESH_LOOP	; Not zero, do it again
-                BCF     EECON1, WREN	; Disable writes
-                BSF     INTCON, GIE	; Enable interrupts
-                RETURN
-
-
 ERASE_DATA
                 BSF     EECON1, EEPGD	; point to Flash program memory
                 BCF     EECON1, CFGS	; access Flash program memory

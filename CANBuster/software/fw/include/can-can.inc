@@ -178,6 +178,7 @@ MAIN
 #INCLUDE        "can.inc"                   ; CAN
 #INCLUDE        "timer.inc"                 ; Timer
 #INCLUDE        "i2c.inc"                   ; I2C
+#INCLUDE        "eeprom.inc"                ; EEPROM
 #INCLUDE        "id.inc"                    ; UID
 #INCLUDE        "pio.inc"                   ; PIO
 #IFDEF PWM_FW

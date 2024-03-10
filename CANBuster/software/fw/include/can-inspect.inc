@@ -232,10 +232,24 @@ CHANNEL_CHECK_3
 CHANNEL_CHECK_4
                 MOVFF   CANFRAME+10,WREG
                 XORLW   4
-                BNZ     CHANNEL_CHECK_UNKNOWN
+                BNZ     CHANNEL_CHECK_5
                 MOVLW	0
                 MOVWF   POSTINC0
                 MOVFF   SCAN_INTERVAL,POSTINC0
+                BRA     EVENT_RING_NORMALIZE
+
+CHANNEL_CHECK_5
+                MOVFF   CANFRAME+10,WREG
+                XORLW   5
+                BNZ     CHANNEL_CHECK_UNKNOWN
+                MOVLW	0
+                MOVWF   POSTINC0
+                MOVLW   HIGH EEA_S88LENGTH
+                MOVWF   EEADRH
+                MOVLW   LOW EEA_S88LENGTH
+                MOVWF   EEADR
+                CALL    EEPROM_READ
+                MOVFF   WREG,POSTINC0
                 BRA     EVENT_RING_NORMALIZE
 
 CHANNEL_CHECK_UNKNOWN
@@ -282,6 +296,21 @@ SETUP_VALUE_CONT3
                 BRA     SETUP_VALUE_WRITE
 
 SETUP_VALUE_CONT4
+                MOVLW   0x05
+                XORWF   CANFRAME+10,W
+                BNZ     SETUP_VALUE_CONT5
+                ; save to EEPROM
+                MOVLW   HIGH EEA_S88LENGTH
+                MOVWF   EEADRH
+                MOVLW   LOW EEA_S88LENGTH
+                MOVWF   EEADR
+                MOVFF   CANFRAME+12,S88LENGTH
+                MOVFF   CANFRAME+12,EEDATA
+                CALL    EEPROM_WRITE
+                ; TODO
+                BRA     SETUP_VALUE_WRITE
+
+SETUP_VALUE_CONT5
                 ; exit
                 RETURN
 
@@ -424,7 +453,7 @@ S88_SINGLE_IO
                 XORLW   0
                 BTFSS	STATUS,Z
                 RETURN
-                ; skip uf IO > module number * 16
+                ; skip if IO > module number * 16
                 MOVFF	S88LENGTH,WREG
                 SWAPF	WREG
                 ADDLW	1

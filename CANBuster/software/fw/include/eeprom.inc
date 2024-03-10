@@ -38,7 +38,7 @@ EEPROM_READ
                 BSF     EECON1, RD          ; EEPROM Read
                 NOP
                 MOVF    EEDATA, W           ; W = EEDATA
-		RETURN
+                RETURN
 
 EEPROM_WRITE
 		; MOVLW   DATA_EE_ADDRH
@@ -56,11 +56,12 @@ EEPROM_WRITE
                 MOVLW   0AAh
                 MOVWF   EECON2		; Write 0AAh
                 BSF     EECON1, WR	; Set WR bit to begin write
+WAIT_EE_WRITE
                 BTFSC   EECON1, WR	; Wait for write to complete GOTO $-2
+                BRA     WAIT_EE_WRITE
                 BSF     INTCON, GIE	; Enable Interrupts
-					; User code execution
                 BCF     EECON1, WREN	; Disable writes on write complete (EEIF set)
-		RETURN
+                RETURN
 
 EEPROM_REFRESH
                 CLRF    EEADR		; Start at address 0
