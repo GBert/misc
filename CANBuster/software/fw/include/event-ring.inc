@@ -66,12 +66,8 @@ PUTEVENT
                 MOVLW	0x8
                 MOVWF	POSTINC0
                 ; DATA
-                MOVF    ID_H,W
-                ADDLW   -'8'
-                MOVWF	POSTINC0
-                MOVF    ID_L,W
-                ADDLW   0
-                MOVWF	POSTINC0
+                MOVFF	DEVID_H,POSTINC0    ; TODO: probably MOVF to save a cycle ?
+                MOVFF	DEVID_L,POSTINC0
                 MOVFF	TEMP16,POSTINC0
                 MOVFF	TEMP16+1,POSTINC0
                 MOVF	ACTUAL,W

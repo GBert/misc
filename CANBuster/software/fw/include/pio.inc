@@ -44,6 +44,8 @@
                 PIOC_L : 1
                 S88C_H : 1
                 S88C_L : 1
+                DEVID_H : 1
+                DEVID_L : 1
                 SCAN_INTERVAL : 1
                 ENDC
 

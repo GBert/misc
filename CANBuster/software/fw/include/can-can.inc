@@ -146,6 +146,8 @@ INIT
 
                 CALL    S88INIT
                 CALL    READ_UID
+                CLRF    DEVID_H
+                MOVFF   ID_L, DEVID_L       ; set Device ID to defaults
 
                 BSF     RCON,IPEN           ; Enable priority interrupts
                 BSF     INTCON,PEIE         ; Init. ISR

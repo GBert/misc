@@ -36,6 +36,12 @@ CANINSPECT
                 BTFSC   STATUS,Z
                 BRA     SYSYTEM_CMD
 
+                ; System CMD 0x01 (ID ?)
+                MOVF    CANFRAME+1,F
+                XORLW   1
+                BTFSC   STATUS,Z
+                BRA     SYSTEM_CMD_R
+
                 ; Switch Accessoir 0x16 (Zubehoer schalten)?
                 MOVF    CANFRAME+1,W
                 XORLW   0x16
@@ -268,11 +274,7 @@ SETUP_VALUE
                 XORWF   CANFRAME+10,W
                 BNZ     SETUP_VALUE_CONT1
                 MOVFF   CANFRAME+11,ID_H
-                MOVLW   '8'
-                ADDWF   ID_H
                 MOVFF   CANFRAME+12,ID_L
-                MOVLW   0
-                ADDWF   ID_L
                 BRA     SETUP_VALUE_WRITE
 SETUP_VALUE_CONT1
                 MOVLW   0x02
@@ -339,6 +341,25 @@ SETUP_VALUE_RESPONSE
                 MOVWF   POSTINC0
                 BRA     EVENT_RING_NORMALIZE
 
+                RETURN
+
+;------------------------------------------------------------------------------
+; System CMD 0x0C -> save ID value
+;------------------------------------------------------------------------------
+
+SYSTEM_CMD_R
+                RCALL   CHECK_ID
+                BNZ     SYSTEM_CMD_R_EXIT
+
+                ; System Command & Sub Command 0x0C
+                MOVF    CANFRAME+9,W
+                XORLW   0x0C
+                BNZ     SYSTEM_CMD_R_NEXT
+
+                MOVFF   CANFRAME+10,DEVID_H
+                MOVFF   CANFRAME+11,DEVID_L
+SYSTEM_CMD_R_NEXT
+SYSTEM_CMD_R_EXIT
                 RETURN
 
 ;------------------------------------------------------------------------------
@@ -510,10 +531,10 @@ CAN_PING_CONT
                 MOVWF	POSTINC0
                 MOVFF	ID_H,POSTINC0
                 MOVFF	ID_L,POSTINC0
-                ; Version 1.3
+                ; Version 1.4
                 MOVLW	1
                 MOVWF	POSTINC0
-                MOVLW	3
+                MOVLW	4
                 MOVWF	POSTINC0
                 MOVLW	0
                 MOVWF	POSTINC0
@@ -570,10 +591,10 @@ CAN_BOOTLOADER_PING
                 MOVWF	POSTINC0
                 MOVFF	ID_H,POSTINC0
                 MOVFF	ID_L,POSTINC0
-                ; Version 1.3
+                ; Version 1.4
                 MOVLW	1
                 MOVWF	POSTINC0
-                MOVLW	3
+                MOVLW	4
                 MOVWF	POSTINC0
                 MOVLW	0
                 MOVWF	POSTINC0
