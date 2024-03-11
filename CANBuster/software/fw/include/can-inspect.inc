@@ -344,7 +344,7 @@ SETUP_VALUE_RESPONSE
                 RETURN
 
 ;------------------------------------------------------------------------------
-; System CMD 0x0C -> save ID value
+; System CMD 0x0C -> save Device ID value
 ;------------------------------------------------------------------------------
 
 SYSTEM_CMD_R
@@ -432,6 +432,16 @@ S88_EVENT
                 ; BTFSC	STATUS,Z
                 ; RETURN
 
+                ; Devide ID check
+                MOVF    CANFRAME+5,W
+                XORWF   DEVID_H,W
+                BTFSS   STATUS,Z
+                RETURN
+                MOVF    CANFRAME+6,W
+                XORWF   DEVID_L,W
+                BTFSS   STATUS,Z
+                RETURN
+
                 MOVF	CANFRAME+4,W
                 XORLW	4
                 BTFSC	STATUS,Z
@@ -441,6 +451,7 @@ S88_EVENT
                 XORLW	7
                 BTFSS	STATUS,Z
                 RETURN
+
                 ; if not S88 Counter Start -> return
                 MOVF	CANFRAME+7,W
                 XORWF   S88C_H,W
