@@ -37,7 +37,7 @@ CANINSPECT
                 BRA     SYSYTEM_CMD
 
                 ; System CMD 0x01 (ID ?)
-                MOVF    CANFRAME+1,F
+                MOVF    CANFRAME+1,W
                 XORLW   1
                 BTFSC   STATUS,Z
                 BRA     SYSTEM_CMD_R
