@@ -41,7 +41,7 @@ TxD
 Text Label 9550 8875 2    60   ~ 0
 RxD
 $Comp
-L SRSE2-rescue:R-SRSE2-rescue R3
+L Device:R R3
 U 1 1 56BA15E7
 P 6900 8025
 F 0 "R3" V 7000 8025 50  0000 C CNN
@@ -53,7 +53,7 @@ F 4 "C17798" V 6900 8025 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L SRSE2-rescue:R-SRSE2-rescue R5
+L Device:R R5
 U 1 1 56BA166A
 P 7100 8025
 F 0 "R5" V 7200 8025 50  0000 C CNN
@@ -426,7 +426,7 @@ I2C_SCL
 Text Label 9700 9575 2    60   ~ 0
 I2C_SDA
 $Comp
-L SRSE2-rescue:R-SRSE2-rescue R2
+L Device:R R2
 U 1 1 57BF7B94
 P 6700 8025
 F 0 "R2" V 6800 8025 50  0000 C CNN
@@ -707,7 +707,7 @@ F 3 "" H 3325 10500 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L SRSE2-rescue:R-SRSE2-rescue R21
+L Device:R R21
 U 1 1 57C0BAC4
 P 3050 9150
 F 0 "R21" V 2950 9150 50  0000 C CNN
@@ -1070,7 +1070,7 @@ F 4 "C49678" H 5750 9375 50  0001 C CNN "LCSC"
 	1    0    0    -1  
 $EndComp
 $Comp
-L SRSE2-rescue:R-SRSE2-rescue R11
+L Device:R R11
 U 1 1 57C151D0
 P 10600 6050
 F 0 "R11" V 10680 6050 50  0000 C CNN
