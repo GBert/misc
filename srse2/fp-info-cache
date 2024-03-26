@@ -1,4 +1,4 @@
-23038284316106107
+23041707245086332
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -94381,9 +94381,23 @@ Varistor VF
 2
 2
 srse2
+CC_Logo
+
+
+0
+0
+0
+srse2
 MEBP_8-8G
 RJ45 connector shielded
 RJ45
 0
 10
 9
+srse2
+MountingHole_3mm
+
+
+0
+1
+1
