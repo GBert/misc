@@ -1,3 +1,6 @@
 (sym_lib_table
-  (lib (name SRSE2-rescue)(type Legacy)(uri ${KIPRJMOD}/SRSE2-rescue.lib)(options "")(descr ""))
+  (version 7)
+  (lib (name "SRSE2-rescue")(type "Legacy")(uri "${KIPRJMOD}/SRSE2-rescue.lib")(options "")(descr ""))
+  (lib (name "New_Library")(type "KiCad")(uri "${KIPRJMOD}/SRSEII.lib/New_Library.kicad_sym")(options "")(descr ""))
+  (lib (name "srse2")(type "KiCad")(uri "${KIPRJMOD}/srse2.kicad_sym")(options "")(descr ""))
 )
