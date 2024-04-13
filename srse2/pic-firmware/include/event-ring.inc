@@ -34,6 +34,9 @@ EVENTPG   EQU   0x30a           ; event pointer
 ;------------------------------------------------------------------------------
 
 EVENTBUF        EQU 0x400		; event ring
+                ; CBLOCK 0x400          ; TODO check
+                ; EVENTBUFFER : 1024
+                ; ENDC
 
 ;------------------------------------------------------------------------------
 ; Event ring macros
@@ -63,12 +66,8 @@ PUTEVENT
                 MOVLW	0x8
                 MOVWF	POSTINC0
                 ; DATA
-                MOVF    ID_H,W
-                ADDLW   -'U'
-                MOVWF	POSTINC0
-                MOVF    ID_L,W
-                ADDLW   -'S'
-                MOVWF	POSTINC0
+                MOVFF	DEVID_H,POSTINC0    ; TODO: probably MOVF to save a cycle ?
+                MOVFF	DEVID_L,POSTINC0
                 MOVFF	TEMP16,POSTINC0
                 MOVFF	TEMP16+1,POSTINC0
                 MOVF	ACTUAL,W

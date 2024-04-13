@@ -1,0 +1,5 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "Onion2")(type "KiCad")(uri "${KIPRJMOD}/Onion2.pretty")(options "")(descr ""))
+  (lib (name "srse2")(type "KiCad")(uri "${KIPRJMOD}/srse2.pretty")(options "")(descr ""))
+)

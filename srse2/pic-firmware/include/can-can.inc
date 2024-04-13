@@ -164,6 +164,8 @@ INIT
 #ENDIF
                 CALL    S88INIT
                 CALL    READCANHASH
+                CLRF    DEVID_H
+                MOVFF   ID_L, DEVID_L       ; set Device ID to defaults
 
                 BSF     RCON,IPEN           ; Enable priority interrupts
                 BSF     INTCON,PEIE         ; Init. ISR

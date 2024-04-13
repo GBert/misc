@@ -2,7 +2,7 @@
 ;
 ; CANBuster CAN inspect
 ;
-; Copyright (c) 2016 Gerhard Bertelsmann
+; Copyright (c) 2024 Gerhard Bertelsmann
 ;
 ;------------------------------------------------------------------------------
 ;
@@ -35,6 +35,12 @@ CANINSPECT
                 MOVF    CANFRAME+1,F
                 BTFSC   STATUS,Z
                 BRA     SYSYTEM_CMD
+
+                ; System CMD 0x01 (ID ?)
+                MOVF    CANFRAME+1,W
+                XORLW   1
+                BTFSC   STATUS,Z
+                BRA     SYSTEM_CMD_R
 
                 ; System CMD reponse 0x01 ? (looking for on/off state)
                 MOVF    CANFRAME+1,W
@@ -273,11 +279,7 @@ SETUP_VALUE
                 XORWF   CANFRAME+10,W
                 BNZ     SETUP_VALUE_CONT1
                 MOVFF   CANFRAME+11,ID_H
-                MOVLW   'U'
-                ADDWF   ID_H
                 MOVFF   CANFRAME+12,ID_L
-                MOVLW   'S'
-                ADDWF   ID_L
                 BRA     SETUP_VALUE_WRITE
 SETUP_VALUE_CONT1
                 MOVLW   0x02
@@ -328,6 +330,25 @@ SETUP_VALUE_RESPONSE
                 MOVWF   POSTINC0
                 BRA     EVENT_RING_NORMALIZE
 
+                RETURN
+
+;------------------------------------------------------------------------------
+; System CMD 0x0C -> save Device ID value
+;------------------------------------------------------------------------------
+
+SYSTEM_CMD_R
+                RCALL   CHECK_ID
+                BNZ     SYSTEM_CMD_R_EXIT
+
+                ; System Command & Sub Command 0x0C
+                MOVF    CANFRAME+9,W
+                XORLW   0x0C
+                BNZ     SYSTEM_CMD_R_NEXT
+
+                MOVFF   CANFRAME+10,DEVID_H
+                MOVFF   CANFRAME+11,DEVID_L
+SYSTEM_CMD_R_NEXT
+SYSTEM_CMD_R_EXIT
                 RETURN
 
 ;------------------------------------------------------------------------------
@@ -400,6 +421,16 @@ S88_EVENT
                 BTFSC	STATUS,Z
                 RETURN
 
+                ; Devide ID check
+                MOVF    CANFRAME+5,W
+                XORWF   DEVID_H,W
+                BTFSS	STATUS,Z
+                RETURN
+                MOVF	CANFRAME+6,W
+                XORWF   DEVID_L,W
+                BTFSS	STATUS,Z
+                RETURN
+
                 MOVF	CANFRAME+4,W
                 XORLW	4
                 BTFSC	STATUS,Z
@@ -409,6 +440,7 @@ S88_EVENT
                 XORLW	7
                 BTFSS	STATUS,Z
                 RETURN
+
                 ; if not S88 Counter Start -> return
                 MOVF	CANFRAME+7,W
                 XORWF   S88C_H,W
@@ -442,7 +474,7 @@ S88_SINGLE_IO
                 XORLW   0
                 BTFSS	STATUS,Z
                 RETURN
-                ; skip uf IO > module number * 16
+                ; skip if IO > module number * 16
                 MOVFF	S88LENGTH,WREG
                 SWAPF	WREG
                 ADDLW	1
@@ -499,10 +531,10 @@ CAN_PING_CONT
                 MOVWF	POSTINC0
                 MOVFF	ID_H,POSTINC0
                 MOVFF	ID_L,POSTINC0
-                ; Version 1.13
+                ; Version 1.15
                 MOVLW	1
                 MOVWF	POSTINC0
-                MOVLW	14
+                MOVLW	15
                 MOVWF	POSTINC0
                 MOVLW	0
                 MOVWF	POSTINC0
@@ -559,10 +591,10 @@ CAN_BOOTLOADER_PING
                 MOVWF	POSTINC0
                 MOVFF	ID_H,POSTINC0
                 MOVFF	ID_L,POSTINC0
-                ; Version 1.13
+                ; Version 1.15
                 MOVLW	1
                 MOVWF	POSTINC0
-                MOVLW	14
+                MOVLW	15
                 MOVWF	POSTINC0
                 MOVLW	0
                 MOVWF	POSTINC0
