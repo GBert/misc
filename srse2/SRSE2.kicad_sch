@@ -8378,7 +8378,7 @@
   )
 
   (symbol (lib_id "Connector_Generic:Conn_01x02") (at 241.3 167.64 90) (mirror x) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (in_bom no) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-000058ac3d98)
     (property "Reference" "P19" (at 242.57 170.18 90)
       (effects (font (size 1.27 1.27)))
@@ -8404,7 +8404,7 @@
   )
 
   (symbol (lib_id "Connector_Generic:Conn_01x02") (at 251.46 179.07 90) (mirror x) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no)
+    (in_bom no) (on_board yes) (dnp no)
     (uuid 00000000-0000-0000-0000-00005b2a8b0e)
     (property "Reference" "P3" (at 252.73 181.61 90)
       (effects (font (size 1.27 1.27)))
@@ -8696,6 +8696,9 @@
     (property "LCSC" "C75510" (at 45.72 102.87 0)
       (effects (font (size 1.27 1.27)) hide)
     )
+    (property "JLCPCB Position Offset" "-1.8,0.0" (at 45.72 102.87 0)
+      (effects (font (size 1.524 1.524)) hide)
+    )
     (pin "1" (uuid 97df0bb6-9a2b-47de-9460-c68904f06a29))
     (pin "2" (uuid 5cfab5f1-9756-4a91-90f9-1b61a12b8c7b))
     (pin "3" (uuid 994f3548-2ffe-464d-ae1f-2d96a825057c))
@@ -8883,7 +8886,7 @@
   )
 
   (symbol (lib_id "Connector:RJ45_Hanrun_HR911105A_Horizontal") (at 341.63 153.67 180) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (in_bom no) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 1088b6ce-8fdc-4c5b-a12d-26f3b6866742)
     (property "Reference" "J3" (at 340.36 165.1 0)
       (effects (font (size 1.27 1.27)))
@@ -8928,7 +8931,7 @@
     (property "Value" "TPS5430DDA" (at 113.03 33.02 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Footprint" "Package_SO:TI_SO-PowerPAD-8_ThermalVias" (at 114.3 52.07 0)
+    (property "Footprint" "srse2:TI_SO-PowerPAD-8_ThermalVias" (at 114.3 52.07 0)
       (effects (font (size 1.27 1.27) italic) (justify left) hide)
     )
     (property "Datasheet" "http://www.ti.com/lit/ds/symlink/tps5430.pdf" (at 113.03 43.18 0)
@@ -9052,6 +9055,9 @@
     (property "LCSC" "C2938437" (at 363.22 49.53 0)
       (effects (font (size 1.524 1.524)) hide)
     )
+    (property "JLCRotOffset" "90" (at 363.22 49.53 0)
+      (effects (font (size 1.524 1.524)) hide)
+    )
     (instances
       (project "SRSE2"
         (path "/2fb9dd88-7f2e-4e94-830f-18cb5a9434c7"
@@ -9102,6 +9108,9 @@
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "LCSC" "C2938437" (at 377.19 49.53 0)
+      (effects (font (size 1.524 1.524)) hide)
+    )
+    (property "JLCRotOffset" "90" (at 377.19 49.53 0)
       (effects (font (size 1.524 1.524)) hide)
     )
     (instances
@@ -10197,7 +10206,7 @@
   )
 
   (symbol (lib_id "Mechanical:MountingHole_Pad") (at 361.95 232.41 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (in_bom no) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 7ee34856-7109-4a7b-905b-6e364a1149fb)
     (property "Reference" "H2" (at 365.76 231.14 90)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -10222,7 +10231,7 @@
   )
 
   (symbol (lib_id "Mechanical:MountingHole_Pad") (at 361.95 238.76 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (in_bom no) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 8ccb6d6b-4877-44b4-b608-cf55ea27d260)
     (property "Reference" "H3" (at 365.76 237.49 90)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -11101,7 +11110,7 @@
   )
 
   (symbol (lib_id "Mechanical:MountingHole_Pad") (at 361.95 245.11 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (in_bom no) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid c39fce58-7be8-4916-9c65-88997ef3f49c)
     (property "Reference" "H4" (at 365.76 243.84 90)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -11252,7 +11261,7 @@
   )
 
   (symbol (lib_id "Mechanical:MountingHole_Pad") (at 361.95 226.06 270) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (in_bom no) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid da3afc6d-7246-4d28-9499-61b807187d16)
     (property "Reference" "H1" (at 365.76 224.79 90)
       (effects (font (size 1.27 1.27)) (justify left))
