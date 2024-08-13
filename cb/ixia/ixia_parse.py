@@ -81,7 +81,7 @@ def print_ports():
     # sorted by item1 -> 'default_name' -> naturally
     for uuid in dict(sorted(ixia_data_port_sort.items(), key=lambda item: (int(re.search('\D(\d+)', item[1]).group(1)), item[1]))):
         data = json.loads(ixia_data_port[uuid])
-        print(f'{data["default_name"]} ,{data["name"]},', end='')
+        print(f'{data["default_name"]} ,{data["name"]} ,', end="")
         filter_list = []
         for filter in data['source_filter_uuid_list']:
             filter_data = json.loads(ixia_data_filter[filter])
@@ -89,6 +89,9 @@ def print_ports():
         filter_list = mysort_list(filter_list)
         print(' '.join(map(str, filter_list)), end='')
         print(', ', end ='')
+	# dictionary -> string for JSON object
+        tagg_data = json.loads(json.dumps(data["std_port_tagging_settings"]))
+        print(f' {tagg_data["vlan_id"]} ,', end ='')
 
         filter_list = []
         for filter in data['dest_filter_uuid_list']:
