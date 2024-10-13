@@ -424,11 +424,11 @@ S88_EVENT
                 ; Devide ID check
                 MOVF    CANFRAME+5,W
                 XORWF   DEVID_H,W
-                BTFSS	STATUS,Z
+                BTFSS   STATUS,Z
                 RETURN
-                MOVF	CANFRAME+6,W
+                MOVF    CANFRAME+6,W
                 XORWF   DEVID_L,W
-                BTFSS	STATUS,Z
+                BTFSS   STATUS,Z
                 RETURN
 
                 MOVF	CANFRAME+4,W
