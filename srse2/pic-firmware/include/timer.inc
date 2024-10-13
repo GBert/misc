@@ -69,6 +69,11 @@ SCHEDULE
                 BCF	INTCON, TMR0IF
                 INFSNZ	TCOUNTER,F	; heartbeat routine
                 RCALL	DO_HEARTBEAT
+                ; avoid S88 event queue overflow:
+                ;  wait until count is below the half max (64)
+                MOVLW   32
+                SUBWF   EVENTCNT,W
+                BTFSS   STATUS,C
                 CALL    S88_FSM
 
                 ; update free running counter (4.096ms)
