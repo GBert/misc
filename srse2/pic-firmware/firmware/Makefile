@@ -46,4 +46,4 @@ upload:build
 
 
 clean:
-	rm -f *.lst *.hex *.cod *.log *.o *~
+	rm -f *.lst *[a-zA-Z].hex *.cod *.log *.o *~

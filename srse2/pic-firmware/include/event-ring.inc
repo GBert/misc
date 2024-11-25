@@ -2,7 +2,7 @@
 ;
 ; CAN frames send ring
 ;
-; Copyright (c) 2016 Gerhard Bertelsmann
+; Copyright (c) 2024 Gerhard Bertelsmann
 ;
 ;------------------------------------------------------------------------------
 ;
@@ -50,8 +50,8 @@ INITEVENTRING
                 MOVFF	FSR0L,EVENTPP+1
                 MOVFF	FSR0L,EVENTPG+1
                 RETURN
-
-PUTEVENT
+PUTEVENTEQUAL
+;sends event old state = curent state
                 MOVFF	EVENTPP,FSR0H
                 MOVFF	EVENTPP+1,FSR0L
                 MOVLW	0x00
@@ -66,42 +66,54 @@ PUTEVENT
                 MOVLW	0x8
                 MOVWF	POSTINC0
                 ; DATA
-                MOVFF	DEVID_H,POSTINC0    ; TODO: probably MOVF to save a cycle ?
-                MOVFF	DEVID_L,POSTINC0
+                MOVFF	ID_H,POSTINC0    ; TODO: probably MOVF to save a cycle ?
+                MOVFF	ID_L,POSTINC0
                 MOVFF	TEMP16,POSTINC0
                 MOVFF	TEMP16+1,POSTINC0
                 MOVF	ACTUAL,W
                 ANDWF	MASK,W
                 BTFSS	STATUS,Z
-                MOVLW   1		; either W is zero or it's set to one
-
-                XORLW	1
-                MOVWF	POSTINC0
-                XORLW	1
-                MOVWF	POSTINC0
+                MOVLW   1               ; either W is zero or it's set to one
+                MOVWF	POSTINC0        ;old state
+                MOVWF	POSTINC0        ;new state
                 CLRF	POSTINC0	; time - unused
                 CLRF	POSTINC0
+                BRA     EVENT_RING_NORMALIZE
 
-                ;;;;;;;;;;;;;;;;;;;;;;
-                MOVLW	15
-                ADDWF   FSR0L,F
-                BNC     NORM_C1
-                INCF    FSR0H,F
-NORM_C1
-                MOVLW   0xF0
-                ANDWF   FSR0L,F
+PUTEVENT
+;sends event old state = curent state
+                MOVFF	EVENTPP,FSR0H
+                MOVFF	EVENTPP+1,FSR0L
+                MOVLW	0x00
+                MOVWF	POSTINC0
+                ; mark with 0x23 as S88 event
+                MOVLW	0x23
+                MOVWF	POSTINC0
 
-                MOVLW	0x04		; make sure that FSR is in the range 0x400 - 0x7ff
-                IORWF	FSR0H,F
-                MOVLW	0x07
-                ANDWF	FSR0H,F
+                MOVFF	CANHASH_HIGH,POSTINC0
+                MOVFF	CANHASH_LOW,POSTINC0
+                ; DLC
+                MOVLW	0x8
+                MOVWF	POSTINC0
+                ; DATA
+                ;DeviceID = ID_H:ID_L
+                MOVFF	ID_H,POSTINC0    ; TODO: probably MOVF to save a cycle ?
+                MOVFF	ID_L,POSTINC0
+                ;contactID
+                MOVFF	TEMP16,POSTINC0
+                MOVFF	TEMP16+1,POSTINC0
+                MOVF	ACTUAL,W
+                ANDWF	MASK,W
+                BTFSS	STATUS,Z
+                MOVLW   1               ; either W is zero or it's set to one
 
-                MOVFF   FSR0H,EVENTPP
-                MOVFF   FSR0L,EVENTPP+1
-
-                INCF	EVENTCNT,F
-                RETURN
-
+                XORLW	1
+                MOVWF	POSTINC0        ;old state
+                XORLW	1
+                MOVWF	POSTINC0        ;new state
+                CLRF	POSTINC0        ;time - unused
+                CLRF	POSTINC0
+                BRA     EVENT_RING_NORMALIZE
 
 GETEVENT_P_NORM MACRO
                 MOVLW	15
@@ -128,13 +140,9 @@ GETEVENT_P      MACRO
                 ENDM
 
 SENDEVENT
-                ; check if an event is in the buffer
-                MOVF	EVENTCNT,F
-                BTFSC	STATUS,Z
-                RETURN
                 ; check if UART send buffer is available
                 MOVLW	OVERFLOW - 5	; 5 buffers spare for CAN -> UART
-                SUBWF	TXCNT,W	
+                SUBWF	TXCNT,W
                 BTFSC	STATUS,C
                 RETURN
 

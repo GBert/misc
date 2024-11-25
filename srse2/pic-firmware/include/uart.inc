@@ -48,7 +48,9 @@
         #DEFINE UTXIP       TXIP
 
         #DEFINE UTXSTA      TXSTA
+	#IFNDEF URCSTA
         #DEFINE URCSTA      RCSTA
+	#ENDIF
         #DEFINE UTXREG      TXREG
         #DEFINE URCREG      RCREG
 
@@ -69,7 +71,9 @@
         #DEFINE UTXIP       TX1IP
 
         #DEFINE UTXSTA      TXSTA1
+	#IFNDEF URCSTA
         #DEFINE URCSTA      RCSTA1
+	#ENDIF
         #DEFINE UTXREG      TXREG1
         #DEFINE URCREG      RCREG1
 
@@ -93,7 +97,9 @@
         #DEFINE UTXIP       TX2IP
 
         #DEFINE UTXSTA      TXSTA2
+	#IFNDEF URCSTA
         #DEFINE URCSTA      RCSTA2
+	#ENDIF
         #DEFINE UTXREG      TXREG2
         #DEFINE URCREG      RCREG2
 

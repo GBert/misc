@@ -38,8 +38,8 @@ I2CINIT
                 BCF     SSPSTAT,SMP
                 BSF     SSPSTAT,CKE
                 ; configure SCL and SDL as input
-		BSF     TRISC,3
-		BSF     TRISC,4
+                BSF     TRISC,3
+                BSF     TRISC,4
                 ; master mode
                 MOVLW   (1 << SSPEN) + (1 << SSPM3)
                 IORWF   SSPCON1,F

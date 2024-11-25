@@ -17,6 +17,17 @@
                 LIST
                 RADIX   DEC
 
+#IF UART == PORTC
+    #IFNDEF TXSTA1
+        #DEFINE URCSTA      RCSTA
+    #ELSE
+        #DEFINE URCSTA      RCSTA1
+    #ENDIF
+#ENDIF
+
+#IF UART == PORTB || UART == PORTD
+        #DEFINE URCSTA      RCSTA2
+#ENDIF
 ;------------------------------------------------------------------------------
 ; Macros
 ;------------------------------------------------------------------------------
@@ -55,6 +66,22 @@ POWER_LED_OFF   MACRO
                 BSF     GPIO,1              ; Maerklin Power LED off
                 ENDM
 
+LED_EEPWRITE_ON MACRO
+#IF LEDON == 0
+                BCF     GPIO,0
+#ELSE
+                BSF     GPIO,0
+#ENDIF
+                ENDM
+
+LED_EEPWRITE_OFF MACRO
+#IF LEDON == 0
+                BSF     GPIO,0
+#ELSE
+                BCF     GPIO,0
+#ENDIF
+                ENDM
+
 UARTOVFL        MACRO
 #IF LEDON == 0
                 BCF     GPIO,0              ; LED2 UART Packet dropped
@@ -63,7 +90,7 @@ UARTOVFL        MACRO
 #ENDIF
                 ENDM
 
-UARTRECV        MACRO
+UARTOVFLOFF        MACRO
 #IF LEDON == 0
                 BSF     GPIO,0              ; LED2 UART Packet received
 #ELSE
@@ -94,10 +121,8 @@ RTSSET          MACRO
                 CBLOCK  0x0000              ; ACCESS RAM 0x00..0x5F
                 TEMP    : 2
                 TEMP16  : 2
-                B_SAVE  : 1                 ; ISR BANK SELECT REGISTER
                 S_SAVE  : 1                 ; ISR STATUS REGISTER
                 W_SAVE  : 1                 ; ISR WORKING REGISTER
-                STATE   : 1
                 ENDC
 
 ;------------------------------------------------------------------------------
@@ -127,9 +152,21 @@ INIT
                 CLRF    PIR1
 #ENDIF
 
-                ; after boot we are in cold state
-                MOVLW	0
-                MOVWF   STATE	
+                ;CLEAR RAM IF POWER ON RESET
+
+                ;check for Power On Reset
+                BTFSC   RCON, POR
+                BRA     CLEAR_RAM_END ; reset was not power on reset
+                ;Power On Reset RCON: POR=0
+CLEAR_RAM
+                MOVLW   0x60
+                LFSR    FSR0,0
+CLEAR_RAM_L
+                CLRF    POSTINC0
+                DECFSZ  WREG,F
+                BRA     CLEAR_RAM_L
+CLEAR_RAM_END
+
                 ; switch off A/Ds, D/As and comaprators
                 CLRF    ADCON0          ;D
                 CLRF    ADCON1          ;D
@@ -146,6 +183,8 @@ INIT
 #ELSE
                 CLRF    GPIO                ; Init. LED
 #ENDIF
+
+
                 RTSCLR                      ; Init. RTS
                 CLRF    DDR                 ; All O/P
 
@@ -162,24 +201,76 @@ INIT
 #IFDEF XPN_CODE
                 CALL    INITXPNBUFFER       ; Init. XpressnetBuffer
 #ENDIF
+
                 CALL    S88INIT
+                ; init S88 RAM if power on reset
+                BTFSS   RCON, POR
+                CALL    S88_RESET_MEM
+
+
+                ; check and read configs from EEPROM
+                CALL    EEP_CHECK_INIT
+                CALL    EEP_READ_CONFIGS
+
                 CALL    READCANHASH
-                CLRF    DEVID_H
-                MOVFF   ID_L, DEVID_L       ; set Device ID to defaults
 
                 BSF     RCON,IPEN           ; Enable priority interrupts
                 BSF     INTCON,PEIE         ; Init. ISR
                 BSF     INTCON,GIE
-               
+
+                CALL    CAN_SEND_RESET      ; create SYS CMD (SUB 0x80)
+                CALL    SENDEVENT           ; send this immediately
+
+                ;test power on reset
+                BTFSC   RCON, POR
+                BRA     NO_POWER_ON_RESET2
+; ---------------------------------
+; handle all power on options here
+; ---------------------------------
+; after boot we are in cold state
+                BCF     SYSTEM_FLAGS, SYSTEM_FLAG_WARM_STATE
+; handle S88ALLONFIRST option
+                BTFSC   OPTION_FLAGS, OPTION_FLAG_S88ALLONFIRST
+                BSF     SYSTEM_FLAGS, SYSTEMFLAG_S88SENDALL_ONFIRST
+; handle LED TEST on power on option
+                BCF     SYSTEM_FLAGS, SYSTEMFLAG_LED_TEST  ;default
+                BTFSS   OPTION_FLAGS, OPTION_FLAG_LED_TEST
+                BRA     NO_LED_TEST
+                ; set power on LED test
+                BSF     SYSTEM_FLAGS, SYSTEMFLAG_LED_TEST
+#IF LEDON == 0
+                MOVLW   0xF8                ; claer bits 0,1,1
+                ANDWF   GPIO, F
+#ELSE
+                MOVLW   0x07                ; set bits 0,1,1
+                IORWF   GPIO, F
+#ENDIF
+NO_LED_TEST
+;end handle LED TEST on power on option
+NO_POWER_ON_RESET2
+
+                BSF     RCON, POR     ;mark Power on Reset as handled
+
+;TEST		CALL    S88_CHECK_FORCED_EVENTS
+;		BRA     TEST
+
 ;------------------------------------------------------------------------------
 ; Main
 ;------------------------------------------------------------------------------
 MAIN
+                BTFSC   URCSTA,OERR         ;test in main avoids Call/Return
+                CALL    RESETUART           ; UART RESET
+                BTFSC   URCSTA,FERR         ;test in main avoids Call/Return
                 CALL    RESETUART           ; UART RESET
                 CALL    RXCAN               ; RECEIVE CAN
+                BTFSC   CANFRAME,6          ;test in main avoids Call/Return
                 CALL    CANINSPECT
-                CALL    TXCAN               ; SEND CAN
+                MOVF    RXCNT,W             ; Messages received? test in main avoids Call/Return
+                BTFSS   STATUS,Z
+                CALL    TXCAN               ; SEND CAN (received to CAN)
+                BTFSC   CANFRAME,6          ;test in main avoids Call/Return
                 CALL    CANINSPECT
+
 #IFDEF XPN_CODE
                 CALL    XPNSERVICE
 #ENDIF
@@ -206,7 +297,6 @@ MAIN
 #IFDEF	XPN_CODE
 #INCLUDE        "xpn.inc"                   ; XpressNet routines
 #ENDIF
-#INCLUDE        "bindecascii.inc"           ; 16 binary to decimal converter
 
 ;------------------------------------------------------------------------------
 ;

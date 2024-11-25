@@ -2,7 +2,7 @@
 ;
 ; CANBuster ID routines
 ;
-; Copyright (c) 2016 Gerhard Bertelsmann
+; Copyright (c) 2024 Gerhard Bertelsmann
 ;
 ;------------------------------------------------------------------------------
 ;
@@ -18,29 +18,93 @@
                 RADIX   DEC
 
                 CBLOCK
-                INDEX : 1
                 INDEX_APOS : 1
-                INDEX_VL : 1
-                INDEX_VH : 1
                 INDEX_N : 1
                 INDEX_L : 1
                 INDEX_C : 1
                 ENDC
 
-;------------------------------------------------------------------------------
-; Generic Flash routines
-;------------------------------------------------------------------------------
+LOAD_INDEX_P    MACRO   INDEX
+                MOVLW   LOW INDEX
+                MOVWF   TBLPTRL
+                MOVLW   HIGH INDEX
+                MOVWF   TBLPTRH
+                MOVLW   UPPER INDEX
+                MOVWF   TBLPTRU
+                ENDM
 
-EEPROM_REFRESH
-                CLRF    EEADR		; Start at address 0
+
+
+; Config in DataEEPROM
+; EEPROM DEFAULT DATA is defined in idlocs.inc
+
+READ_UID    RETURN
+
+; EEPROM ADDRESSES
+; 0x00: UNUSED
+; 0x01: 'C'  Valid Marking (if != 'C' EEPROM will be initialized )
+; 0x02: 'B'  Valid Marking (if != 'B' EEPROM will be initialized )
+; 0x03: ID_H Device ID (Kennung) HIGH
+; 0x04: ID_L Device ID (Kennung) LOW
+; 0x05: IO Start Adress (Offset) HIGH
+; 0x06: IO Start Adress (Offset) LOW
+; 0x07: S88 Start Adress (Offset) HIGH
+; 0x08: S88 Start Adress (Offset) LOW
+; 0x09: Scan Interval
+; 0x0A: S88 Length (Nr of 16Bit modules)
+; 0x0B: UID 3rd byte
+; 0x0C: UID 4th byte
+#DEFINE EEP_ADDR_ID_H           0x03
+#DEFINE EEP_ADDR_ID_L           0x04
+#DEFINE EEP_ADDR_PIOC_H         0x05
+#DEFINE EEP_ADDR_PIOC_L         0x06
+#DEFINE EEP_ADDR_S88C_H         0x07
+#DEFINE EEP_ADDR_S88C_L         0x08
+#DEFINE EEP_ADDR_SCAN_INTERV    0x09
+#DEFINE EEP_ADDR_S88LENGTH      0x0A
+#DEFINE EEP_ADDR_UID_H          0x0B
+#DEFINE EEP_ADDR_UID_L          0x0C
+#DEFINE EEP_ADDR_OPTIONFLAGS    0x0D
+#DEFINE EEP_ADDR_S88FEVENTDELAY 0x0E
+
+EEP_SET_UNUSED_ADDR
+; for safety keep EEADR in unused range
+                MOVLW	0xFF
+                MOVWF	EEADR
+                RETURN
+
+EEPROM_READ_LOWPAGE	;Adress in WREG 0...255
+                MOVWF	EEADR
                 CLRF    EEADRH
-                BCF     EECON1, CFGS	; Set for memory
-                BCF     EECON1, EEPGD	; Set for Data EEPROM
+                BCF     EECON1, EEPGD ; Point to DATA memory
+                BCF     EECON1, CFGS ; Access EEPROM
+                BSF     EECON1, RD ; EEPROM Read
+                NOP
+                MOVF    EEDATA, W ; W = EEDATA
+                RETURN
+
+
+EEPROM_WRITE_LOWPAGE
+; ADDRESS in WREG, DATA in TEMP
+; value is checked before write cycle (if new = old skips write cycle)
+                MOVWF	EEADR
+                CLRF    EEADRH
+                BCF     EECON1, EEPGD ; Point to DATA memory
+                BCF     EECON1, CFGS ; Access EEPROM
+EEPROM_WRITE_LOWPAGE_CONT
+                ; read before write
+                BSF     EECON1, RD ; EEPROM Read
+                NOP
+                MOVF    EEDATA, W
+                SUBWF	TEMP,W
+                BZ      EEPROM_WRITE_END ;old = new, skip write
+                BTFSC	OPTION_FLAGS, OPTION_LED_ON_EEP_WRITE
+                LED_EEPWRITE_ON
+                BTFSC	OPTION_FLAGS, OPTION_LED_ON_EEP_WRITE
+                CLRF	HEARTBEAT
+                MOVFF	TEMP,EEDATA
                 BCF     INTCON, GIE	; Disable interrupts
                 BSF     EECON1, WREN	; Enable writes
-
-EEPROM_REFRESH_LOOP	; Loop to refresh array
-                BSF     EECON1, RD	; Read current address
                 MOVLW   55h
                 MOVWF   EECON2
                 MOVLW   0AAh
@@ -48,122 +112,164 @@ EEPROM_REFRESH_LOOP	; Loop to refresh array
                 BSF     EECON1, WR	; Set WR bit to begin write
                 BTFSC   EECON1, WR	; Wait for write to complete
                 BRA $-2
-                INCFSZ  EEADR, F	; Increment address
-                BRA     EEPROM_REFRESH_LOOP	; Not zero, do it again
-                INCFSZ  EEADRH, F	; Increment the high address
-                BRA     EEPROM_REFRESH_LOOP	; Not zero, do it again
                 BCF     EECON1, WREN	; Disable writes
                 BSF     INTCON, GIE	; Enable interrupts
+EEPROM_WRITE_END
                 RETURN
 
 
-ERASE_DATA
-                BSF     EECON1, EEPGD	; point to Flash program memory
-                BCF     EECON1, CFGS	; access Flash program memory
-                BSF     EECON1, WREN	; enable write to memory
-                BSF     EECON1, FREE
-
-                BCF     INTCON, GIE	; disable interrupts
+EEP_INIT        ; write default data to EEPROM (if 'C''B' check not valid)
+                LOAD_INDEX_P EEPROM_DEFAULT_DATA
+                TBLRD*+
+                MOVFF   TABLAT,TEMP
+                MOVLW 1 ;Start at EEP Address 1
+                MOVWF   EEADR
+                CLRF    EEADRH
+                BCF     EECON1, EEPGD ; Point to DATA memory
+                BCF     EECON1, CFGS ; Access EEPROM
+                BCF     INTCON, GIE	; Disable interrupts
+                BSF     EECON1, WREN	; Enable writes
+EEP_INIT_LOOP
+                TBLRD*+
+                MOVFF   TABLAT,EEDATA
                 MOVLW   0x55
                 MOVWF   EECON2
-                MOVLW   0xAA
+                MOVLW   0x0AA
                 MOVWF   EECON2
-                BSF     EECON1, WR	; start program (CPU stall)
+                BSF     EECON1, WR	; Set WR bit to begin write
+                BTFSC   EECON1, WR	; Wait for write to complete
+                BRA $-2
+                INCFSZ  EEADR, F	; Increment address
+                DECFSZ	TEMP,F
+                BRA     EEP_INIT_LOOP
+
+                BCF     EECON1, WREN	; Disable writes
+                BCF     INTCON, GIE	; Enable interrupts
+                BRA     EEP_SET_UNUSED_ADDR
+
+
+EEP_CHECK_INIT  ;check for 'C','B' at EEPROM address 0x01, 0x02
+                ;init EEPROM if not found
+                MOVLW   0x01
+                CALL	EEPROM_READ_LOWPAGE
+                SUBLW  'C'
+                BNZ	EEP_INIT
+                MOVLW   0x02
+                CALL	EEPROM_READ_LOWPAGE
+                SUBLW  'B'
+                BNZ	EEP_INIT
+                BRA     EEP_SET_UNUSED_ADDR
+
+EEP_READ_CONFIGS ; no call structure because speed
+                MOVLW   EEP_ADDR_ID_H
+                MOVWF   EEADR         ;3
+                CLRF    EEADRH
+                BCF     EECON1, EEPGD ; Point to DATA memory
+                BCF     EECON1, CFGS ; Access EEPROM
+                BSF     EECON1, RD ; EEPROM Read
                 NOP
+                MOVFF   EEDATA,ID_H
+                INCF    EEADR,F       ;4
+                BSF     EECON1, RD ; EEPROM Read
+                NOP
+                MOVFF   EEDATA,ID_L
+                INCF    EEADR,F       ;5
+                BSF     EECON1, RD ; EEPROM Read
+                NOP
+                MOVFF   EEDATA,PIOC_H
+                INCF    EEADR,F       ;6
+                BSF     EECON1, RD ; EEPROM Read
+                NOP
+                MOVFF   EEDATA,PIOC_L
+                INCF    EEADR,F       ;7
+                BSF     EECON1, RD ; EEPROM Read
+                NOP
+                MOVFF   EEDATA,S88C_H
+                INCF    EEADR,F       ;8
+                BSF     EECON1, RD ; EEPROM Read
+                NOP
+                MOVFF   EEDATA,S88C_L
+                INCF    EEADR,F       ;9
+                BSF     EECON1, RD ; EEPROM Read
+                NOP
+                MOVFF   EEDATA,SCAN_INTERVAL
+                INCF    EEADR,F      ;10
+                BSF     EECON1, RD ; EEPROM Read
+                NOP
+                MOVF    EEDATA,W
+                CALL    S88_SET_LENGTH_CHECKED
+                INCF    EEADR,F      ;11
+                BSF     EECON1, RD ; EEPROM Read
+                NOP
+                MOVFF   EEDATA,UID_H
+                INCF    EEADR,F      ;12
+                BSF     EECON1, RD ; EEPROM Read
+                NOP
+                MOVFF   EEDATA,UID_L
+                INCF    EEADR,F      ;13
+                BSF     EECON1, RD ; EEPROM Read
+                NOP
+                MOVFF   EEDATA,OPTION_FLAGS
+                INCF    EEADR,F      ;14
+                BSF     EECON1, RD ; EEPROM Read
+                NOP
+                MOVFF   EEDATA,S88_FEVENTDELAY_SOLL
+                ;for safety keep EEADR in unused range
+                BRA     EEP_SET_UNUSED_ADDR
 
-                BSF     INTCON, GIE	; enable interrupts
-                BCF     EECON1, WREN	; Disable writes on write complete (EEIF set)
-                RETURN
+EEP_WRITE_DEVICEID
+                MOVLW   EEP_ADDR_ID_H
+                MOVFF   ID_H, TEMP
+                RCALL	EEPROM_WRITE_LOWPAGE
+                MOVLW   EEP_ADDR_ID_L
+                MOVFF   ID_L, TEMP
+EEP_WRANDSAVE   RCALL	EEPROM_WRITE_LOWPAGE
+                ;for safety keep EEADR in unused range
+                BRA     EEP_SET_UNUSED_ADDR
 
-FIN_WRITE_DATA
-                BSF     EECON1, EEPGD	; point to Flash program memory
-                BCF     EECON1, CFGS	; access Flash program memory
-                BSF     EECON1, WREN	; enable write to memory
-                BCF     EECON1, FREE
+EEP_WRITE_OPTIONFLAGS
+                MOVLW   EEP_ADDR_OPTIONFLAGS
+                MOVFF   OPTION_FLAGS, TEMP
+                BRA     EEP_WRANDSAVE
 
-                BCF     INTCON, GIE	; disable interrupts
-                MOVLW   0x55
-                MOVWF   EECON2
-                MOVLW   0xAA
-                MOVWF   EECON2
-                BSF     EECON1, WR	; start program (CPU stall)
+EEP_WRITE_UID
+                MOVLW   EEP_ADDR_UID_H
+                MOVFF   UID_H, TEMP
+                RCALL	EEPROM_WRITE_LOWPAGE
+                MOVLW   EEP_ADDR_UID_L
+                MOVFF   UID_L, TEMP
+                BRA     EEP_WRANDSAVE
 
-                BSF     INTCON, GIE	; enable interrupts
-                BCF     EECON1, WREN	; Disable writes on write complete (EEIF set)
-                RETURN
+EEP_WRITE_PIOC
+                MOVLW   EEP_ADDR_PIOC_H
+                MOVFF   PIOC_H, TEMP
+                RCALL	EEPROM_WRITE_LOWPAGE
+                MOVLW   EEP_ADDR_PIOC_L
+                MOVFF   PIOC_L, TEMP
+                BRA     EEP_WRANDSAVE
 
-;------------------------------------------------------------------------------
-; Location ID routines
-;------------------------------------------------------------------------------
-;------------------------------------------------------------------------------
-; Location ID
-; 0x200000	UID High
-; 0x200001	UID Low
-; 0x200002	Start counting at X-High for event
-; 0x200003	Start counting at X-Low for event
-; 0x200004	Start counting at X-High for event - S88
-; 0x200005	Start counting at X-Low for event - S88
-; 0x200006	Scan Interval (in 512us steps)
-; 0x200007	S88 Bus length
-;------------------------------------------------------------------------------
+EEP_WRITE_S88C
+                MOVLW   EEP_ADDR_S88C_H
+                MOVFF   S88C_H, TEMP
+                RCALL	EEPROM_WRITE_LOWPAGE
+                MOVLW   EEP_ADDR_S88C_L
+                MOVFF   S88C_L, TEMP
+                BRA     EEP_WRANDSAVE
 
-SETLOCIDP
-                MOVWF   TBLPTRL
-                CLRF    TBLPTRH
-                MOVLW   20h
-                MOVWF   TBLPTRU
-                RETURN
+EEP_WRITE_S88LENGTH
+                MOVLW   EEP_ADDR_S88LENGTH
+                MOVFF   S88LENGTH, TEMP
+                BRA     EEP_WRANDSAVE
 
-READ_UID
-                ; read ID and counting numbers
-                MOVLW   0
-                RCALL   SETLOCIDP
-                TBLRD*+
-                MOVFF   TABLAT,ID_H
-                TBLRD*+
-                MOVFF   TABLAT,ID_L
-                TBLRD*+
-                MOVFF   TABLAT,PIOC_H
-                TBLRD*+
-                MOVFF   TABLAT,PIOC_L
-                TBLRD*+
-                MOVFF   TABLAT,S88C_H
-                TBLRD*+
-                MOVFF   TABLAT,S88C_L
-                TBLRD*+
-                MOVFF   TABLAT,SCAN_INTERVAL
-                TBLRD*+
-                MOVFF   TABLAT,S88LENGTH
-                RETURN
+EEP_WRITE_SCANINTERVAL
+                MOVLW   EEP_ADDR_SCAN_INTERV
+                MOVFF   SCAN_INTERVAL, TEMP
+                BRA     EEP_WRANDSAVE
 
-SET_UID
-                ; set ID and counting numbers
-                MOVLW   0
-                RCALL   SETLOCIDP
-                RCALL   ERASE_DATA
-
-                MOVFF   ID_H,TABLAT
-                TBLWT*+
-                MOVFF   ID_L,TABLAT
-                TBLWT*+
-                MOVFF   PIOC_H,TABLAT
-                TBLWT*+
-                MOVFF   PIOC_L,TABLAT
-                TBLWT*+
-                MOVFF   S88C_H,TABLAT
-                TBLWT*+
-                MOVFF   S88C_L,TABLAT
-                TBLWT*+
-                MOVFF   SCAN_INTERVAL,TABLAT
-                TBLWT*+
-                MOVFF	S88LENGTH,TABLAT
-                TBLWT*+
-
-                MOVLW   0
-                RCALL   SETLOCIDP
-                RCALL   FIN_WRITE_DATA
-
-                RETURN
+EEP_WRITE_S88_FEVENTDELAY
+                MOVLW   EEP_ADDR_S88FEVENTDELAY
+                MOVFF   S88_FEVENTDELAY_SOLL, TEMP
+                BRA     EEP_WRANDSAVE
 
 ;------------------------------------------------------------------------------
 ; Set CAN Hash according to Maerklin documentation
@@ -182,9 +288,8 @@ SET_UID
 
 
 READCANHASH
-                RCALL   READ_UID
                 MOVLW   'C'
-                XORWF   ID_H,W
+                XORWF   UID_H,W
                 MOVWF   CANHASH_HIGH
                 ; shift left 3
                 SWAPF   CANHASH_HIGH,F
@@ -192,30 +297,26 @@ READCANHASH
                 ; set two lower bits
                 BSF     CANHASH_HIGH,0
                 BSF     CANHASH_HIGH,1
-
                 MOVLW   'B'
-                XORWF   ID_L,W
+                XORWF   UID_L,W
                 MOVWF   CANHASH_LOW
                 BSF     CANHASH_HIGH,2
-                BTFSS   ID_L,7
+                BTFSS   UID_L,7
                 BCF     CANHASH_HIGH,2
                 BCF     CANHASH_LOW,7
                 RETURN
 
 ;------------------------------------------------------------------------------
-; send variable definitions
+; Send Configuration Index Description
 ;------------------------------------------------------------------------------
 
-LOAD_INDEX_P    MACRO   INDEX
-                MOVLW   LOW INDEX
-                MOVWF   TBLPTRL
-                MOVLW   HIGH INDEX
-                MOVWF   TBLPTRH
-                MOVLW   UPPER INDEX
-                MOVWF   TBLPTRU
-                ENDM
-
+; Send Configuration Index Description (Multi CAN frame answer)
+; IMPORTANT BEFORE CALL of this function
+; current value of dependent config channel in (TEMP16):(TEMP16+1)
+; INDEX 0...x in TEMP
+; Tablepointer points to right index description (DB section) below
 SEND_INDEX
+; Current value in TEMP16:TEMP16+1 (H:L)
                 TBLRD*+
                 MOVFF   TABLAT,INDEX_N
                 CLRF    INDEX_C
@@ -242,9 +343,14 @@ SEND_INDEX_LOOP1
 SEND_INDEX_LOOP2
                 TBLRD*+
                 MOVFF   TABLAT,POSTINC0
-             DECFSZ  INDEX_APOS
+                ; check for current value position
+                MOVF    INDEX_APOS
+                BZ      SEND_INDEX_LOOP3 ;has no current value or already sent
+                DECFSZ  INDEX_APOS
                 BRA     SEND_INDEX_LOOP3
-                ; TODO
+                ; Send current value
+                MOVFF  TEMP16,POSTINC0
+                MOVFF  TEMP16+1,POSTINC0
 SEND_INDEX_LOOP3
                 DECFSZ  INDEX_L,F
                 BRA     SEND_INDEX_LOOP2
@@ -259,22 +365,50 @@ SEND_INDEX_LOOP3
                 MOVWF   POSTINC0
                 MOVFF   CANHASH_HIGH,POSTINC0
                 MOVFF   CANHASH_LOW,POSTINC0
-                MOVLW   5
+                MOVLW   5  ;DLC
                 MOVWF   POSTINC0
-                MOVLW   'C'
-                MOVWF   POSTINC0
-                MOVLW   'B'
-                MOVWF   POSTINC0
-                MOVFF   ID_H,POSTINC0
-                MOVFF   ID_L,POSTINC0
-                MOVFF   INDEX,POSTINC0
-                ; MOVFF   INDEX_C,POSTINC0
-
+                CALL    UID_TO_POSTINC0
+                MOVFF   TEMP,POSTINC0   ;requested INDEX
                 BRA     EVENT_RING_NORMALIZE
 
 ;------------------------------------------------------------------------------
-; variable definition for cs2.exe
+; variable definition for CS2
 ;------------------------------------------------------------------------------
+; !!!!  IMPORTANT !!!!
+; for index > 0
+; the configchannel_nr MUST correspond TO CANNEL_GET/CHANNEL_SET number
+; DO NOT SEND INDEX if channel nr does not exist
+
+; CS2 input types for configuration
+; 1 = DROPDOWN LIST see protocol definition for definition
+; 2 = SLIDER    WE USE SLIDERS HERE !!!!!!!!!!!!!!!!!!!!!!
+
+; Format eines Datenblocks mit der Moeglichkeit einen Wert einzustelle:
+; Typ         Bedeutung                    Beispiel
+;
+; Char        Konfigirationskanalnummer    0x05: Setzen unter Kanal 5
+; Char        Kenner Slider                Wert 2
+; Word        Unterer Wert                 0
+; Word        Oberer Wert                  2500
+; Word        Aktuelle Einstellung         500
+; String      Auswahlbezeichnung           Variable Strombegrenzung\0
+; String      Bezeichnung Start            0.000\0
+; String      Bezeichnung Ende             2500.000\0
+; String      Bezeichnung Einheit          mA\0
+
+; Actual Value is at Index 6
+
+; ConfigChannel1 = DeviceID
+; ConfigChannel2 = PIO ContactID Offset
+; ConfigChannel3 = S88 Length (number 16bit modules)
+; ConfigChannel4 = S88 ContactID Offset
+; ConfigChannel5 = Scan Interval
+
+
+;---------------------------------------------
+; INDEX 0 is device descriptions
+;---------------------------------------------
+
 INDEX0
 #IFDEF PWM
                 DB        5 ,  0
@@ -285,16 +419,22 @@ INDEX0
                 DB        0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0
 #ELSE
                 DB        5 ,  0
+; nr measvalues, nr configchannels, not used, not used, 4 byte serial nr
                 DB        0 ,  4 ,  0 ,  0 ,  1 ,  2 ,  0 ,  1
+; article number 8 byte
                 DB       'S', '8', '8',  0 ,  0 ,  0 ,  0 ,  0
+; device description /0 terminate
                 DB       'C', 'A', 'N', 'B', 'u', 's', 't', 'e'
                 DB       'r',  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0
                 DB        0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0
 #ENDIF
-
+;---------------------------------------------
+; INDEX 1...n  are config channel descriptions
+;---------------------------------------------
 INDEX1
                 ;  5 rows - actual value at positon 28
-                DB        5 , 28
+                DB        5 , 6 ;28
+;configchannel_nr, 2=slider, min_h, min_l, max_h, max_l current_h, current_
                 DB        1 ,  2 ,  0 ,  0 ,  0 ,0xFF,  0 ,  0
                 DB       'C', 'A', 'N', 'B', 'u', 's', 't', 'e'
                 DB       'r', ' ', 'I', 'D',  0 , '0',  0 , '2'
@@ -303,7 +443,7 @@ INDEX1
 
 INDEX2
                 ;  5 rows - actual value at positon 26
-                DB        5 , 26
+                DB        5 , 6 ;26
                 DB        2 ,  2 ,  0 ,  0 ,0x27,0x10,0x03,0xe8
                 DB       'S', 't', 'a', 'r', 't', ' ', 'N', 'r'
                 DB        0 , '0',  0 , '1', '0', '0', '0', '0'
@@ -313,7 +453,7 @@ INDEX2
 INDEX3
 #IFDEF PWM
                 ;  5 rows - actual value at positon 33
-                DB        5 , 33
+                DB        5 , 6 ;33
                 DB        3 ,  2 ,0x07,0xD0,0x0F,0xa0,0x0B,0xB8
                 DB       'S', 'e', 'r', 'v', 'o', ' ', '1',  0
                 DB       '2', '0', '0', '0',  0 , '4', '0', '0'
@@ -321,18 +461,18 @@ INDEX3
                 DB        0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0
 #ELSE
                 ;  5 rows - actual value at positon 29
-                DB        5 , 29
-                DB        3 ,  2 ,  0 ,  0 ,  0 ,0x0F,  0 ,  1
+                DB        5 , 6 ;29
+                DB        3 ,  2 ,  0x00 , 0x01 , 0x00 ,0x10,  0 ,  1
                 DB       'L',0xc3,0xa4, 'n', 'g', 'e', ' ', 'S'
-                DB       '8', '8', '-', 'B', 'u', 's',  0 , '0'
-                DB        0 , '1', '5',  0 ,  0 ,  0 ,  0 ,  0
+                DB       '8', '8', '-', 'B', 'u', 's',  0 , '1'
+                DB        0 , '1', '6',  0 ,  0 ,  0 ,  0 ,  0
                 DB        0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0
 #ENDIF
 
 INDEX4
 #IFDEF PWM
                 ;  5 rows - actual value at positon 32
-                DB        5 , 32
+                DB        5 , 6 ;32
                 DB        4 ,  2 ,0x07,0xD0,0x0F,0xa0,0x0B,0xB8
                 DB       'S', 'e', 'r', 'v', 'o', ' ', '2',  0
                 DB       '2', '0', '0', '0',  0 , '4', '0', '0'
@@ -340,7 +480,7 @@ INDEX4
                 DB        0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0 ,  0
 #ELSE
                 ;  5 rows - actual value at positon 35
-                DB        5 , 35
+                DB        5 , 6
                 DB        4 ,  2 ,  0 ,  0 ,0x27,0x10,0x03,0xe8
                 DB       'S', '8', '8', ' ', 'S', 't', 'a', 'r'
                 DB       't',  0 , '0',  0 , '1', '0', '0', '0'
@@ -350,7 +490,7 @@ INDEX4
 
 #IFDEF PWM
 INDEX5
-                DB        5 ,  33
+                DB        5 ,  6
                 DB        5 ,  2 ,0x07,0xD0,0x0F,0xa0,0x0B,0xB8
                 DB       'S', 'e', 'r', 'v', 'o', ' ', '3',  0
                 DB       '2', '0', '0', '0',  0 , '4', '0', '0'

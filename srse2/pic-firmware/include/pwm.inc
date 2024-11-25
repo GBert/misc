@@ -20,6 +20,7 @@
 ; PWM variables
 ;------------------------------------------------------------------------------
 
+#IFNDEF SRSE2_SLCAN
                 CBLOCK
                 PWM_VALUE1 : 2
                 PWM_VALUE2 : 2
@@ -255,6 +256,7 @@ DEBUG_CAN
                 BRA     EVENT_RING_NORMALIZE
 
                 RETURN
+#ENDIF ;IFNDEF SRSE2_SLCAN
 ;
 ; vim: set shiftwidth=4 tabstop=4 softtabstop=4 expandtab
 ;

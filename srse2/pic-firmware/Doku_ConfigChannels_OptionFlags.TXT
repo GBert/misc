@@ -1,0 +1,88 @@
+Device ID (ConfigChannel 1)
+================================
+
+Read: cansend can0 00000300#434255530B01
+Write: cansend can0 00000300#434255530B01IIII
+
+Hier wird die default Device ID des S88 Gateway festgelegt. z.B. IIII = 0001
+cansend can0 00000300#434255530B010001
+Das S88 Gateway hat die Device ID 0x0001
+
+S88 Bus Länge (ConfigChannel 3)
+=================================
+Hier wird die Bus Länge festgelegt (=Anzahl 16Bit S88-Module) 0...16 (=0x00...0x10)
+
+Read: cansend can0 00000300#434255530B03
+Write: cansend can0 00000300#434255530B03100LL
+
+LL = (0x00) 0x01...0x10   ACHTUNG: LL=00 SCHALTET S88 BUS AUS
+
+Achtung: Bei größerer Bus-Länge kann die Entprellung von 4 auf 2 gleiche gelesene Werte reduziert werden
+(siehe Option Flags)
+
+
+S88 KontaktID Start (ConfigChannel 4)
+======================================
+Read: cansend can0 00000300#434255530B04
+Write: cansend can0 00000300#434255530B04SSSS
+
+Hier wird der Offset für KontaktIDs des S88 Gateway festgelegt. z.B. SSSS = 0000 (Offset = 0)
+cansend can0 00000300#434255530B040000
+S88 KontaktIDs 1...256
+z.B. SSSS = 03E8 (Offset = 1000)
+cansend can0 00000300#434255530B0403E8
+S88 KontaktIDs 1001...1256
+
+Rocrail:      KontaktID = Schnittstelle Adresse des RÃªckmelders
+
+UID (ConfigChannel 6)
+=================================
+Read: cansend can0 00000300#434255530B07
+Write: cansend can0 00000300#434255530B07UUUU
+
+Hier wird die UID des S88 Gateway festgelegt. z.B. UUUU = 3322
+cansend can0 00000300#434255530B073322
+Das S88 Gateway hat UID 0x43423322
+Der Hashwert wird bei Änderung angepasst
+
+Option Flags (ConfigChannel 7)
+==================================
+Read: cansend can0 00000300#434255530B07
+Write: cansend can0 00000300#434255530B0700XX
+
+XX:
+Bit 0: OPTION_FLAG_S88ALLONFIRST (+1)
+       Sendet bei erstem S88-Query-Event nicht nur abgefragte KontaktKennung sondern alle (nur nach Power On)
+       = 'forced Events'
+       Dies wurde eingeführt, da nicht jede Software immer alle Kanäle abfragt.
+       Zusätzlich wurde ein Delay zwischen 2 forced Events in ms eingeführt (ConfigChannel 8), da manche Software
+       schnelle Events manchmal verschluckt. 
+Bit 1: OPTION_FLAG_S88ALLONFIRSTGO (+2)
+       Sendet bei erstem S88-Query-Event nicht nur abgefragte KontaktKennung sondern alle (nur nach Power On)
+       Dies wurde eingeführt, da manche Software nicht immer alle Kanäle abfragt.
+       Zusätzlich wurde ein Delay zwischen 2 forced Events in ms eingeführt (ConfigChannel 8), da manche Software
+       schnelle Events manchmal verschluckt.
+
+Bit 2: OPTION_FLAG_LED_TEST (+4)
+       Schaltet bei Power On alle LEDs für ca. 1 Sekunde an, bevor die Blinksequenz beginnt. 
+       Hilfreich für Inbetriebnahme (LED Bestückung)
+
+Bit 3: OPTION_LED_ON_EEP_WRITE (+8)
+       Bei EEPROM Schreibzugriffen wird die LED3 für ca. 1 Sekunde eingeschaltet.
+       Hilfreich für DEBUG und Prüfung Konfigurations-Änderung 
+
+Bit 7  OPTION_2EQUALSS88 (+128)
+       Wenn dieses Bit 1 ist, wird die S88 Entprellung mit Änderung bei 2 gleichen gelesenen Werten durchgefÃªht.
+       Wenn dieses Bit 0 ist, wird die S88 Entprellung mit Änderung bei 4 gleichen gelesenen Werten durchgefÃªht.
+       Wenn die S88 Buslänge größer ist, sollte auf 2 gleiche gelesene Werte entprellt werden, da sonst kurze Ereignisse
+       z.B. überfahren Schaltgleis ggf nicht erkannt werden.
+       ToDo: ggf auch ohne Entprellung bei größeren Buslängen
+
+
+Delay zwischen 2 forced Events in ms (ConfigChannel 8)
+======================================================
+Read: cansend can0 00000300#434255530B08
+Write: cansend can0 00000300#434255530B0800DD
+
+DD=0x00 kein Delay
+DD=0x01...0xFF = 1...255ms Delay zwischen Senden 2 forced Events 

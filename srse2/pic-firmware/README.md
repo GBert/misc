@@ -1,3 +1,3 @@
-Firmware for CANBuster
+Firmware für SRSEII
 ======================
-based on Darron Broads CAN-CAN
+basierend auf Darron Broads CAN-CAN

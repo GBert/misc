@@ -21,9 +21,10 @@
 ; Receive message on UART and send on CAN bus
 ;------------------------------------------------------------------------------
 TXCAN
-                MOVF    RXCNT,W             ; If Rx packet counter > 0
-                BNZ     TXCAN1
-                RETURN
+;  Check is done in MAIN (can-can.inc)
+;                MOVF    RXCNT,W             ; If Rx packet counter > 0
+;                BNZ     TXCAN1
+;                RETURN
 
 ;------------------------------------------------------------------------------
 TXCAN1

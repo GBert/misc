@@ -104,8 +104,7 @@ ISRHIGH
 
                 ; Overflow On
                 SETF    RXOVF
-
-                UARTOVFL                    ; UART packet status LED
+                UARTOVFL              ; UART overflow status LED on
                 RETFIE  FAST
 
 ;------------------------------------------------------------------------------
@@ -119,9 +118,9 @@ ISRHIGH1
                 MOVF    PLUSW1,W            ; EOLN?
                 XORLW   EOLNCHAR
                 BNZ     ISRHIGH2
-
                 ; Overflow Off
                 CLRF    RXOVF
+                UARTOVFLOFF ;MK  UART overflow status LED off
 ISRHIGH2
                 RETFIE  FAST
                 
@@ -143,7 +142,7 @@ ISRHIGH3
                 ; Not Clear to Send; RXCNT > CONTROL
                 RTSSET
 ISRHIGHEND
-                UARTRECV                    ; UART packet status LED
+;;                UARTRECV   replaced MK LED off  UARTOVFLOFF
                 RETFIE  FAST
 
 ;------------------------------------------------------------------------------

@@ -63,21 +63,22 @@
 ; Device hardware
 ;------------------------------------------------------------------------------
 
-; LED1 RA1 CAN  OVERFLOW
-; LED2 RA0 UART OVERFLOW
+; LED1 RA1 Stop/Go
+; LED2 RA0 UART OVERFLOW / (EEP Write if option on)
 ; RTS  RA3 CLEAR TO SEND
 ;
 #DEFINE         GPIO        LATA
 #DEFINE         DDR         DDRA
-#DEFINE		PIO	    0
-#DEFINE		LEDON       0
-#DEFINE		PIOINVERT   1
-#DEFINE		NO_CAN_LED  1
-
+#DEFINE         PIO         0
+#DEFINE         LEDON       0
+#DEFINE         PIOINVERT   1
+#DEFINE         NO_CAN_LED  1
+;MK
+#DEFINE     S88_INPUT_HIGH_ACTIVE  1
+;MK END
 ;------------------------------------------------------------------------------
 ; Device firmware
 ;------------------------------------------------------------------------------
-
 
 #INCLUDE        "18f2xk80-mcu-config.inc"
 #INCLUDE        "can-can.inc"

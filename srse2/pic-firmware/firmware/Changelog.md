@@ -1,6 +1,9 @@
 PIC Firmware Changelog
 ======================
 
+V1.17
+- various changes from Martin Krause
+
 V1.11
 - check if S88 IO number is in range
 

@@ -21,11 +21,45 @@
 ; PIO variables
 ;------------------------------------------------------------------------------
 
+SYSTEM_FLAG_STOP_GO           EQU 0 ; bit in SYSTEM_FLAGS
+SYSTEM_FLAG_WARM_STATE        EQU 1 ; bit in SYSTEM_FLAGS
+SYSTEMFLAG_LED_TEST           EQU 2 ; bit in SYSTEM_FLAGS
+SYSTEMFLAG_S88SENDALL_ONFIRST EQU 3 ; bit in SYSTEM_FLAGS
+
+OPTION_FLAG_S88ALLONFIRST     EQU 0 ; bitindex in OPTION_FLAGS
+OPTION_FLAG_S88ALLONFIRSTGO   EQU 1 ; bitindex in OPTION_FLAGS
+OPTION_FLAG_LED_TEST          EQU 2 ; bitindex in OPTION_FLAGS
+OPTION_LED_ON_EEP_WRITE       EQU 3 ; bitindex in OPTION_FLAGS
+OPTION_2EQUALSS88             EQU 7 ; bitindex in OPTION_FLAGS
+
+PIOTIME         EQU   0x310
+
+
                 CBLOCK
-                ; PIOTEMP : 1
-                MASK : 1
-                ACTUAL : 1
-                ; PIOTEMP16 : 2
+                MASK : 1        ; 0x26
+                ACTUAL : 1      ; 0x27
+                CANHASH_LOW : 1 ; 0x28
+                CANHASH_HIGH: 1 ; 0x29
+                ID_H : 1    ; 0x2A
+                ID_L : 1    ; 0x2B
+                PIOC_H : 1  ; 0x2C
+                PIOC_L : 1  ; 0x2D
+                S88C_H : 1  ; 0x2E
+                S88C_L : 1  ; 0x2F
+                SCAN_INTERVAL : 1 ;0x30
+                SYSTEM_FLAGS : 1  ;0x31 bit 0=stop(0)/go(1)
+                OPTION_FLAGS : 1  ;0x32
+                ENDC
+
+                CBLOCK
+                UID_H : 1   ; 0x33
+                UID_L : 1   ; 0x34
+                ENDC
+
+
+#IFNDEF	SRSE2_SLCAN   ;PIO debounce not used in SRSE2
+                CBLOCK
+                PIOTEMP16 : 2
                 BUT_CT0 : 1
                 BUT_CT1 : 1
                 BUT_VAL_NEW : 1
@@ -36,28 +70,16 @@
                 TOP_VAL_NEW : 1
                 TOP_VAL_CHG : 1
                 TOP_VAL_STATE : 1
-                CANHASH_LOW : 1
-                CANHASH_HIGH: 1
-                ID_H : 1
-                ID_L : 1
-                PIOC_H : 1
-                PIOC_L : 1
-                S88C_H : 1
-                S88C_L : 1
-                DEVID_H : 1
-                DEVID_L : 1
-                SCAN_INTERVAL : 1
-                POWER_ONOFF : 1
                 ENDC
 
-PIOTIME         EQU   0x310
+
 ;------------------------------------------------------------------------------
 ; Macros
 ;------------------------------------------------------------------------------
                 ; debouncing code from Peter Danegger
 PIO_DEBOUNCE    MACRO   MVAL_NEW,MVAL_STATE,MVAL_CHG,MTEMP,MCT0,MCT1
                 COMF	MVAL_NEW,W
-                XORWF	MVAL_STATE,W		; port changed ?
+                XORWF	MVAL_STATE,W	; port changed ?
                 MOVWF	MTEMP
                 ANDWF	MCT0,F	    	; reset or count ct0
                 COMF	MCT0,F
@@ -133,6 +155,7 @@ GENEVENTLOOP
 
                 RETURN
 
+#ENDIF ;IFNDEF	SRSE2_SLCAN
 ;
 ; vim: set shiftwidth=4 tabstop=4 softtabstop=4 expandtab
 ;
