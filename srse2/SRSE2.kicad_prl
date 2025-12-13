@@ -1,6 +1,6 @@
 {
   "board": {
-    "active_layer": 37,
+    "active_layer": 32,
     "active_layer_preset": "",
     "auto_track_width": true,
     "hidden_netclasses": [],
@@ -41,7 +41,6 @@
       11,
       12,
       13,
-      14,
       15,
       16,
       17,
@@ -64,8 +63,14 @@
       35,
       36
     ],
-    "visible_layers": "0009128_ffffffff",
+    "visible_layers": "0015b7f_ffffffff",
     "zone_display_mode": 0
+  },
+  "git": {
+    "repo_password": "",
+    "repo_type": "",
+    "repo_username": "",
+    "ssh_key": ""
   },
   "meta": {
     "filename": "SRSE2.kicad_prl",
