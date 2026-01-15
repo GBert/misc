@@ -4,7 +4,7 @@ height = 3;
 module screw_place(x,y,z) {
   translate([x,y,z])
   difference() {
-    cylinder(h=height,r=4.8);
+    cylinder(h=height,r=4.0);
     cylinder(h=height,r=1.2);
    # cylinder(h=1,r1=2,r2=1,center=true);
     translate([0,0,z + height])
