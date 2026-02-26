@@ -1,0 +1,196 @@
+diff --git a/config/Config-kernel.in b/config/Config-kernel.in
+index d4648a5064..364968bab4 100644
+--- a/config/Config-kernel.in
++++ b/config/Config-kernel.in
+@@ -46,9 +46,14 @@ config KERNEL_DEBUG_FS
+ 	  write to these files. Many common debugging facilities, such as
+ 	  ftrace, require the existence of debugfs.
+ 
++config KERNEL_MIPS_FPU_EMULATOR
++	bool "Compile the kernel with MIPS FPU Emulator"
++	default y if TARGET_pistachio
++	depends on (mips || mipsel || mips64 || mips64el)
++
+ config KERNEL_MIPS_FP_SUPPORT
+ 	bool
+-	default y if TARGET_pistachio
++	default y if KERNEL_MIPS_FPU_EMULATOR
+ 
+ config KERNEL_ARM_PMU
+ 	bool
+diff --git a/feeds.conf.default b/feeds.conf.default
+index f1827a3661..6752401aa4 100644
+--- a/feeds.conf.default
++++ b/feeds.conf.default
+@@ -3,3 +3,8 @@ src-git-full luci https://git.openwrt.org/project/luci.git;openwrt-21.02
+ src-git-full routing https://git.openwrt.org/feed/routing.git;openwrt-21.02
+ src-git-full telephony https://git.openwrt.org/feed/telephony.git;openwrt-21.02
+ #src-link custom /usr/src/openwrt/custom-feed
++src-git openwrtfiles https://github.com/GBert/openwrt-files
++src-git openwrtmisc https://github.com/GBert/openwrt-misc
++src-git railroad http://github.com/GBert/railroad
++src-git openwrtnetem https://github.com/Connectify/openwrt-netem
++src-git node https://github.com/nxhack/openwrt-node-packages.git;openwrt-18.06
+diff --git a/target/linux/ramips/dts/mt7628an_onion_omega2.dtsi b/target/linux/ramips/dts/mt7628an_onion_omega2.dtsi
+index 460a563257..3a9a8c4a0c 100644
+--- a/target/linux/ramips/dts/mt7628an_onion_omega2.dtsi
++++ b/target/linux/ramips/dts/mt7628an_onion_omega2.dtsi
+@@ -24,6 +24,14 @@
+ 			label = "amber:system";
+ 			gpios = <&gpio 44 GPIO_ACTIVE_LOW>;
+ 		};
++                network1 {
++                        label = "green:link";
++                        gpios = <&gpio 18 GPIO_ACTIVE_LOW>;
++                };
++                network2 {
++                        label = "amber:activity";
++                        gpios = <&gpio 19 GPIO_ACTIVE_LOW>;
++                };
+ 	};
+ 
+ 	keys {
+@@ -99,6 +107,7 @@
+ 		compatible = "jedec,spi-nor";
+ 		reg = <0>;
+ 		spi-max-frequency = <40000000>;
++		broken-flash-reset;
+ 
+ 		partitions {
+ 			compatible = "fixed-partitions";
+diff --git a/target/linux/ramips/mt76x8/config-5.4 b/target/linux/ramips/mt76x8/config-5.4
+index 0c53b6f8b4..db7d3ae231 100644
+--- a/target/linux/ramips/mt76x8/config-5.4
++++ b/target/linux/ramips/mt76x8/config-5.4
+@@ -1,23 +1,9 @@
+ CONFIG_ARCH_32BIT_OFF_T=y
+ CONFIG_ARCH_CLOCKSOURCE_DATA=y
+-CONFIG_ARCH_HAS_DMA_COHERENT_TO_PFN=y
+-CONFIG_ARCH_HAS_DMA_PREP_COHERENT=y
+-CONFIG_ARCH_HAS_DMA_WRITE_COMBINE=y
+-CONFIG_ARCH_HAS_ELF_RANDOMIZE=y
+-CONFIG_ARCH_HAS_RESET_CONTROLLER=y
+-CONFIG_ARCH_HAS_SYNC_DMA_FOR_DEVICE=y
+-CONFIG_ARCH_HAS_UNCACHED_SEGMENT=y
+ CONFIG_ARCH_HIBERNATION_POSSIBLE=y
+ CONFIG_ARCH_MMAP_RND_BITS_MAX=15
+ CONFIG_ARCH_MMAP_RND_COMPAT_BITS_MAX=15
+-CONFIG_ARCH_SUPPORTS_UPROBES=y
+ CONFIG_ARCH_SUSPEND_POSSIBLE=y
+-CONFIG_ARCH_USE_BUILTIN_BSWAP=y
+-CONFIG_ARCH_USE_MEMREMAP_PROT=y
+-CONFIG_ARCH_USE_QUEUED_RWLOCKS=y
+-CONFIG_ARCH_USE_QUEUED_SPINLOCKS=y
+-CONFIG_ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT=y
+-CONFIG_ARCH_WANT_IPC_PARSE_VERSION=y
+ CONFIG_AT803X_PHY=y
+ CONFIG_BLK_MQ_PCI=y
+ CONFIG_CEVT_R4K=y
+@@ -46,23 +32,19 @@ CONFIG_CPU_R4K_CACHE_TLB=y
+ CONFIG_CPU_SUPPORTS_32BIT_KERNEL=y
+ CONFIG_CPU_SUPPORTS_HIGHMEM=y
+ CONFIG_CPU_SUPPORTS_MSA=y
++CONFIG_CRYPTO_LIB_POLY1305_RSIZE=2
+ CONFIG_CRYPTO_RNG2=y
+ CONFIG_CSRC_R4K=y
+ CONFIG_DEBUG_PINCTRL=y
+ CONFIG_DMA_NONCOHERENT=y
+ CONFIG_DMA_NONCOHERENT_CACHE_SYNC=y
+-# CONFIG_DMA_RALINK is not set
+ # CONFIG_DTB_MT7620A_EVAL is not set
+ # CONFIG_DTB_OMEGA2P is not set
+ CONFIG_DTB_RT_NONE=y
+ # CONFIG_DTB_VOCORE2 is not set
+ CONFIG_DTC=y
+ CONFIG_EARLY_PRINTK=y
+-CONFIG_EFI_EARLYCON=y
+ CONFIG_FIXED_PHY=y
+-CONFIG_FONT_8x16=y
+-CONFIG_FONT_AUTOSELECT=y
+-CONFIG_FONT_SUPPORT=y
+ CONFIG_FW_LOADER_PAGED_BUF=y
+ CONFIG_GENERIC_ATOMIC64=y
+ CONFIG_GENERIC_CLOCKEVENTS=y
+@@ -94,41 +76,6 @@ CONFIG_HARDWARE_WATCHPOINTS=y
+ CONFIG_HAS_DMA=y
+ CONFIG_HAS_IOMEM=y
+ CONFIG_HAS_IOPORT_MAP=y
+-CONFIG_HAVE_ARCH_COMPILER_H=y
+-CONFIG_HAVE_ARCH_JUMP_LABEL=y
+-CONFIG_HAVE_ARCH_KGDB=y
+-CONFIG_HAVE_ARCH_SECCOMP_FILTER=y
+-CONFIG_HAVE_ARCH_TRACEHOOK=y
+-CONFIG_HAVE_ASM_MODVERSIONS=y
+-CONFIG_HAVE_CLK=y
+-CONFIG_HAVE_CONTEXT_TRACKING=y
+-CONFIG_HAVE_COPY_THREAD_TLS=y
+-CONFIG_HAVE_C_RECORDMCOUNT=y
+-CONFIG_HAVE_DEBUG_KMEMLEAK=y
+-CONFIG_HAVE_DEBUG_STACKOVERFLOW=y
+-CONFIG_HAVE_DMA_CONTIGUOUS=y
+-CONFIG_HAVE_DYNAMIC_FTRACE=y
+-CONFIG_HAVE_FAST_GUP=y
+-CONFIG_HAVE_FTRACE_MCOUNT_RECORD=y
+-CONFIG_HAVE_FUNCTION_GRAPH_TRACER=y
+-CONFIG_HAVE_FUNCTION_TRACER=y
+-CONFIG_HAVE_GENERIC_VDSO=y
+-CONFIG_HAVE_IDE=y
+-CONFIG_HAVE_IOREMAP_PROT=y
+-CONFIG_HAVE_IRQ_EXIT_ON_IRQ_STACK=y
+-CONFIG_HAVE_IRQ_TIME_ACCOUNTING=y
+-CONFIG_HAVE_KVM=y
+-CONFIG_HAVE_LD_DEAD_CODE_DATA_ELIMINATION=y
+-CONFIG_HAVE_MEMBLOCK_NODE_MAP=y
+-CONFIG_HAVE_MOD_ARCH_SPECIFIC=y
+-CONFIG_HAVE_NET_DSA=y
+-CONFIG_HAVE_OPROFILE=y
+-CONFIG_HAVE_PCI=y
+-CONFIG_HAVE_PERF_EVENTS=y
+-CONFIG_HAVE_REGS_AND_STACK_ACCESS_API=y
+-CONFIG_HAVE_RSEQ=y
+-CONFIG_HAVE_SYSCALL_TRACEPOINTS=y
+-CONFIG_HAVE_VIRT_CPU_ACCOUNTING_GEN=y
+ CONFIG_HZ=250
+ CONFIG_HZ_250=y
+ CONFIG_HZ_PERIODIC=y
+@@ -150,6 +97,7 @@ CONFIG_MIGRATION=y
+ CONFIG_MIPS=y
+ CONFIG_MIPS_ASID_BITS=8
+ CONFIG_MIPS_ASID_SHIFT=0
++CONFIG_MIPS_CBPF_JIT=y
+ CONFIG_MIPS_CLOCK_VSYSCALL=y
+ # CONFIG_MIPS_CMDLINE_BUILTIN_EXTEND is not set
+ # CONFIG_MIPS_CMDLINE_DTB_EXTEND is not set
+@@ -200,9 +148,15 @@ CONFIG_PHY_RALINK_USB=y
+ CONFIG_PINCTRL=y
+ CONFIG_PINCTRL_RT2880=y
+ # CONFIG_PINCTRL_SINGLE is not set
+-# CONFIG_PWM_MEDIATEK is not set
++CONFIG_PREEMPT=y
++CONFIG_PREEMPTION=y
++CONFIG_PREEMPT_COUNT=y
++# CONFIG_PREEMPT_NONE is not set
++CONFIG_PREEMPT_RCU=y
+ CONFIG_RALINK=y
+ # CONFIG_RALINK_WDT is not set
++CONFIG_RCU_NEED_SEGCBLIST=y
++CONFIG_RCU_STALL_COMMON=y
+ CONFIG_REGMAP=y
+ CONFIG_REGMAP_MMIO=y
+ CONFIG_REGULATOR=y
+@@ -234,11 +188,14 @@ CONFIG_SYS_SUPPORTS_32BIT_KERNEL=y
+ CONFIG_SYS_SUPPORTS_ARBIT_HZ=y
+ CONFIG_SYS_SUPPORTS_LITTLE_ENDIAN=y
+ CONFIG_SYS_SUPPORTS_MIPS16=y
++CONFIG_SYS_SUPPORTS_ZBOOT=y
+ CONFIG_TARGET_ISA_REV=2
++CONFIG_TASKS_RCU=y
+ CONFIG_TICK_CPU_ACCOUNTING=y
+ CONFIG_TIMER_OF=y
+ CONFIG_TIMER_PROBE=y
+-CONFIG_TINY_SRCU=y
++CONFIG_TREE_SRCU=y
++CONFIG_UNINLINE_SPIN_UNLOCK=y
+ CONFIG_USB_SUPPORT=y
+ CONFIG_USE_OF=y
+ CONFIG_WATCHDOG_CORE=y
